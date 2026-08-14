@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /Users/adityabahuguna/Documents/LandingPage/ && ls -la /Users/adityabahuguna/Downloads/final.mp4 && which ffmpeg ffprobe)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(mdfind -name ffmpeg)",
+      "Bash(xcode-select -p)",
+      "Bash(time swift extract.swift /Users/adityabahuguna/Downloads/final.mp4 /Users/adityabahuguna/Documents/LandingPage/assets/frames 240 1280 0.72)",
+      "Bash(cp /Users/adityabahuguna/Downloads/final.mp4 /Users/adityabahuguna/Documents/LandingPage/assets/final.mp4 && ls /Users/adityabahuguna/Documents/LandingPage/assets/frames | head -2 && ls /Users/adityabahuguna/Documents/LandingPage/assets/frames | tail -1)",
+      "Bash(swift extract.swift /Users/adityabahuguna/Downloads/final.mp4 /Users/adityabahuguna/Documents/LandingPage/assets/frames 240 1280 0.9)",
+      "Bash(npm -v)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\);console.log\\(JSON.stringify\\({dep:p.dependencies,dev:p.devDependencies},null,2\\)\\)\")",
+      "Bash(sed -i '' 's/z-90 grid/z-[90] grid/' components/Loader.tsx)",
+      "Bash(sed -i '' 's/bottom-\\\\[8\\\\.5vh\\\\] z-12/bottom-[8.5vh] z-[12]/' components/Outro.tsx)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(node -e \"console.log\\(require\\('./package.json'\\).dependencies\\)\")",
+      "Bash(python3 -)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4321/)"
+    ]
+  }
+}

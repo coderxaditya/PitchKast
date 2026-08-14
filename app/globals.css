@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Theme — mirrors the liquidGlass tailwind.config
+   ============================================================ */
+
+@theme {
+  --font-heading: var(--font-instrument-serif), serif;
+  --font-body: var(--font-barlow), sans-serif;
+  --font-display: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+
+  /* bare `rounded` becomes a pill, per the spec */
+  --radius: 9999px;
+}
+
+html,
+body {
+  background: #000;
+}
+
+body {
+  margin: 0;
+}
+
+body.is-loading {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ============================================================
+   Scroll-driven hero
+   ------------------------------------------------------------
+   The one piece kept from the previous build. liquidGlass's hero is
+   a single static viewport; ours is pinned across a long scrub, so
+   the hero has to clear out to let the footage through.
+
+   `--heroFilter` resolves to `none` at rest rather than `blur(0px)`.
+   A filter of any length makes an element a backdrop root, which
+   would cut every `backdrop-filter` inside it off from the video
+   behind and flatten all the glass.
+   ============================================================ */
+
+:root {
+  --bgFade: 1;
+  --heroFade: 1;
+  --heroY: 0px;
+  --heroFilter: none;
+}
+
+/* Ambient background layer. Its own opacity is scroll-driven; the video
+   inside manages a separate rAF opacity for its loop crossfade. */
+.bg-veil {
+  opacity: var(--bgFade);
+}
+
+/* Oversized display word anchored to the bottom of the hero.
+   Given the same liquid-glass read as the chrome: translucent fill that lets
+   the video through, a lit rim, and a soft drop shadow for depth. */
+.giant-word {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.78;
+  white-space: nowrap;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.34) 45%,
+    rgba(255, 255, 255, 0.16) 80%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.6);
+  transform-origin: center center;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25))
+    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.35));
+  user-select: none;
+  letter-spacing: -0.015em;
+}
+
+.hero-driven {
+  opacity: var(--heroFade);
+  transform: translate3d(0, var(--heroY), 0);
+  filter: var(--heroFilter);
+  will-change: opacity, transform;
+}
+
+/* ============================================================
+   liquidGlass — ported verbatim
+   ============================================================ */
+
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.liquid-glass-strong {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(50px);
+  border: none;
+  box-shadow:
+    4px 4px 4px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
