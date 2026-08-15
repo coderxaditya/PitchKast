@@ -2,9 +2,12 @@ import type { Metadata, Viewport } from "next";
 import {
   Barlow,
   Barlow_Condensed,
-  Instrument_Serif,
-} from "next/font/google";
+  Instrument_Serif, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
 
 /* Self-hosted at build time — the same faces liquidGlass pulled from the
    Google Fonts CDN, minus the third-party round trip. */
@@ -48,7 +51,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${barlow.variable} ${barlowCondensed.variable}`}
+      className={cn(instrumentSerif.variable, barlow.variable, barlowCondensed.variable, "font-sans", geist.variable)}
     >
       <body className="is-loading bg-black">{children}</body>
     </html>

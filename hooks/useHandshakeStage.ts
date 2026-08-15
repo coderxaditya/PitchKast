@@ -14,11 +14,11 @@ import {
   RENDERER,
   SNAP_EPSILON,
   USE_LENIS,
-} from "@/lib/scrub-config";
-import { clamp, easeInOut, norm } from "@/lib/stage-math";
-import { FrameSequenceRenderer } from "@/lib/renderers/frame-sequence";
-import { VideoRenderer } from "@/lib/renderers/video";
-import type { StageRenderer } from "@/lib/renderers/types";
+} from "@/lib/scrub/config";
+import { clamp, easeInOut, norm } from "@/lib/scrub/math";
+import { FrameSequenceRenderer } from "@/lib/scrub/renderers/frame-sequence";
+import { VideoRenderer } from "@/lib/scrub/renderers/video";
+import type { StageRenderer } from "@/lib/scrub/renderers/types";
 
 interface Options {
   trackRef: RefObject<HTMLDivElement | null>;

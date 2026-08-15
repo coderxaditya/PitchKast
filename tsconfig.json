@@ -37,6 +37,11 @@
   ],
   "exclude": [
     "node_modules",
-    "legacy"
+    ".next",
+    "out",
+    "legacy",
+    "skills",
+    ".agents",
+    ".claude"
   ]
 }
