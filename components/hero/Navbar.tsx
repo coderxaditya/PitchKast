@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { ArrowUpRight } from "@/components/icons";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const links = ["Home", "Voyages", "Worlds", "Innovation", "Plan Launch"];
 
@@ -51,30 +52,37 @@ export function Navbar() {
 
         {/* Desktop rail */}
         <div className="hidden items-center lg:flex">
-          <div className="liquid-glass flex items-center rounded-full px-1.5 py-1.5">
+          <div className="liquid-glass flex items-center rounded-full px-2 py-1.5 xl:px-4">
+            <span className="rim-light" aria-hidden="true" />
             {links.map((link) => (
               <a
                 key={link}
                 href="#"
-                className="font-body px-3 py-2 text-sm font-medium text-white/90"
+                className="font-body px-4 py-2 text-sm font-medium text-white/90 xl:px-8"
               >
                 {link}
               </a>
             ))}
-            <button className="font-body ml-1 flex items-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-black">
-              Claim a Spot
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
           </div>
+        </div>
+
+        {/* CTA lives outside the rail, hard right. */}
+        <div className="hidden flex-1 justify-end lg:flex">
+          {/* rounded-full rather than the component's default rounded-sm —
+              every other control in this nav is a pill. */}
+          <RainbowButton className="font-body rounded-full px-4 py-2">
+            Book a Discovery Call
+            <ArrowUpRight className="h-4 w-4" />
+          </RainbowButton>
         </div>
 
         {/* Compact chrome below lg — the rail's links and CTA are otherwise
             unreachable on a phone. */}
         <div className="flex items-center gap-2 lg:hidden">
-          <button className="font-body flex h-12 items-center gap-1 rounded-full bg-white px-3.5 text-xs font-medium whitespace-nowrap text-black sm:px-4 sm:text-sm">
-            Claim a Spot
+          <RainbowButton className="font-body h-12 rounded-full px-3.5 text-xs sm:px-4 sm:text-sm">
+            Book a Discovery Call
             <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          </button>
+          </RainbowButton>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -87,7 +95,6 @@ export function Navbar() {
           </button>
         </div>
 
-        <div className="hidden flex-1 lg:block" />
       </div>
 
       {/* The 4px variant is tuned for chips over video; a menu sitting on top

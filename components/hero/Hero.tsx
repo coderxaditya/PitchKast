@@ -6,7 +6,7 @@ import { BlurText } from "@/components/motion/BlurText";
 import { GiantWord } from "./GiantWord";
 import { Navbar } from "./Navbar";
 import { Rise } from "@/components/motion/Rise";
-import { ArrowUpRight, ClockIcon, GlobeIcon, Play } from "@/components/icons";
+import { CheckIcon, GlobeIcon } from "@/components/icons";
 
 function StatCard({
   icon,
@@ -45,20 +45,10 @@ export function Hero({ play }: { play: boolean }) {
 
       <div
         ref={contentRef}
-        className="my-auto flex flex-col items-center justify-center px-4 pt-24 text-center [@media(max-height:720px)]:pt-16"
+        className="my-auto flex flex-col items-center justify-center px-4 pt-32 text-center [@media(max-height:720px)]:pt-20"
       >
-        <Rise delay={0.4} play={play}>
-          <div className="liquid-glass flex items-center gap-2 rounded-full p-1 sm:gap-3">
-            <span className="font-body rounded-full bg-white px-2.5 py-1 text-xs font-semibold whitespace-nowrap text-black sm:px-3">
-              New
-            </span>
-            <span className="font-body pr-3 text-xs text-white/90 sm:text-sm">
-              Maiden Crewed Voyage to Mars Arrives 2026
-            </span>
-          </div>
-        </Rise>
-
-        <div className="mt-6 [@media(max-height:720px)]:mt-3">
+        {/* Heading leads the stack now, so no top margin. */}
+        <div>
           <BlurText
             play={play}
             text="Strategic Growth Partners"
@@ -66,47 +56,32 @@ export function Hero({ play }: { play: boolean }) {
           />
         </div>
 
-        <Rise
-          delay={1.1}
-          play={play}
-          className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 [@media(max-height:720px)]:mt-3"
-        >
-          <button className="liquid-glass-strong font-body flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-white">
-            Start Your Voyage
-            <ArrowUpRight className="h-5 w-5" />
-          </button>
-          <button className="font-body flex items-center gap-2 text-sm font-medium text-white">
-            View Liftoff
-            <Play className="h-4 w-4" />
-          </button>
-        </Rise>
-
         {/* Cards are fixed-width by design; below sm they share the row instead
             so the pair never runs past the viewport edges. */}
         <Rise
-          delay={1.3}
+          delay={1.1}
           play={play}
-          className="mt-8 flex w-full max-w-[456px] items-stretch justify-center gap-4 sm:w-auto sm:max-w-none [@media(max-height:720px)]:mt-4 [@media(max-height:560px)]:hidden"
+          className="mt-10 flex w-full max-w-[456px] items-stretch justify-center gap-4 sm:w-auto sm:max-w-none [@media(max-height:720px)]:mt-5 [@media(max-height:560px)]:hidden"
         >
           <StatCard
-            icon={<ClockIcon />}
-            value="34.5 Min"
-            label="Average Videos Watch Time"
+            icon={<GlobeIcon />}
+            value="25+"
+            label="Global Clients"
           />
           <StatCard
-            icon={<GlobeIcon />}
-            value="2.8B+"
-            label="Users Across the Globe"
+            icon={<CheckIcon />}
+            value="250+"
+            label="Projects delivered"
           />
         </Rise>
 
         <Rise
-          delay={1.4}
+          delay={1.25}
           play={play}
           className="mt-8 flex flex-col items-center gap-4 [@media(max-height:720px)]:mt-4"
         >
           <div className="liquid-glass font-body rounded-full px-3.5 py-1 text-center text-xs font-medium text-white">
-            Collaborating with top aerospace pioneers globally
+            We Don&rsquo;t Chase Growth. We Create It.
           </div>
         </Rise>
       </div>

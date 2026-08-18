@@ -46,6 +46,11 @@ skills-lock.json
 .claude/settings.local.json
 .claude/launch.json
 
+# ── Local reference material ──────────────────────────────────
+# Source tutorials/snippets kept on disk while porting a technique. The
+# implementations live in the codebase; these are notes, not project files.
+tutorial-*.html
+
 # ── Editor / OS ───────────────────────────────────────────────
 .DS_Store
 Thumbs.db

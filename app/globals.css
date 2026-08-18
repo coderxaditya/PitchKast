@@ -12,6 +12,10 @@
   --font-heading: var(--font-instrument-serif), serif;
   --font-body: var(--font-barlow), sans-serif;
   --font-display: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+
+  /* The warm accent from the original brand pass. Registered here so it is
+     reachable as text-gold / bg-gold rather than an arbitrary hex. */
+  --color-gold: #c8a96a;
 }
 
 html,
@@ -79,6 +83,11 @@ body.is-loading {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --color-1: oklch(66.2% 0.225 25.9);
+  --color-2: oklch(60.4% 0.26 302);
+  --color-3: oklch(69.6% 0.165 251);
+  --color-4: oklch(80.2% 0.134 225);
+  --color-5: oklch(90.7% 0.231 133);
 }
 
 /* Ambient background layer. Its own opacity is scroll-driven; the video
@@ -162,6 +171,180 @@ body.is-loading {
   pointer-events: none;
 }
 
+/* ============================================================
+   Revolving rim light
+   ------------------------------------------------------------
+   Same idea as magicui's shimmer-button: a conic gradient masked
+   down to the border ring. That component paints an opaque backdrop
+   over the middle to hide the rest of the gradient, which would
+   destroy the glass here — so this reuses the mask-composite trick
+   already used by `.liquid-glass::before`, leaving the centre
+   genuinely transparent.
+
+   The angle is animated rather than the element, so the arc travels
+   around the perimeter instead of the whole box spinning.
+   ============================================================ */
+
+@property --rim-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.rim-light {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px; /* matches the static rim thickness */
+  background: conic-gradient(
+    from var(--rim-angle),
+    transparent 0deg,
+    transparent 300deg,
+    rgba(255, 255, 255, 0.9) 345deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: rim-travel 3s linear infinite;
+}
+
+@keyframes rim-travel {
+  to {
+    --rim-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rim-light {
+    animation: none;
+  }
+}
+
+/* `.liquid-glass` is tuned for sitting over the video: a 1% white fill plus a
+   blur of whatever is behind. On solid black both come to nothing, so the card
+   collapses to a hairline. This adds an actual surface — background-image only,
+   so the glass rim and inset highlight survive untouched. Must stay after
+   `.liquid-glass`, whose `background` shorthand would otherwise reset it. */
+.glass-on-black {
+  background-image: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.025) 45%,
+    rgba(255, 255, 255, 0.012) 100%
+  );
+  transition:
+    background-image 0.5s ease,
+    transform 0.5s ease;
+}
+
+.glass-on-black:hover {
+  background-image: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.045) 45%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+}
+
+/* ── Build → Grow → Raise rail ─────────────────────────────────
+   A pulse that travels each connector, so the arc reads as a
+   direction rather than three unrelated cards. Horizontal only:
+   below sm the rail turns vertical and the cards stack, where a
+   travelling dot reads as noise. */
+.stage-pulse {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .stage-pulse {
+    display: block;
+    position: absolute;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    margin-top: -2.5px;
+    margin-left: -2.5px;
+    border-radius: 9999px;
+    background: var(--color-gold);
+    box-shadow: 0 0 9px 1px rgba(200, 169, 106, 0.75);
+    animation: stage-pulse-travel 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+}
+
+@keyframes stage-pulse-travel {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-pulse {
+    animation: none;
+    opacity: 0.6;
+    left: 50%;
+  }
+}
+
+/* ── Reveal on scroll ──────────────────────────────────────────
+   Ported from the StringTune tutorial. Timing, easing and the
+   clip-path/scale/opacity trio are carried over verbatim; the
+   `.-inview` class is driven by an IntersectionObserver instead of
+   the CDN library. */
+.reveal-figure {
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.reveal-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 2;
+  opacity: 0;
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+}
+
+/* The transition lives on the in-view state only, so leaving the
+   viewport snaps back instantly and the next entry replays the wipe
+   in full — this is what `string-repeat` gives you upstream. */
+.reveal-figure.is-inview img {
+  scale: 1;
+  opacity: 1;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  transition:
+    scale 1.5s cubic-bezier(0.86, 0, 0.31, 1),
+    opacity 1.5s cubic-bezier(0.86, 0, 0.31, 1),
+    clip-path 1.5s cubic-bezier(0.86, 0, 0.31, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-figure img {
+    scale: 1;
+    opacity: 1;
+    clip-path: none;
+    transition: none;
+  }
+}
+
 .liquid-glass-strong {
   background: rgba(255, 255, 255, 0.01);
   background-blend-mode: luminosity;
@@ -239,7 +422,42 @@ body.is-loading {
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-}
+  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+  --color-color-5: var(--color-5);
+  --color-color-4: var(--color-4);
+  --color-color-3: var(--color-3);
+  --color-color-2: var(--color-2);
+  --color-color-1: var(--color-1);
+  @keyframes rainbow {
+  0% {
+    background-position: 0%;
+    }
+  100% {
+    background-position: 200%;
+    }
+  }
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear
+;
+  @keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+    }
+  15%, 35% {
+    transform: translateZ(0) rotate(90deg);
+    }
+  65%, 85% {
+    transform: translateZ(0) rotate(270deg);
+    }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+    }
+  }}
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -273,6 +491,11 @@ body.is-loading {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --color-1: oklch(66.2% 0.225 25.9);
+  --color-2: oklch(60.4% 0.26 302);
+  --color-3: oklch(69.6% 0.165 251);
+  --color-4: oklch(80.2% 0.134 225);
+  --color-5: oklch(90.7% 0.231 133);
 }
 
 @layer base {

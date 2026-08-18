@@ -51,7 +51,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(instrumentSerif.variable, barlow.variable, barlowCondensed.variable, "font-sans", geist.variable)}
+      /* `dark` is the truth here — the site is black-on-white-text throughout.
+         It flips shadcn's tokens to their dark values, which is what makes the
+         rainbow button render its white face with a dark label. */
+      className={cn(
+        "dark",
+        instrumentSerif.variable,
+        barlow.variable,
+        barlowCondensed.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
       <body className="is-loading bg-black">{children}</body>
     </html>

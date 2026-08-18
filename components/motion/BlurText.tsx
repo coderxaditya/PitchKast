@@ -15,12 +15,15 @@ export function BlurText({
   delay = 100,
   className = "",
   stepDuration = 0.35,
+  align = "center",
   play,
 }: {
   text?: string;
   delay?: number;
   className?: string;
   stepDuration?: number;
+  /** Words are laid out with flex, so alignment can't come from text-align. */
+  align?: "center" | "left";
   play: boolean;
 }) {
   const words = text.split(" ");
@@ -41,7 +44,7 @@ export function BlurText({
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "center",
+        justifyContent: align === "left" ? "flex-start" : "center",
         rowGap: "0.1em",
       }}
     >

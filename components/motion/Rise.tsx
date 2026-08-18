@@ -36,7 +36,10 @@ export function Rise({
       }
       transition={{ duration: 0.8, ease: "easeOut", delay }}
       onAnimationComplete={() => {
-        if (ref.current) ref.current.style.filter = "";
+        /* Only strip the filter once settled *visible*. Clearing it on the way
+           out would also wipe the blur(10px) the next entry needs to animate
+           from, so a replayed reveal would fade in without ever blurring. */
+        if (play && ref.current) ref.current.style.filter = "";
       }}
     >
       {children}
