@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { BlurText } from "@/components/motion/BlurText";
-import { GiantWord } from "./GiantWord";
 import { Navbar } from "./Navbar";
 import { Rise } from "@/components/motion/Rise";
 import { CheckIcon, GlobeIcon } from "@/components/icons";
@@ -33,18 +32,15 @@ function StatCard({
 }
 
 export function Hero({ play }: { play: boolean }) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
   return (
     <div
-      ref={sectionRef}
-      className="hero-driven absolute inset-0 z-10 flex h-full flex-col"
+      /* pointer-events-none so drags land on the globe behind rather than on
+         this full-screen box. The navbar re-enables them for itself. */
+      className="hero-driven pointer-events-none absolute inset-0 z-10 flex h-full flex-col"
     >
       <Navbar />
 
       <div
-        ref={contentRef}
         className="my-auto flex flex-col items-center justify-center px-4 pt-32 text-center [@media(max-height:720px)]:pt-20"
       >
         {/* Heading leads the stack now, so no top margin. */}
@@ -70,7 +66,7 @@ export function Hero({ play }: { play: boolean }) {
           />
           <StatCard
             icon={<CheckIcon />}
-            value="250+"
+            value="90+"
             label="Projects delivered"
           />
         </Rise>
@@ -85,18 +81,6 @@ export function Hero({ play }: { play: boolean }) {
           </div>
         </Rise>
       </div>
-
-      <Rise
-        delay={1.6}
-        play={play}
-        className="pointer-events-none flex w-full justify-center overflow-hidden [@media(max-height:560px)]:hidden"
-      >
-        <GiantWord
-          word="Growth"
-          sectionRef={sectionRef}
-          contentRef={contentRef}
-        />
-      </Rise>
     </div>
   );
 }

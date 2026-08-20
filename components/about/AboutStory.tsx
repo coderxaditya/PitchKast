@@ -4,7 +4,7 @@ import { Fragment } from "react";
 
 import { BlurText } from "@/components/motion/BlurText";
 import { Rise } from "@/components/motion/Rise";
-import { FounderPortrait } from "./FounderPortrait";
+import { Chapter } from "./Chapter";
 import { useInView } from "./useInView";
 
 /**
@@ -30,82 +30,81 @@ const REFUSALS = [
 ] as const;
 
 export function AboutStory() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.2);
+  const { ref, inView } = useInView<HTMLDivElement>(0.15);
 
   return (
-    <div
-      ref={ref}
-      className="flex h-full flex-col justify-center px-1 py-6 text-left lg:px-5 lg:py-0"
-    >
-      <Rise delay={0} play={inView}>
-        <span className="font-body text-gold/80 text-[0.62rem] tracking-[0.28em] uppercase">
-          02 &mdash; Our Story
-        </span>
-      </Rise>
+    <div ref={ref}>
+      <Chapter id="about-02" index="02" title="Our Story" inView={inView}>
+        {/* Asymmetric split: the headline holds the left rail and stays put
+            while the prose scrolls past it, which is what makes this read as
+            an essay rather than a two-column marketing block. */}
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-32">
+              <BlurText
+                play={inView}
+                align="left"
+                as="h3"
+                text="Built for founders who need more than a vendor."
+                className="font-heading text-display-sm max-w-[16ch] leading-[1.0] tracking-[-0.02em] text-white italic"
+              />
+            </div>
+          </div>
 
-      <Rise delay={0.15} play={inView} className="mt-3">
-        <span className="block h-px w-full bg-white/12" />
-      </Rise>
+          <div className="lg:col-span-7">
+            <Rise delay={0.9} play={inView}>
+              <p className="font-body text-lead text-ink-soft max-w-[58ch] leading-[1.75] text-pretty">
+                Early-stage companies rarely need another disconnected service
+                provider. They need people who understand the bigger picture.
+              </p>
+            </Rise>
 
-      <BlurText
-        play={inView}
-        align="left"
-        text="Built for founders who need more than a vendor."
-        className="font-heading mt-5 max-w-[22ch] text-[1.9rem] leading-[1.02] tracking-[-1px] text-white italic lg:text-[2.05rem]"
-      />
+            <Rise delay={1.05} play={inView}>
+              <p className="font-body text-body text-ink-muted mt-8 max-w-[62ch] leading-[1.85] text-pretty">
+                That is why PitchKast works alongside founders across the
+                journey, combining{" "}
+                {SERVICES.map((service, i) => (
+                  <Fragment key={service}>
+                    <span className="text-ink">{service}</span>
+                    {i < SERVICES.length - 2
+                      ? ", "
+                      : i === SERVICES.length - 2
+                        ? ", and "
+                        : ""}
+                  </Fragment>
+                ))}{" "}
+                into one connected growth system.
+              </p>
+            </Rise>
 
-      {/* Portrait sits inset beside the opening paragraph — the editorial move
-          that keeps this from reading as a stacked two-column block. */}
-      <Rise delay={1.0} play={inView} className="mt-6">
-        <div className="flex items-start gap-4">
-          <FounderPortrait className="h-[104px] w-[84px] shrink-0" />
-          <p className="font-body text-[0.8rem] leading-[1.7] text-white/70">
-            Early-stage companies rarely need another disconnected service
-            provider. They need people who understand the bigger picture.
-          </p>
+            <Rise delay={1.2} play={inView}>
+              <p className="font-body text-body text-ink-muted mt-6 max-w-[62ch] leading-[1.85] text-pretty">
+                Every engagement has named people, transparent progress, and
+                work delivered in your name.
+              </p>
+            </Rise>
+
+            <Rise delay={1.35} play={inView}>
+              <ul className="mt-12 border-t border-white/10">
+                {REFUSALS.map((refusal) => (
+                  <li
+                    key={refusal}
+                    className="group flex items-baseline gap-4 border-b border-white/10 py-4"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="bg-gold/60 group-hover:bg-gold h-px w-5 shrink-0 translate-y-[-0.35em] transition-all duration-500 group-hover:w-8"
+                    />
+                    <span className="font-body text-body text-ink-soft leading-snug">
+                      {refusal}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Rise>
+          </div>
         </div>
-      </Rise>
-
-      <Rise delay={1.15} play={inView}>
-        <p className="font-body mt-5 text-[0.8rem] leading-[1.7] text-white/55">
-          That is why PitchKast works alongside founders across the journey,
-          combining{" "}
-          {SERVICES.map((service, i) => (
-            <Fragment key={service}>
-              <span className="text-white/90">{service}</span>
-              {i < SERVICES.length - 2
-                ? ", "
-                : i === SERVICES.length - 2
-                  ? ", and "
-                  : ""}
-            </Fragment>
-          ))}{" "}
-          into one connected growth system.
-        </p>
-      </Rise>
-
-      <Rise delay={1.3} play={inView}>
-        <p className="font-body mt-4 text-[0.8rem] leading-[1.7] text-white/55">
-          Every engagement has named people, transparent progress, and work
-          delivered in your name.
-        </p>
-      </Rise>
-
-      <Rise delay={1.45} play={inView}>
-        <ul className="mt-6 space-y-1.5">
-          {REFUSALS.map((refusal) => (
-            <li
-              key={refusal}
-              className="font-body flex items-baseline gap-2.5 text-[0.78rem] leading-snug text-white/65"
-            >
-              <span className="text-gold/70" aria-hidden="true">
-                &mdash;
-              </span>
-              <span>{refusal}</span>
-            </li>
-          ))}
-        </ul>
-      </Rise>
+      </Chapter>
     </div>
   );
 }

@@ -16,6 +16,38 @@
   /* The warm accent from the original brand pass. Registered here so it is
      reachable as text-gold / bg-gold rather than an arbitrary hex. */
   --color-gold: #c8a96a;
+
+  /* ── Type scale ──────────────────────────────────────────────
+     One modular scale for the whole About section, replacing the
+     arbitrary per-panel values it grew. Display steps are fluid, so
+     the section reads at the right size at every width instead of
+     stepping between breakpoints.
+
+     Ink levels matter as much as size here: on black, white at 45%
+     resolves to 4.33:1 and fails AA for body text. --ink-muted is
+     the floor for anything small (5.3:1); the dimmer levels are for
+     display type only, where the 3:1 large-text threshold applies. */
+  --text-eyebrow: 0.6875rem;
+  --text-micro: 0.8125rem;
+  --text-body: 0.9375rem;
+  --text-lead: 1.0625rem;
+  --text-title: 1.375rem;
+  --text-display-xs: clamp(1.5rem, 1.1rem + 1.6vw, 2.1rem);
+  --text-display-sm: clamp(1.9rem, 1.3rem + 2.6vw, 3rem);
+  --text-display-md: clamp(2.4rem, 1.4rem + 4.4vw, 4.6rem);
+  --text-display-lg: clamp(3rem, 1.4rem + 7vw, 7rem);
+  --text-display-xl: clamp(3.4rem, 1.2rem + 9.5vw, 9rem);
+
+  --color-ink: rgba(255, 255, 255, 0.92);
+  --color-ink-soft: rgba(255, 255, 255, 0.72);
+  --color-ink-muted: rgba(255, 255, 255, 0.55);
+  --color-ink-faint: rgba(255, 255, 255, 0.4);
+}
+
+/* Vertical rhythm between chapters, and the section's reading measure. */
+:root {
+  --chapter-gap: clamp(5.5rem, 11vh, 10rem);
+  --shell: 84rem;
 }
 
 html,
@@ -239,9 +271,12 @@ body.is-loading {
     rgba(255, 255, 255, 0.025) 45%,
     rgba(255, 255, 255, 0.012) 100%
   );
+  /* `translate`, not `transform`. Tailwind v4 compiles `-translate-y-1` to the
+     standalone `translate` property, so easing `transform` here never touched
+     the hover lift on these cards — it snapped. */
   transition:
     background-image 0.5s ease,
-    transform 0.5s ease;
+    translate 0.5s ease;
 }
 
 .glass-on-black:hover {
@@ -251,6 +286,68 @@ body.is-loading {
     rgba(255, 255, 255, 0.045) 45%,
     rgba(255, 255, 255, 0.02) 100%
   );
+}
+
+/* ── Atmosphere ────────────────────────────────────────────────
+   Pure #000 reads as a hole, not a surface: nothing for the glass
+   to refract and no sense of depth behind the type. A film grain
+   plus two very low gold blooms give the section air to sit in.
+   The blooms sit *behind* the panels, so `backdrop-filter` on the
+   cards finally has something to sample. */
+.about-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* A gradient rather than blur(): a filter on a box this large costs
+   real paint time on mid-tier phones, and the gradient is already soft. */
+.about-bloom {
+  position: absolute;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(200, 169, 106, 0.11) 0%,
+    rgba(200, 169, 106, 0.04) 35%,
+    rgba(200, 169, 106, 0) 70%
+  );
+}
+
+/* ── Cursor spotlight ──────────────────────────────────────────
+   The card lights where the pointer is. Coordinates arrive from one
+   delegated pointermove listener on the section, written as custom
+   properties, so hovering never triggers a React render. Pointer-gated:
+   touch has no cursor to follow, and a stuck highlight looks broken. */
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    220px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0) 62%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ── Focus ─────────────────────────────────────────────────────
+   The section is now keyboard-navigable via the chapter rail, so the
+   focus ring has to be visible against black rather than inherited. */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
 }
 
 /* ── Build → Grow → Raise rail ─────────────────────────────────

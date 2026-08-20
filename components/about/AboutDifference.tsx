@@ -1,6 +1,7 @@
 "use client";
 
 import { Rise } from "@/components/motion/Rise";
+import { Chapter } from "./Chapter";
 import { useInView } from "./useInView";
 
 const PRINCIPLES = [
@@ -27,50 +28,54 @@ const PRINCIPLES = [
 ] as const;
 
 /**
- * Four principles as a 2×2 grid.
+ * Four principles, running the full width as a single row at desktop.
  *
  * Reuses the glass treatment from the stage cards in 01 so the two card systems
- * in this section read as the same material. Hover stays restrained: the card
- * lifts a little, its surface brightens, and the index turns gold — three small
- * changes on one easing curve, no scaling or colour washes.
+ * read as the same material. Hover stays restrained: the card lifts, its
+ * surface brightens, the index turns gold, and the cursor spotlight tracks —
+ * small changes on one easing curve, no scaling or colour washes.
  */
 export function AboutDifference() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.2);
+  const { ref, inView } = useInView<HTMLDivElement>(0.15);
 
   return (
-    <div
-      ref={ref}
-      className="flex h-full flex-col justify-center px-1 py-6 text-left lg:px-5 lg:py-0"
-    >
-      <Rise delay={0} play={inView}>
-        <span className="font-body text-gold/80 text-[0.62rem] tracking-[0.28em] uppercase">
-          06 &mdash; What Makes PitchKast Different
-        </span>
-      </Rise>
+    <div ref={ref}>
+      <Chapter
+        id="about-06"
+        index="06"
+        title="What Makes PitchKast Different"
+        inView={inView}
+      >
+        <h3 className="sr-only">What makes PitchKast different</h3>
 
-      <Rise delay={0.15} play={inView} className="mt-3">
-        <span className="block h-px w-full bg-white/12" />
-      </Rise>
+        {/* Four-up only at xl. At lg the cards fall to ~217px, which wraps the
+            titles to three lines and reads cramped rather than considered. */}
+        <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+          {PRINCIPLES.map((principle, i) => (
+            <Rise key={principle.index} delay={0.3 + i * 0.12} play={inView}>
+              <article className="liquid-glass glass-on-black spotlight group flex h-full flex-col rounded-[1.5rem] p-7 lg:p-8 hover:-translate-y-1.5">
+                <div className="flex items-center gap-3">
+                  <span className="font-body text-eyebrow text-gold/60 group-hover:text-gold tracking-[0.22em] transition-colors duration-500">
+                    {principle.index}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="h-px flex-1 bg-white/10 transition-colors duration-500 group-hover:bg-white/20"
+                  />
+                </div>
 
-      {/* auto-rows-fr keeps both rows the same height whatever the copy does,
-          so the four cards stay a grid rather than a ragged pair of columns. */}
-      <div className="mt-5 grid auto-rows-fr grid-cols-2 gap-2.5 lg:gap-4">
-        {PRINCIPLES.map((principle, i) => (
-          <Rise key={principle.index} delay={0.35 + i * 0.12} play={inView}>
-            <article className="liquid-glass glass-on-black group h-full rounded-[1.15rem] p-4 lg:p-7 hover:-translate-y-1">
-              <span className="font-body text-gold/55 text-[0.58rem] tracking-[0.2em] transition-colors duration-500 group-hover:text-gold">
-                {principle.index}
-              </span>
-              <h3 className="font-body mt-2 text-[0.95rem] leading-tight font-medium text-white lg:text-[1rem]">
-                {principle.title}
-              </h3>
-              <p className="font-body mt-2.5 text-[0.72rem] leading-[1.6] text-white/50 transition-colors duration-500 group-hover:text-white/65 lg:text-[0.75rem]">
-                {principle.body}
-              </p>
-            </article>
-          </Rise>
-        ))}
-      </div>
+                <h4 className="font-body text-title mt-6 leading-tight font-medium text-balance text-white">
+                  {principle.title}
+                </h4>
+
+                <p className="font-body text-micro text-ink-muted group-hover:text-ink-soft mt-4 leading-[1.75] text-pretty transition-colors duration-500">
+                  {principle.body}
+                </p>
+              </article>
+            </Rise>
+          ))}
+        </div>
+      </Chapter>
     </div>
   );
 }

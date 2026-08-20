@@ -66,3 +66,4 @@ Thumbs.db
 # Regenerated automatically by predev/prebuild, so a fresh clone and CI both
 # rebuild them instead of carrying them in git.
 public/assets/frames/
+backups/

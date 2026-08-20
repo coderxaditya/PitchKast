@@ -120,7 +120,7 @@ from production builds.
 |---|---|
 | Partner logos — invented names, not real clients | `components/partners/logos.tsx` |
 | About imagery — `picsum.photos` URLs, external dependency | `components/about/About.tsx` |
-| Founder photograph — deliberately unnamed placeholder | `components/about/FounderPortrait.tsx` |
+| Founder photograph — component exists but is **not currently placed** anywhere; drop `<FounderPortrait src="…" />` into a panel when the photo is ready | `components/about/FounderPortrait.tsx` |
 | Ambient hero video — hosted on a CloudFront URL, not local | `BG_VIDEO_SRC` in `lib/scrub/config.ts` |
 | Navbar links — still the reference site's labels | `components/hero/Navbar.tsx` |
 

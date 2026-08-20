@@ -7,6 +7,14 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const links = ["Home", "Voyages", "Worlds", "Innovation", "Plan Launch"];
 
+/**
+ * Both CTAs point here. Declared once so the desktop and mobile buttons can
+ * never drift apart, and rendered through `asChild` so each is a real anchor —
+ * a button with an onClick would lose middle-click, "open in new tab", and the
+ * link semantics assistive tech announces.
+ */
+const BOOKING_URL = "https://calendly.com/goelsoham/founder-growth-strategy-call";
+
 function MenuIcon({ open }: { open: boolean }) {
   return (
     <svg
@@ -70,18 +78,25 @@ export function Navbar() {
         <div className="hidden flex-1 justify-end lg:flex">
           {/* rounded-full rather than the component's default rounded-sm —
               every other control in this nav is a pill. */}
-          <RainbowButton className="font-body rounded-full px-4 py-2">
-            Book a Discovery Call
-            <ArrowUpRight className="h-4 w-4" />
+          <RainbowButton asChild className="font-body rounded-full px-4 py-2">
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+              Book a Discovery Call
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
           </RainbowButton>
         </div>
 
         {/* Compact chrome below lg — the rail's links and CTA are otherwise
             unreachable on a phone. */}
         <div className="flex items-center gap-2 lg:hidden">
-          <RainbowButton className="font-body h-12 rounded-full px-3.5 text-xs sm:px-4 sm:text-sm">
-            Book a Discovery Call
-            <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <RainbowButton
+            asChild
+            className="font-body h-12 rounded-full px-3.5 text-xs sm:px-4 sm:text-sm"
+          >
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+              Book a Discovery Call
+              <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            </a>
           </RainbowButton>
           <button
             type="button"

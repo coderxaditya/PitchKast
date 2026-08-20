@@ -4,12 +4,12 @@ import { useEffect, useRef } from "react";
 
 import { useHandshakeStage } from "@/hooks/useHandshakeStage";
 import {
-  BG_VIDEO_SRC,
   RENDERER,
   TRACK_VH,
   VIDEO_SRC,
 } from "@/lib/scrub/config";
-import { FadingVideo } from "./FadingVideo";
+import LightRays from "@/components/ui/LightRays";
+import { HeroGlobe } from "./HeroGlobe";
 import { Hero } from "@/components/hero/Hero";
 import { Loader } from "./Loader";
 
@@ -62,13 +62,38 @@ export function Stage() {
           {/* Ambient background, sitting on top of the scrubbed footage and
               dissolving away as you scroll. Layering it this way rather than
               compositing into the canvas leaves the scroll video's renderer
-              completely untouched. */}
-          <div className="bg-veil pointer-events-none absolute inset-0 z-[1] overflow-hidden">
-            <FadingVideo
-              src={BG_VIDEO_SRC}
-              className="absolute top-0 left-1/2 -translate-x-1/2 object-cover object-top"
-              style={{ width: "120%", height: "120%" }}
+              completely untouched.
+
+              `bg-veil` carries --bgFade, so the rays and the globe dissolve
+              together over the first stretch of scroll and hand off to the
+              handshake footage exactly as the old space clip did.
+
+              The component ships `z-[3]` on its own root. This wrapper is a
+              positioned element with a z-index, so it opens a stacking context
+              and that 3 is scoped inside it — it cannot climb over the globe
+              or the copy. */}
+          <div className="bg-veil absolute inset-0 z-[1] overflow-hidden">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#ffffff"
+              raysSpeed={1}
+              lightSpread={0.5}
+              rayLength={3}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0}
+              distortion={0}
+              className="custom-rays"
+              pulsating={false}
+              fadeDistance={1}
+              saturation={1}
             />
+          </div>
+
+          {/* Centred on the rays, behind the copy. Its own layer so it keeps
+              pointer events for OrbitControls. */}
+          <div className="bg-veil absolute inset-0 z-[2]">
+            <HeroGlobe />
           </div>
 
           <Hero play={ready} />

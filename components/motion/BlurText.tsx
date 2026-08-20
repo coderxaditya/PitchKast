@@ -16,6 +16,7 @@ export function BlurText({
   className = "",
   stepDuration = 0.35,
   align = "center",
+  as: Tag = "p",
   play,
 }: {
   text?: string;
@@ -24,6 +25,12 @@ export function BlurText({
   stepDuration?: number;
   /** Words are laid out with flex, so alignment can't come from text-align. */
   align?: "center" | "left";
+  /**
+   * Headlines animated by this component are still headlines. Rendering every
+   * one as a `<p>` left the About section with no heading structure at all,
+   * which is how screen-reader users navigate a long page.
+   */
+  as?: "p" | "span" | "h2" | "h3" | "h4";
   play: boolean;
 }) {
   const words = text.split(" ");
@@ -39,7 +46,7 @@ export function BlurText({
   };
 
   return (
-    <p
+    <Tag
       className={className}
       style={{
         display: "flex",
@@ -68,6 +75,6 @@ export function BlurText({
           {word}
         </motion.span>
       ))}
-    </p>
+    </Tag>
   );
 }
