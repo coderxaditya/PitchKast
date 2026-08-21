@@ -288,6 +288,193 @@ body.is-loading {
   );
 }
 
+/* ── Meet-us stack ─────────────────────────────────────────────
+   Members do not crossfade — each one slides up from below and
+   stacks over the one before it, so the outgoing portrait is
+   progressively covered from its bottom edge. Cards paint no
+   background of their own: the photographs are opaque and do the
+   covering, which is why both names stay readable mid-transition.
+
+   Scroll writes a single property, --team-p; every card derives its
+   own offset from it, so a scroll tick is one style write. */
+@property --team-p {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --team-i {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+@property --team-local {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.team-card {
+  /* 0 while the card waits below, 1 once it has fully arrived. */
+  --team-local: clamp(
+    0,
+    calc(var(--team-p) * var(--team-last) - var(--team-i) + 1),
+    1
+  );
+  transform: translate3d(0, calc((1 - var(--team-local)) * 100%), 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-card {
+    transform: none;
+  }
+}
+
+/* ── Services cylinder ─────────────────────────────────────────
+   The reference draws its service names into a three.js canvas.
+   Here they stay real DOM text and the curve is CSS 3D, so the list
+   is still selectable, indexable and readable by a screen reader —
+   and it costs no extra WebGL context on a page already running two.
+
+   Scroll writes exactly one custom property, --svc-p. Every line
+   derives its own position from that, so a scroll tick is a single
+   style write rather than 23. */
+@property --svc-p {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --svc-i {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+@property --svc-o {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+@property --svc-theta {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* The cylinder is a wide-canvas effect and only applies from md up. Names here
+   run to 44 characters, which wrap to two or three lines on a phone — and the
+   curve spaces its lines on a fixed step, so wrapped items would collide. Below
+   md the section is a plain, readable list instead. */
+@media (min-width: 768px) {
+  .svc-stage {
+    perspective: 820px;
+    perspective-origin: 50% 50%;
+  }
+
+  .svc-list {
+    transform-style: preserve-3d;
+  }
+
+  /* Lines sit on the surface of an actual cylinder rather than being rotated
+     in place. Each one is placed at angle θ around a circle of radius R:
+
+       y = R·sin θ        z = R·(cos θ − 1)      pitch = −θ
+
+     The z term is what was missing before — without it the lines rotated but
+     never travelled backwards, so they flattened without ever receding. With
+     it, passed lines wrap up and over the top, bunching together and turning
+     edge-on exactly the way the reference does.
+
+     Fading on cos θ rather than on distance keeps roughly five lines alive on
+     each side and retires them as they turn away, so the curve stays visible
+     instead of dissolving after two steps. */
+  .svc-item {
+    /* Signed distance from the focused line, in list positions. */
+    --svc-o: calc(var(--svc-i) - var(--svc-p) * var(--svc-last));
+    --svc-theta: calc(var(--svc-o) * var(--svc-angle));
+    position: absolute;
+    inset-inline: 0;
+    transform: translate3d(
+        0,
+        calc(var(--svc-r) * sin(var(--svc-theta))),
+        calc(var(--svc-r) * (cos(var(--svc-theta)) - 1))
+      )
+      rotateX(calc(-1 * var(--svc-theta)))
+      skewX(calc(var(--svc-theta) * 0.14));
+
+    /* Two gates multiplied together.
+
+       cos θ retires a line as it turns edge-on. On its own that is not enough:
+       23 lines at 17° span 374°, more than a full turn, so the tail of the list
+       comes back around past 270° where cos is positive again and lands on top
+       of the head of the list at full opacity. That is what made the start and
+       end of the section collide.
+
+       The second gate is a hard distance cutoff — beyond five positions from
+       the focus a line is gone no matter where its angle wrapped to. */
+    opacity: calc(
+      clamp(0, calc(cos(var(--svc-theta)) * 1.12), 1) *
+        clamp(0, calc(6 - max(var(--svc-o), -1 * var(--svc-o))), 1)
+    );
+  }
+
+  /* The curve is decoration; the list still has to be readable without it. */
+  @media (prefers-reduced-motion: reduce) {
+    .svc-item {
+      transform: translate3d(0, calc(var(--svc-o) * var(--svc-step)), 0);
+      opacity: clamp(
+        0,
+        calc(1.04 - max(var(--svc-o), -1 * var(--svc-o)) * 0.3),
+        1
+      );
+    }
+  }
+}
+
+/* ── Logo marquee ──────────────────────────────────────────────
+   Driven by a CSS animation rather than a requestAnimationFrame
+   loop. The previous implementation moved the track from rAF on the
+   main thread, which is fine on a laptop but stalls on a phone,
+   where this page is already decoding a 240-frame sequence and
+   running two WebGL contexts. A keyframed transform is handed to
+   the compositor and keeps running while the main thread is busy.
+
+   The track holds exactly two copies of the sequence, so animating
+   to -50% lands copy two exactly where copy one began — seamless,
+   with no measurement needed to make the loop join. */
+.marquee {
+  position: relative;
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Pause on hover in CSS, gated to real pointers. Doing this in JS is
+   what stranded the strip on touch before: mobile browsers fire an
+   emulated mouseenter and often never send the matching mouseleave,
+   so the paused state latched and never cleared. A media query
+   cannot latch. */
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+}
+
 /* ── Atmosphere ────────────────────────────────────────────────
    Pure #000 reads as a hole, not a surface: nothing for the glass
    to refract and no sense of depth behind the type. A film grain
@@ -604,5 +791,37 @@ body.is-loading {
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* ── Custom cursor ────────────────────────────────────────────────────────
+   SmoothCursor sets `cursor: none` on <body> from JS, which an element with
+   its own cursor — every button, link, and the globe's markers — overrides,
+   leaving the native arrow drawn on top of the custom one. This hides it
+   everywhere instead.
+
+   Three guards on the rule:
+
+   - `pointer: fine` + `hover: hover`, matching the component's own device
+     test. A touch device never renders the cursor, so hiding the native one
+     there would be hiding nothing and breaking hybrid laptop/touch setups.
+   - `prefers-reduced-motion: no-preference`, matching the JS gate in
+     `Cursor`. When the custom cursor is not rendered, the real one must come
+     back — otherwise there is no pointer at all.
+   - text fields keep their I-beam, which is a genuine affordance rather than
+     decoration: it shows where the caret will land.
+   ────────────────────────────────────────────────────────────────────────── */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable="true"] {
+    cursor: text !important;
   }
 }

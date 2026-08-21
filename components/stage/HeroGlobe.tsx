@@ -1,84 +1,108 @@
 "use client";
 import { Globe3D, GlobeMarker } from "@/components/ui/3d-globe";
 
-const sampleMarkers: GlobeMarker[] = [
+/**
+ * Where we actually work.
+ *
+ * Country-level entries are pinned to that country's primary business centre,
+ * since a pin needs a single point and a country's centroid often lands in
+ * open desert or ocean. City-level entries are the cities themselves.
+ *
+ * Coordinates are decimal degrees, north and east positive.
+ */
+const markers: GlobeMarker[] = [
+  // Americas
   {
     lat: 40.7128,
     lng: -74.006,
     src: "https://assets.aceternity.com/avatars/1.webp",
-    label: "New York",
+    label: "United States",
   },
+
+  // Europe
   {
     lat: 51.5074,
     lng: -0.1278,
     src: "https://assets.aceternity.com/avatars/2.webp",
-    label: "London",
+    label: "United Kingdom",
   },
   {
-    lat: 35.6762,
-    lng: 139.6503,
+    lat: 40.4168,
+    lng: -3.7038,
     src: "https://assets.aceternity.com/avatars/3.webp",
-    label: "Tokyo",
+    label: "Spain",
   },
   {
-    lat: -33.8688,
-    lng: 151.2093,
+    lat: 52.2297,
+    lng: 21.0122,
     src: "https://assets.aceternity.com/avatars/4.webp",
-    label: "Sydney",
+    label: "Poland",
   },
-  {
-    lat: 48.8566,
-    lng: 2.3522,
-    src: "https://assets.aceternity.com/avatars/5.webp",
-    label: "Paris",
-  },
-  {
-    lat: 28.6139,
-    lng: 77.209,
-    src: "https://assets.aceternity.com/avatars/6.webp",
-    label: "New Delhi",
-  },
-  {
-    lat: 55.7558,
-    lng: 37.6173,
-    src: "https://assets.aceternity.com/avatars/7.webp",
-    label: "Moscow",
-  },
-  {
-    lat: -22.9068,
-    lng: -43.1729,
-    src: "https://assets.aceternity.com/avatars/8.webp",
-    label: "Rio de Janeiro",
-  },
-  {
-    lat: 31.2304,
-    lng: 121.4737,
-    src: "https://assets.aceternity.com/avatars/9.webp",
-    label: "Shanghai",
-  },
+
+  // Middle East & Africa
   {
     lat: 25.2048,
     lng: 55.2708,
-    src: "https://assets.aceternity.com/avatars/10.webp",
+    src: "https://assets.aceternity.com/avatars/5.webp",
     label: "Dubai",
   },
   {
-    lat: -34.6037,
-    lng: -58.3816,
+    lat: 24.7136,
+    lng: 46.6753,
+    src: "https://assets.aceternity.com/avatars/6.webp",
+    label: "Saudi Arabia",
+  },
+  {
+    lat: 30.0444,
+    lng: 31.2357,
+    src: "https://assets.aceternity.com/avatars/7.webp",
+    label: "Egypt",
+  },
+
+  // India — four separate cities, pinned individually
+  {
+    lat: 28.4595,
+    lng: 77.0266,
+    src: "https://assets.aceternity.com/avatars/8.webp",
+    label: "Gurgaon",
+  },
+  {
+    lat: 18.5204,
+    lng: 73.8567,
+    src: "https://assets.aceternity.com/avatars/9.webp",
+    label: "Pune",
+  },
+  {
+    lat: 17.385,
+    lng: 78.4867,
+    src: "https://assets.aceternity.com/avatars/10.webp",
+    label: "Hyderabad",
+  },
+  {
+    lat: 12.9716,
+    lng: 77.5946,
     src: "https://assets.aceternity.com/avatars/11.webp",
-    label: "Buenos Aires",
+    label: "Bangalore",
+  },
+
+  // Asia-Pacific
+  {
+    lat: 4.1755,
+    lng: 73.5093,
+    src: "https://assets.aceternity.com/avatars/12.webp",
+    label: "Maldives",
   },
   {
     lat: 1.3521,
     lng: 103.8198,
-    src: "https://assets.aceternity.com/avatars/12.webp",
+    src: "https://assets.aceternity.com/avatars/13.webp",
     label: "Singapore",
   },
   {
-    lat: 37.5665,
-    lng: 126.978,
-    src: "https://assets.aceternity.com/avatars/13.webp",
-    label: "Seoul",
+    lat: -33.8688,
+    lng: 151.2093,
+    src: "https://assets.aceternity.com/avatars/14.webp",
+    label: "Australia",
   },
 ];
 
@@ -104,6 +128,25 @@ const sampleMarkers: GlobeMarker[] = [
  */
 const GLOBE_BOX = "118.1vmin";
 
+/**
+ * Which longitude the globe opens on.
+ *
+ * The camera sits on +z looking at the origin, and `latLngToVector3` puts a
+ * point at longitude L on +z when L = -90 — so an unrotated globe always
+ * opened on 90°W, dead centre on the Americas, with every marker except the
+ * US behind the limb.
+ *
+ * Rotating the sphere by y brings longitude L forward when y = -90 - L. We
+ * want to open on ~45°E, which frames Europe, Africa, the Gulf and India at
+ * once — the dense part of the marker set:
+ *
+ *     y = -90 - 45 = -135
+ *
+ * Only the starting frame changes. Auto-rotation and drag still run exactly
+ * as before, from here instead of from the Americas.
+ */
+const OPENING_ROTATION_Y = -135;
+
 export function HeroGlobe() {
   return (
     <div className="pointer-events-none absolute inset-0">
@@ -122,12 +165,13 @@ export function HeroGlobe() {
       >
         <Globe3D
           className="h-full w-full"
-          markers={sampleMarkers}
+          markers={markers}
           config={{
             atmosphereColor: "#4da6ff",
             atmosphereIntensity: 20,
             bumpScale: 5,
             autoRotateSpeed: 0.3,
+            initialRotation: { x: 0, y: OPENING_ROTATION_Y },
           }}
         />
       </div>

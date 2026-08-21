@@ -1,13 +1,16 @@
-import type { LogoItem } from "@/components/ui/LogoLoop";
+export type LogoItem = {
+  title: string;
+  ariaLabel: string;
+  node: React.ReactNode;
+};
 
 /**
  * Placeholder client lockups — a geometric mark plus a wordmark, drawn in
  * `currentColor` so the strip controls its own colour and hover state.
  *
  * These are deliberately invented names. Swapping in the real thing is a
- * one-line change per entry: replace the `node` with
- * `{ src: "/logos/acme.svg", alt: "Acme" }` and LogoLoop renders an <img>
- * instead, re-measuring the track once the image loads.
+ * one-line change per entry: replace the `node` with an `<img>` of the real
+ * mark; the marquee re-measures once fonts and images have settled.
  */
 
 function Lockup({ mark, name }: { mark: React.ReactNode; name: string }) {

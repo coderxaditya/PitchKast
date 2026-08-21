@@ -118,6 +118,18 @@ interface MarkerProps {
   onHover?: (marker: GlobeMarker | null) => void;
 }
 
+/**
+ * Raster resolution for the marker avatars.
+ *
+ * The original 8px box was blown up ~30x by drei's `transform` mode, which is
+ * why the faces read as blurry — there were only 8 source pixels to stretch.
+ * These two constants must move together: apparent size is proportional to
+ * `distanceFactor`, so multiplying the CSS box by AVATAR_SCALE and dividing
+ * distanceFactor by it leaves the on-screen size identical.
+ */
+const AVATAR_SCALE = 10;
+const AVATAR_PX = 8 * AVATAR_SCALE;
+
 function Marker({
   marker,
   radius,
@@ -210,11 +222,20 @@ function Marker({
 
       {/* Circular image at the top */}
       <group ref={imageGroupRef} position={topPosition}>
+        {/* The avatar is drawn at AVATAR_PX and then scaled *down* to its
+            on-screen size, rather than authored at 8px and scaled up ~30x by
+            `transform`. At 8px the browser was interpolating an eight-pixel
+            bitmap, so the face was already soft and `scale-125` on hover only
+            magnified the mush. distanceFactor is divided by the same factor,
+            because apparent size is proportional to it — so the marker lands
+            at exactly the size it did before, just with real resolution
+            behind it. Ring and shadow are scaled up in lockstep for the same
+            reason: at this raster size a 1px ring would render hairline. */}
         <Html
           transform
           center
           sprite
-          distanceFactor={10}
+          distanceFactor={10 / AVATAR_SCALE}
           style={{
             pointerEvents: isVisible ? "auto" : "none",
             opacity: isVisible ? 1 : 0,
@@ -223,12 +244,16 @@ function Marker({
         >
           <div
             className={cn(
-              "cursor-pointer overflow-hidden rounded-full bg-neutral-900 shadow-lg transition-transform duration-200",
-              hovered && "scale-125 shadow-xl ring-1 ring-white/50",
+              /* `transition-[scale]`, not `transition-transform`: Tailwind v4
+                 compiles `scale-125` to the standalone `scale` property, which
+                 `transition-transform` does not cover — so the hover was
+                 snapping rather than easing. */
+              "cursor-pointer overflow-hidden rounded-full bg-neutral-900 shadow-lg transition-[scale,box-shadow] duration-200",
+              hovered && "scale-125 shadow-xl ring-10 ring-white/50",
             )}
             style={{
-              width: "8px",
-              height: "8px",
+              width: `${AVATAR_PX}px`,
+              height: `${AVATAR_PX}px`,
             }}
             onMouseEnter={handlePointerEnter}
             onMouseLeave={handlePointerLeave}
@@ -292,8 +317,26 @@ function RotatingGlobe({
     return new THREE.SphereGeometry(config.radius * 1.002, 32, 16);
   }, [config.radius]);
 
+  /* `initialRotation` was declared in the config and defaulted, but never
+     reached the scene — the group rendered unrotated, so the globe always
+     opened on 90°W (the Americas). Applied here in degrees, which is what the
+     config reads as; three.js wants radians.
+
+     This offsets the sphere, not the camera, so OrbitControls' autoRotate and
+     drag behaviour are untouched: it only changes which longitude is facing
+     the camera on the first frame. Markers live inside this same group, so
+     they carry over with it. */
+  const initialRotation = useMemo<[number, number, number]>(
+    () => [
+      config.initialRotation.x * (Math.PI / 180),
+      config.initialRotation.y * (Math.PI / 180),
+      0,
+    ],
+    [config.initialRotation.x, config.initialRotation.y],
+  );
+
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} rotation={initialRotation}>
       {/* Main globe mesh with Earth texture */}
       <mesh geometry={geometry}>
         <meshStandardMaterial

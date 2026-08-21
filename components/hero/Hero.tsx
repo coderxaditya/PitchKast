@@ -1,27 +1,56 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { BlurText } from "@/components/motion/BlurText";
 import { Navbar } from "./Navbar";
 import { Rise } from "@/components/motion/Rise";
+import StatsCounter from "@/components/ui/stats-counter";
 import { CheckIcon, GlobeIcon } from "@/components/icons";
+
+/** Matches the `Rise` delay on the card row, so the count starts as it fades in. */
+const STATS_DELAY = 1.1;
 
 function StatCard({
   icon,
   value,
+  suffix,
   label,
+  play,
 }: {
   icon: ReactNode;
-  value: string;
+  value: number;
+  suffix: string;
   label: string;
+  play: boolean;
 }) {
+  /* StatsCounter starts on its own in-view check, and in the hero it is in
+     view from the first frame — so left alone it would run its whole count
+     while the card is still at opacity 0 behind the intro, and land on the
+     final number before anyone sees it. Mounting it on the same beat as the
+     card's reveal is what makes the count visible; the component itself is
+     untouched. */
+  const [armed, setArmed] = useState(false);
+
+  useEffect(() => {
+    if (!play) return;
+    const id = setTimeout(() => setArmed(true), STATS_DELAY * 1000);
+    return () => clearTimeout(id);
+  }, [play]);
+
   return (
     <div className="liquid-glass flex min-w-0 flex-1 flex-col justify-between rounded-[1.25rem] p-4 sm:w-[220px] sm:flex-none sm:p-5">
       <div>{icon}</div>
       <div className="mt-6 sm:mt-8">
         <div className="font-heading text-3xl leading-none tracking-[-1px] text-white italic sm:text-4xl">
-          {value}
+          {armed ? (
+            <StatsCounter value={value} suffix={suffix} duration={2} />
+          ) : (
+            /* Same glyph count and tabular figures as the live counter, so
+               arming it cannot shift the card's layout. Invisible in practice:
+               the row is still at opacity 0 until this flips. */
+            <span className="tabular-nums">0{suffix}</span>
+          )}
         </div>
         <div className="font-body mt-2 text-xs font-light text-white">
           {label}
@@ -55,19 +84,23 @@ export function Hero({ play }: { play: boolean }) {
         {/* Cards are fixed-width by design; below sm they share the row instead
             so the pair never runs past the viewport edges. */}
         <Rise
-          delay={1.1}
+          delay={STATS_DELAY}
           play={play}
           className="mt-10 flex w-full max-w-[456px] items-stretch justify-center gap-4 sm:w-auto sm:max-w-none [@media(max-height:720px)]:mt-5 [@media(max-height:560px)]:hidden"
         >
           <StatCard
             icon={<GlobeIcon />}
-            value="25+"
+            value={25}
+            suffix="+"
             label="Global Clients"
+            play={play}
           />
           <StatCard
             icon={<CheckIcon />}
-            value="90+"
+            value={90}
+            suffix="+"
             label="Projects delivered"
+            play={play}
           />
         </Rise>
 
