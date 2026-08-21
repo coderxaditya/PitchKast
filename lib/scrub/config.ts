@@ -30,10 +30,10 @@ export const USE_LENIS = true;
 /**
  * How quickly Lenis catches up to where you actually scrolled, per frame.
  * Lower is smoother and glides longer; higher tracks the input tighter.
- * 0.08 gives a long, settled glide without feeling disconnected from the
- * wheel.
+ * 0.065 sits just past the point where the glide is clearly felt without the
+ * page starting to feel disconnected from the wheel.
  */
-export const LENIS_LERP = 0.08;
+export const LENIS_LERP = 0.065;
 
 /**
  * Distance one wheel notch travels, as a multiple of the browser default.
@@ -46,15 +46,48 @@ export const LENIS_LERP = 0.08;
 export const LENIS_WHEEL_MULTIPLIER = 0.85;
 
 /**
- * Touch is left on the browser's own momentum scrolling.
+ * Smooth touch as well as wheel, so phones and tablets get the same feel.
  *
- * Lenis can drive touch too (`syncTouch`), but it then competes with the
- * native fling physics that phones already do well, and the usual result
- * is a scroll that feels heavier and slightly behind the finger. The
- * "rush scroll" problem this was asked to solve is a wheel and trackpad
- * problem; touch already decelerates on its own.
+ * Lenis leaves this off by default because it means taking over from the
+ * browser's own fling physics, which phones do well. Doing it anyway is a
+ * deliberate call: the alternative is a site that glides on a laptop and
+ * snaps on a phone, which reads as two different sites.
  */
-export const LENIS_SYNC_TOUCH = false;
+export const LENIS_SYNC_TOUCH = true;
+
+/**
+ * Catch-up rate for touch, kept slightly tighter than the wheel value.
+ *
+ * A finger is a direct-manipulation input — the content is expected to be
+ * under the fingertip — so the same 0.065 that reads as luxurious on a
+ * wheel reads as lag on a drag. This is close enough to feel like the same
+ * site without the content sliding out from under the finger.
+ */
+export const LENIS_SYNC_TOUCH_LERP = 0.09;
+
+/**
+ * How far a fling coasts after the finger lifts, as an exponent on release
+ * velocity. Lenis defaults to 1.7; a touch above that lengthens the glide
+ * to match the long wheel settle.
+ */
+export const LENIS_TOUCH_INERTIA_EXPONENT = 1.9;
+
+/** Distance one touch-drag covers, as a multiple of the default. */
+export const LENIS_TOUCH_MULTIPLIER = 1.1;
+
+/**
+ * Lenis honours `prefers-reduced-motion` by default, and honouring it means
+ * forcing `lerp = 1` — no smoothing whatsoever.
+ *
+ * That default would have made every value above dead on the very devices
+ * this was asked to work on: Android battery saver and Samsung's "Reduce
+ * animations" both set the preference, and this project has already lost the
+ * services curve, the team stack and the logo marquee to exactly that. It is
+ * off for the same reason those overrides were removed, and carries the same
+ * tradeoff — scroll hijacking is the most significant of the four for anyone
+ * with vestibular sensitivity.
+ */
+export const LENIS_RESPECT_REDUCED_MOTION = false;
 
 // ── Source footage ────────────────────────────────────────────
 export const FRAME_COUNT = 240; // 10s @ 24fps

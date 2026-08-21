@@ -17,6 +17,10 @@ import {
   LENIS_LERP,
   LENIS_WHEEL_MULTIPLIER,
   LENIS_SYNC_TOUCH,
+  LENIS_SYNC_TOUCH_LERP,
+  LENIS_TOUCH_INERTIA_EXPONENT,
+  LENIS_TOUCH_MULTIPLIER,
+  LENIS_RESPECT_REDUCED_MOTION,
   DAMPING_LENIS,
 } from "@/lib/scrub/config";
 import { clamp, easeInOut, norm } from "@/lib/scrub/math";
@@ -153,6 +157,10 @@ export function useHandshakeStage({
         lerp: LENIS_LERP,
         wheelMultiplier: LENIS_WHEEL_MULTIPLIER,
         syncTouch: LENIS_SYNC_TOUCH,
+        syncTouchLerp: LENIS_SYNC_TOUCH_LERP,
+        touchInertiaExponent: LENIS_TOUCH_INERTIA_EXPONENT,
+        touchMultiplier: LENIS_TOUCH_MULTIPLIER,
+        respectReducedMotion: LENIS_RESPECT_REDUCED_MOTION,
       });
       lenis.on("scroll", ScrollTrigger.update);
       lenisRaf = (time: number) => lenis?.raf(time * 1000);

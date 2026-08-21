@@ -156,6 +156,12 @@ export function HeroGlobe() {
           all off the bottom, dropping the globe 81px low. A translate centres
           it honestly and lets it overflow both edges evenly. */}
       <div
+        /* The globe is dragged to rotate. Now that touch is smoothed, a drag
+           here would otherwise be read as a scroll gesture and the page would
+           slide away under the finger. This hands touch on the globe back to
+           OrbitControls; the wheel is untouched, so scrolling over the globe
+           still scrolls the page. */
+        data-lenis-prevent-touch=""
         className="pointer-events-auto absolute top-1/2 left-1/2"
         style={{
           height: GLOBE_BOX,

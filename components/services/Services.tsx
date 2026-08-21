@@ -150,11 +150,19 @@ export function Services() {
                 className="svc-item px-5 text-center sm:px-6"
                 style={{ "--svc-i": i } as React.CSSProperties}
               >
-                {/* The 22ch cap keeps the longest name (30 chars) to two
-                    lines on a 360px screen — which is what --svc-r's 200px
-                    floor is sized to clear. Released from sm up, where the
-                    names fit on one line at any size in the clamp. */}
-                <span className="font-display mx-auto block max-w-[22ch] text-[clamp(1.05rem,4.6vw,3.6rem)] leading-[1.05] font-extrabold tracking-[-0.02em] text-balance text-neutral-950 sm:max-w-none md:leading-[0.95]">
+                {/* Size: floor and slope both raised, ceiling untouched.
+                    3.6rem was right on a large display, so that stays exactly
+                    as it was; what changed is how quickly the type reaches it.
+                    At 4.6vw the cap only engaged past ~1250px, which left
+                    every phone, tablet and smaller laptop reading well under
+                    it — 17px on a 375px screen. At 6vw the cap arrives by
+                    960px, so everything below grows and everything at the cap
+                    is byte-identical to before.
+
+                    The 22ch cap keeps the longest name (30 chars) to two lines
+                    on a narrow screen — which is what --svc-r's 200px floor is
+                    sized to clear. Released from sm up. */}
+                <span className="font-display mx-auto block max-w-[22ch] text-[clamp(1.35rem,6vw,3.6rem)] leading-[1.05] font-extrabold tracking-[-0.02em] text-balance text-neutral-950 sm:max-w-none md:leading-[0.95]">
                   {service}
                 </span>
               </li>

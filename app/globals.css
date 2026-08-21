@@ -439,6 +439,42 @@ body.is-loading {
    no curve at all, which is exactly the bug it looked like. --svc-step is
    kept as a token for whenever a real reduced variant is built. */
 
+/* ── Lenis smooth scroll ───────────────────────────────────────
+   Lenis ships a stylesheet; rather than add an import we carry the
+   rules it actually needs here, next to everything else.
+
+   `height: auto` is the load-bearing one. Lenis measures the content
+   to compute its scroll limit, and a fixed height on html or body
+   makes that measurement wrong — the page would stop short of its own
+   end. `overscroll-behavior: none` matters now that touch is smoothed:
+   without it an upward fling at the top hands the gesture to Android's
+   pull-to-refresh mid-scroll.
+   ────────────────────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis {
+  overscroll-behavior-y: none;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+/* Opt-outs: an element carrying one of these keeps its own gestures
+   instead of feeding them to the page scroll. */
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 /* ── Logo marquee ──────────────────────────────────────────────
    Driven by a CSS animation rather than a requestAnimationFrame
    loop. The previous implementation moved the track from rAF on the
