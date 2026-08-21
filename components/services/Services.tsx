@@ -29,9 +29,9 @@ const SERVICES = [
 ] as const;
 
 /**
- * Scroll length, md and up. The reference spends about five viewports on six
- * items, which would be nineteen for twenty-three — far too long to sit
- * through. This keeps the same feel at roughly a quarter viewport per line.
+ * Scroll length. The reference spends about five viewports on six items, which
+ * would be nineteen for twenty-three — far too long to sit through. This keeps
+ * the same feel at roughly a quarter viewport per line.
  */
 const TRACK_VH = 520;
 /** Fallback spacing, used only by the reduced-motion flat list. */
@@ -44,34 +44,54 @@ const STEP = "clamp(3.2rem, 7vh, 5.6rem)";
 const ANGLE = "17deg";
 /**
  * Front-of-drum spacing is R·sin(17°) ≈ 0.29R, so the radius has to clear the
- * line height or neighbouring lines touch before the curve has even started.
- * At the desktop size that needs ~230px; this leaves margin on top.
+ * tallest line or neighbours touch before the curve has even started.
+ *
+ * That constraint is what used to keep this section off phones. The longest
+ * name is 44 characters and wraps to three lines on a narrow screen, so the
+ * radius has to clear three lines, not one:
+ *
+ *   3 lines x 1.05rem x 1.05 leading  ~=  53px
+ *   needed R  =  53 / 0.29            ~=  183px
+ *
+ * The 200px floor covers that with margin, including on a short landscape
+ * phone where 30vh alone would only be ~190px. On a tall screen 30vh takes
+ * over and the drum grows with the viewport as before.
  */
-const RADIUS = "clamp(210px, 31vh, 340px)";
+const RADIUS = "clamp(200px, 30vh, 340px)";
+/**
+ * Perspective scales with the drum. A fixed 820px against a 200px radius on a
+ * phone reads as a much stronger lens than the same 820px against 340px on a
+ * desktop, which made the near lines balloon. Tying it to the viewport keeps
+ * the apparent curvature consistent across sizes.
+ */
+const PERSPECTIVE = "clamp(520px, 92vh, 900px)";
 
 export function Services() {
   const trackRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const track = trackRef.current;
+    const pin = pinRef.current;
     const stage = stageRef.current;
-    if (!track || !stage) return;
-
-    /* The cylinder only exists from md up. The width check lives *inside* the
-       handler rather than around the subscription: conditionally attaching
-       meant a page first painted narrow never wired the listener at all, and
-       never recovered on resize. Subscribing once and cheaply bailing cannot
-       get stuck. */
-    const wide = window.matchMedia("(min-width: 768px)");
+    if (!track || !pin || !stage) return;
 
     /* One passive listener writing one custom property. No rAF loop: this only
        has work while the user is actually scrolling, and a standing loop is
-       what stalled the logo marquee on mobile. */
+       what stalled the logo marquee on mobile.
+
+       No width test any more — the cylinder runs at every size. */
     const update = () => {
-      if (!wide.matches) return;
       const rect = track.getBoundingClientRect();
-      const distance = rect.height - window.innerHeight;
+
+      /* Measure the pinned pane rather than assuming it equals the window.
+         On mobile it is sized in svh, which is the *smallest* viewport — the
+         one with the browser chrome showing — while innerHeight grows as that
+         chrome retracts. Using innerHeight here would drift the progress by
+         however tall the address bar happens to be at that moment. */
+      const pinned = pin.offsetHeight;
+      const distance = rect.height - pinned;
       const progress =
         distance <= 0 ? 0 : Math.min(Math.max(-rect.top / distance, 0), 1);
       stage.style.setProperty("--svc-p", progress.toFixed(5));
@@ -90,12 +110,18 @@ export function Services() {
     <section
       ref={trackRef}
       aria-label="Services"
-      /* Auto height on mobile, a tall scroll track from md up. */
-      className="relative z-10 bg-[#f4f3f0] md:h-[var(--svc-track)]"
-      style={{ "--svc-track": `${TRACK_VH}vh` } as React.CSSProperties}
+      /* A tall scroll track at every width — this is what the pinned pane
+         travels through. svh, not vh: on mobile `vh` is the *largest* viewport
+         and would make the track taller than the distance actually scrolled,
+         so the drum would never finish its turn. */
+      className="relative z-10 h-[var(--svc-track)] bg-[#f4f3f0]"
+      style={{ "--svc-track": `${TRACK_VH}svh` } as React.CSSProperties}
     >
-      <div className="flex w-full flex-col md:sticky md:top-0 md:h-screen md:overflow-hidden">
-        <div className="px-6 pt-20 text-center md:pt-24">
+      <div
+        ref={pinRef}
+        className="sticky top-0 flex h-[100svh] w-full flex-col overflow-hidden"
+      >
+        <div className="px-6 pt-14 text-center sm:pt-20 md:pt-24">
           {/* Deeper than the brand gold: #c8a96a on this background is 2:1
               and fails contrast, this is ~4.5:1. The full stop is inside the
               colour, not left to inherit — it reads as part of the word. */}
@@ -106,30 +132,31 @@ export function Services() {
 
         <div
           ref={stageRef}
-          className="svc-stage relative mt-14 md:mt-0 md:flex-1"
+          className="svc-stage relative flex-1"
           style={
             {
               "--svc-last": SERVICES.length - 1,
               "--svc-step": STEP,
               "--svc-angle": ANGLE,
               "--svc-r": RADIUS,
+              "--svc-perspective": PERSPECTIVE,
             } as React.CSSProperties
           }
         >
-          {/* From md up each line is absolutely positioned and derives its own
-              offset from --svc-p, so the list reads as a cylinder turning past
-              the viewport. Below md it is an ordinary flowing list. */}
-          <ul className="svc-list flex flex-col md:absolute md:inset-0 md:items-center md:justify-center">
+          {/* Every line is absolutely positioned and derives its own offset
+              from --svc-p, so the list reads as a cylinder turning past the
+              viewport. */}
+          <ul className="svc-list absolute inset-0 flex flex-col items-center justify-center">
             {SERVICES.map((service, i) => (
               <li
                 key={service}
-                className="svc-item border-b border-neutral-950/10 px-6 py-4 text-center last:border-b-0 md:border-0 md:py-0"
+                className="svc-item px-5 text-center sm:px-6"
                 style={{ "--svc-i": i } as React.CSSProperties}
               >
-                {/* Capped below the old 4.2rem: the longest name is 44
-                    characters, and at that size the line height ate the gap
-                    the curve needs to stay legible. */}
-                <span className="font-display block text-[clamp(1.35rem,4.6vw,3.6rem)] leading-[1.05] font-extrabold tracking-[-0.02em] text-balance text-neutral-950 md:leading-[0.95]">
+                {/* The floor drops to 1.05rem so the longest name (44 chars)
+                    wraps to at most three lines on a 360px screen — which is
+                    what --svc-r's 200px floor is sized to clear. */}
+                <span className="font-display mx-auto block max-w-[22ch] text-[clamp(1.05rem,4.6vw,3.6rem)] leading-[1.05] font-extrabold tracking-[-0.02em] text-balance text-neutral-950 sm:max-w-none md:leading-[0.95]">
                   {service}
                 </span>
               </li>

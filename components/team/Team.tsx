@@ -79,6 +79,17 @@ const TRACK_VH = TEAM.length * 90;
 const PORTRAIT_W = "min(33.6vw, 53.6vh)";
 
 /**
+ * Portrait size below sm, where the card stacks vertically instead of running
+ * as two columns — so the portrait shares the viewport's height with the name,
+ * role and line beneath it rather than sitting beside them.
+ *
+ * Capped on height first: at 0.812 aspect, 37svh of width is 45.6svh of
+ * height, which leaves a little over half the pane for the text block and the
+ * eyebrow. 70vw takes over on a wide-but-short screen.
+ */
+const PORTRAIT_W_SM = "min(70vw, 37svh)";
+
+/**
  * Our light surface, shared with Services so the two read as one continuous
  * light chapter rather than two differently-white blocks.
  *
@@ -109,14 +120,14 @@ export function Team() {
     const stage = stageRef.current;
     if (!track || !stage) return;
 
-    /* Only the desktop stack is scroll-driven. The width test sits inside the
-       handler so a page first painted narrow still wires up when widened. */
-    const wide = window.matchMedia("(min-width: 768px)");
-
     const update = () => {
-      if (!wide.matches) return;
       const rect = track.getBoundingClientRect();
-      const distance = rect.height - window.innerHeight;
+
+      /* The pinned pane's own height, not innerHeight. It is sized in svh —
+         the viewport with mobile browser chrome *showing* — while innerHeight
+         grows as that chrome retracts, which would drift progress mid-scroll
+         by however tall the address bar is. */
+      const distance = rect.height - stage.offsetHeight;
       const progress =
         distance <= 0 ? 0 : Math.min(Math.max(-rect.top / distance, 0), 1);
 
@@ -144,79 +155,32 @@ export function Team() {
     <section
       ref={trackRef}
       aria-label="Meet us"
-      className="relative z-10 md:h-[var(--team-track)]"
+      /* svh, not vh: on mobile `vh` is the *largest* viewport, which would make
+         the track taller than the distance actually scrolled and leave the last
+         member unreached. */
+      className="relative z-10 h-[var(--team-track)]"
       style={
         {
-          "--team-track": `${TRACK_VH}vh`,
+          "--team-track": `${TRACK_VH}svh`,
           background: SURFACE,
         } as React.CSSProperties
       }
     >
-      {/* ── Mobile: a plain vertical stack of cards. Nothing pinned, nothing
-             scroll-driven, no hover — just swipe down through the team. ── */}
-      <div className="px-6 py-24 md:hidden">
-        <p
-          className="font-body text-xs tracking-[0.24em] uppercase"
-          style={{ color: ACCENT }}
-        >
-          (Meet us)
-        </p>
-
-        <ul className="mt-12 flex flex-col gap-16">
-          {TEAM.map((member, i) => (
-            <li key={member.name}>
-              <div
-                className="overflow-hidden rounded-[1.75rem]"
-                style={{ background: FRAME }}
-              >
-                <img
-                  src={member.src}
-                  alt={`${member.name}, ${member.role}`}
-                  width={member.w}
-                  height={member.h}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-[484/596] w-full object-cover grayscale"
-                />
-              </div>
-
-              <div className="mt-6 flex items-baseline justify-between">
-                <h3 className="font-body text-2xl font-bold tracking-[-0.01em] text-neutral-950">
-                  {member.name}
-                </h3>
-                <span className="font-body text-xs tabular-nums text-neutral-400">
-                  {i + 1}/{TEAM.length}
-                </span>
-              </div>
-
-              <p
-                className="font-body mt-2 text-sm font-medium"
-                style={{ color: ACCENT }}
-              >
-                {member.role}
-              </p>
-              <p className="font-body mt-4 text-base text-neutral-700 italic">
-                {member.line}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* ── Desktop: cards slide up and stack over one another ── */}
+      {/* One pinned stack at every width. Cards slide up and over one another;
+          below sm each card lays itself out as a column instead of two. */}
       <div
         ref={stageRef}
-        className="relative hidden md:sticky md:top-0 md:block md:h-screen md:overflow-hidden"
+        className="relative sticky top-0 h-[100svh] overflow-hidden"
         style={{ "--team-last": TEAM.length - 1 } as React.CSSProperties}
       >
         <p
-          className="font-body absolute top-12 left-1/2 z-20 -translate-x-1/2 text-xs tracking-[0.24em] uppercase"
+          className="font-body absolute top-7 left-1/2 z-20 -translate-x-1/2 text-xs tracking-[0.24em] uppercase sm:top-12"
           style={{ color: ACCENT }}
         >
           (Meet us)
         </p>
 
-        <div className="absolute right-8 bottom-10 z-20 flex items-center gap-4 lg:right-14">
+        <div className="absolute right-6 bottom-6 z-20 flex items-center gap-3 sm:right-8 sm:bottom-10 sm:gap-4 lg:right-14">
           <span
             aria-hidden="true"
             className="block h-2 w-2 rotate-45"
@@ -245,14 +209,24 @@ export function Team() {
                 up, its top edge wipes the member beneath from the bottom of
                 the screen upward. Leaving it transparent let every member's
                 text pile up in the same place. Its height matches the portrait,
-                so the wipe line is a single clean edge across both columns. */}
+                so the wipe line is a single clean edge across both columns.
+
+                Below sm it becomes a single centred column — portrait above,
+                text below — and the same wipe still works, because the band is
+                still one opaque rectangle covering everything the card draws. */}
             <div
-              className="mx-auto flex w-full max-w-[76rem] items-stretch gap-10 px-8 lg:gap-14 lg:px-14"
+              className="mx-auto flex w-full max-w-[76rem] flex-col items-center gap-6 px-6 text-center sm:flex-row sm:items-stretch sm:gap-10 sm:px-8 sm:text-left lg:gap-14 lg:px-14"
               style={{ background: SURFACE }}
             >
               <div
-                className="aspect-[484/596] shrink-0 overflow-hidden rounded-[2rem]"
-                style={{ width: PORTRAIT_W, background: FRAME }}
+                className="aspect-[484/596] w-[var(--portrait-sm)] shrink-0 overflow-hidden rounded-[1.5rem] sm:w-[var(--portrait)] sm:rounded-[2rem]"
+                style={
+                  {
+                    "--portrait-sm": PORTRAIT_W_SM,
+                    "--portrait": PORTRAIT_W,
+                    background: FRAME,
+                  } as React.CSSProperties
+                }
               >
                 <img
                   src={member.src}
@@ -270,16 +244,16 @@ export function Team() {
                   wipe edge stays a single clean line. The text sits at the top
                   of that span; the rest is deliberate empty surface. */}
               <div className="flex min-w-0 flex-1 flex-col py-1">
-                <h3 className="font-body text-[clamp(2rem,4.17vw,4.2rem)] leading-[1.02] font-bold tracking-[-0.02em] text-neutral-950">
+                <h3 className="font-body text-[clamp(1.6rem,7vw,4.2rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance text-neutral-950 sm:text-[clamp(2rem,4.17vw,4.2rem)]">
                   {member.name}
                 </h3>
                 <p
-                  className="font-body mt-5 text-base font-medium"
+                  className="font-body mt-3 text-sm font-medium text-balance sm:mt-5 sm:text-base"
                   style={{ color: ACCENT }}
                 >
                   {member.role}
                 </p>
-                <p className="font-body mt-7 text-[clamp(1rem,1.5vw,1.35rem)] text-neutral-800 italic">
+                <p className="font-body mt-4 text-[clamp(0.95rem,3.6vw,1.35rem)] text-pretty text-neutral-800 italic sm:mt-7 sm:text-[clamp(1rem,1.5vw,1.35rem)]">
                   {member.line}
                 </p>
               </div>

@@ -359,73 +359,76 @@ body.is-loading {
   initial-value: 0deg;
 }
 
-/* The cylinder is a wide-canvas effect and only applies from md up. Names here
-   run to 44 characters, which wrap to two or three lines on a phone — and the
-   curve spaces its lines on a fixed step, so wrapped items would collide. Below
-   md the section is a plain, readable list instead. */
-@media (min-width: 768px) {
-  .svc-stage {
-    perspective: 820px;
-    perspective-origin: 50% 50%;
-  }
+/* The cylinder runs at every width.
 
-  .svc-list {
-    transform-style: preserve-3d;
-  }
+   It used to be gated to md and up because names run to 44 characters, which
+   wrap to two or three lines on a phone, and the curve spaces its lines on a
+   fixed angular step — so wrapped lines collided. That is a geometry problem
+   with a geometry fix, not a reason to drop the effect: front-of-drum spacing
+   is R·sin(θ), so the radius simply has to clear the tallest wrapped line.
+   `--svc-r` carries a floor that does exactly that, and the type scale is
+   tuned so nothing exceeds three lines. See Services.tsx for the numbers. */
+.svc-stage {
+  perspective: var(--svc-perspective, 820px);
+  perspective-origin: 50% 50%;
+}
 
-  /* Lines sit on the surface of an actual cylinder rather than being rotated
-     in place. Each one is placed at angle θ around a circle of radius R:
+.svc-list {
+  transform-style: preserve-3d;
+}
 
-       y = R·sin θ        z = R·(cos θ − 1)      pitch = −θ
+/* Lines sit on the surface of an actual cylinder rather than being rotated
+   in place. Each one is placed at angle θ around a circle of radius R:
 
-     The z term is what was missing before — without it the lines rotated but
-     never travelled backwards, so they flattened without ever receding. With
-     it, passed lines wrap up and over the top, bunching together and turning
-     edge-on exactly the way the reference does.
+     y = R·sin θ        z = R·(cos θ − 1)      pitch = −θ
 
-     Fading on cos θ rather than on distance keeps roughly five lines alive on
-     each side and retires them as they turn away, so the curve stays visible
-     instead of dissolving after two steps. */
+   The z term is what makes it read as a drum — without it the lines rotate
+   but never travel backwards, so they flatten without ever receding. With
+   it, passed lines wrap up and over the top, bunching together and turning
+   edge-on exactly the way the reference does.
+
+   Fading on cos θ rather than on distance keeps roughly five lines alive on
+   each side and retires them as they turn away, so the curve stays visible
+   instead of dissolving after two steps. */
+.svc-item {
+  /* Signed distance from the focused line, in list positions. */
+  --svc-o: calc(var(--svc-i) - var(--svc-p) * var(--svc-last));
+  --svc-theta: calc(var(--svc-o) * var(--svc-angle));
+  position: absolute;
+  inset-inline: 0;
+  transform: translate3d(
+      0,
+      calc(var(--svc-r) * sin(var(--svc-theta))),
+      calc(var(--svc-r) * (cos(var(--svc-theta)) - 1))
+    )
+    rotateX(calc(-1 * var(--svc-theta)))
+    skewX(calc(var(--svc-theta) * 0.14));
+
+  /* Two gates multiplied together.
+
+     cos θ retires a line as it turns edge-on. On its own that is not enough:
+     23 lines at 17° span 374°, more than a full turn, so the tail of the list
+     comes back around past 270° where cos is positive again and lands on top
+     of the head of the list at full opacity. That is what made the start and
+     end of the section collide.
+
+     The second gate is a hard distance cutoff — beyond five positions from
+     the focus a line is gone no matter where its angle wrapped to. */
+  opacity: calc(
+    clamp(0, calc(cos(var(--svc-theta)) * 1.12), 1) *
+      clamp(0, calc(6 - max(var(--svc-o), -1 * var(--svc-o))), 1)
+  );
+}
+
+/* The curve is decoration; the list still has to be readable without it. */
+@media (prefers-reduced-motion: reduce) {
   .svc-item {
-    /* Signed distance from the focused line, in list positions. */
-    --svc-o: calc(var(--svc-i) - var(--svc-p) * var(--svc-last));
-    --svc-theta: calc(var(--svc-o) * var(--svc-angle));
-    position: absolute;
-    inset-inline: 0;
-    transform: translate3d(
-        0,
-        calc(var(--svc-r) * sin(var(--svc-theta))),
-        calc(var(--svc-r) * (cos(var(--svc-theta)) - 1))
-      )
-      rotateX(calc(-1 * var(--svc-theta)))
-      skewX(calc(var(--svc-theta) * 0.14));
-
-    /* Two gates multiplied together.
-
-       cos θ retires a line as it turns edge-on. On its own that is not enough:
-       23 lines at 17° span 374°, more than a full turn, so the tail of the list
-       comes back around past 270° where cos is positive again and lands on top
-       of the head of the list at full opacity. That is what made the start and
-       end of the section collide.
-
-       The second gate is a hard distance cutoff — beyond five positions from
-       the focus a line is gone no matter where its angle wrapped to. */
-    opacity: calc(
-      clamp(0, calc(cos(var(--svc-theta)) * 1.12), 1) *
-        clamp(0, calc(6 - max(var(--svc-o), -1 * var(--svc-o))), 1)
+    transform: translate3d(0, calc(var(--svc-o) * var(--svc-step)), 0);
+    opacity: clamp(
+      0,
+      calc(1.04 - max(var(--svc-o), -1 * var(--svc-o)) * 0.3),
+      1
     );
-  }
-
-  /* The curve is decoration; the list still has to be readable without it. */
-  @media (prefers-reduced-motion: reduce) {
-    .svc-item {
-      transform: translate3d(0, calc(var(--svc-o) * var(--svc-step)), 0);
-      opacity: clamp(
-        0,
-        calc(1.04 - max(var(--svc-o), -1 * var(--svc-o)) * 0.3),
-        1
-      );
-    }
   }
 }
 
