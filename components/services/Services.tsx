@@ -3,11 +3,11 @@
 import { useEffect, useRef } from "react";
 
 const SERVICES = [
-  "Founder & Company Branding",
-  "Product & Technology",
-  "Growth & Marketing",
+  "Founder & Company Branding Across Social Media Platforms",
+  "Product & Technology Creation",
+  "Linkedin Lead Generation & Marketing",
   "Sales & Market Expansion",
-  "Fundraising & Strategic Growth",
+  "Fundraising & Strategic Growth Decks",
 ] as const;
 
 /**
@@ -27,34 +27,32 @@ const STEP = "clamp(3.2rem, 7vh, 5.6rem)";
  * Cylinder geometry. The angle is how far apart lines sit around the drum, and
  * the radius sets how far a line travels backwards as it goes over.
  *
- * 17° was right for twenty-three names: it kept five or so alive either side
- * of the front, and the list was long enough that the drum was always mid-turn.
- * Five names at 17° would span only 68° in total — the whole list sitting near
- * the front at once, barely curving, which is not the effect. 24° spreads the
- * same five across ±48° from the focus, so the far ones genuinely turn away:
+ * Front-of-drum spacing is R·sin(θ), and it has to clear the tallest *rendered*
+ * line — which now means a wrapped one. At the desktop size the longest name
+ * ("Founder & Company Branding Across Social Media Platforms", 56 characters)
+ * wraps to two lines:
  *
- *   +/-1 step -> 24 deg, cos 0.91   near the front, full strength
- *   +/-2      -> 48 deg, cos 0.67   clearly receding
- *   +/-3      -> 72 deg, cos 0.31   nearly edge-on
- *   +/-4      -> 96 deg, cos < 0    gone
+ *   2 lines x 54.7px leading   =  109px
+ *   plus a visible gap         ~= 134px of spacing needed
+ *
+ * The previous 24° at a 240px radius gave only 240·sin(24°) = 98px, so that
+ * item would have run into its neighbours. Widening to 30° raises spacing to
+ * half the radius, and it also *shrinks* the vertical spread — at 30° a line
+ * is edge-on by the third step instead of the fourth, so fewer lines are on
+ * screen and the drum needs less room, not more.
  */
-const ANGLE = "24deg";
+const ANGLE = "30deg";
 /**
- * Front-of-drum spacing is R·sin(24°) ≈ 0.41R, so the radius has to clear the
- * tallest line or neighbours touch before the curve has even started.
+ * At 30° spacing is exactly R/2, so 134px of clearance needs R >= 268.
  *
- * This constraint is what used to keep the section off phones entirely. The
- * longest name is now 30 characters and wraps to two lines inside the 22ch cap
- * on a narrow screen, so the radius has to clear two lines:
+ *   34vh gives 272px on an 800px-tall laptop  -> 136px spacing, 27px gap
+ *   the 240px floor covers a 640px-tall phone -> 120px spacing, which clears
+ *   the three wrapped lines (71px) that the 22ch measure produces there
  *
- *   2 lines x 1.05rem x 1.05 leading  ~=  35px
- *   needed R  =  35 / 0.41            ~=  85px
- *
- * The 200px floor clears that several times over, including on a short
- * landscape phone where 30vh alone would only be ~190px. The wider angle also
- * bought headroom here: at 17° the same two lines needed 121px.
+ * Vertical spread stays inside the pane: visible lines reach ±R·sin(60°),
+ * so ±236px at 272 — well within the ~608px the pane leaves below the heading.
  */
-const RADIUS = "clamp(200px, 30vh, 340px)";
+const RADIUS = "clamp(240px, 34vh, 380px)";
 /**
  * Perspective scales with the drum. A fixed 820px against a 200px radius on a
  * phone reads as a much stronger lens than the same 820px against 340px on a
