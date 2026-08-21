@@ -323,11 +323,23 @@ body.is-loading {
   transform: translate3d(0, calc((1 - var(--team-local)) * 100%), 0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .team-card {
-    transform: none;
-  }
-}
+/* No `prefers-reduced-motion` override here, deliberately.
+
+   There used to be one setting `transform: none`, and it was a bug rather
+   than an accommodation: these cards are `position: absolute; inset: 0`, so
+   removing the transform does not calm the motion — it drops all six on top
+   of one another at once, leaving whichever has the highest z-index drawn
+   over a pile of half-covered text while the counter reports someone else
+   entirely. Anyone whose device asks for reduced motion — Android battery
+   saver and Samsung's "Reduce animations" both do — saw a broken section, not
+   a quieter one.
+
+   The motion here is scroll-scrubbed: nothing moves unless the reader is
+   actively scrolling, and it stops the instant they stop. That is a different
+   risk profile from autoplaying animation. If a genuinely reduced variant is
+   wanted later it has to be a real alternative layout — a plain flowing list,
+   with the cards no longer absolutely positioned — not a transform removed
+   from underneath a stack that depends on it. */
 
 /* ── Services cylinder ─────────────────────────────────────────
    The reference draws its service names into a three.js canvas.
@@ -420,17 +432,12 @@ body.is-loading {
   );
 }
 
-/* The curve is decoration; the list still has to be readable without it. */
-@media (prefers-reduced-motion: reduce) {
-  .svc-item {
-    transform: translate3d(0, calc(var(--svc-o) * var(--svc-step)), 0);
-    opacity: clamp(
-      0,
-      calc(1.04 - max(var(--svc-o), -1 * var(--svc-o)) * 0.3),
-      1
-    );
-  }
-}
+/* The flat `prefers-reduced-motion` fallback that used to live here is gone
+   for the same reason as the one on .team-card — see that note. It replaced
+   the drum with a plain vertical list, so every phone with battery saver or
+   "Reduce animations" on rendered this section as flat text sliding past with
+   no curve at all, which is exactly the bug it looked like. --svc-step is
+   kept as a token for whenever a real reduced variant is built. */
 
 /* ── Logo marquee ──────────────────────────────────────────────
    Driven by a CSS animation rather than a requestAnimationFrame

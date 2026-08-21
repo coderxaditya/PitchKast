@@ -170,7 +170,7 @@ export function Team() {
           below sm each card lays itself out as a column instead of two. */}
       <div
         ref={stageRef}
-        className="relative sticky top-0 h-[100svh] overflow-hidden"
+        className="sticky top-0 h-[100svh] overflow-hidden"
         style={{ "--team-last": TEAM.length - 1 } as React.CSSProperties}
       >
         <p
@@ -197,11 +197,23 @@ export function Team() {
         {TEAM.map((member, i) => (
           <article
             key={member.name}
+            /* The card's opaque surface is this element, spanning the whole
+               pinned pane, so every card covers exactly the same rectangle.
+
+               It used to be the inner row, which shrink-wrapped its content —
+               and content height varies per member. Aditya's role wraps to a
+               second line, making his band 496px against everyone else's 453.
+               A shorter card sliding up over him could not cover his last
+               43px, so his line bled out from under the incoming card. Sizing
+               the surface to the pane instead of the text removes the whole
+               class of bug: coverage no longer depends on what anyone's role
+               happens to say. */
             className="team-card absolute inset-0 flex items-center"
             style={
               {
                 "--team-i": i,
                 zIndex: i + 1,
+                background: SURFACE,
               } as React.CSSProperties
             }
           >
@@ -214,10 +226,7 @@ export function Team() {
                 Below sm it becomes a single centred column — portrait above,
                 text below — and the same wipe still works, because the band is
                 still one opaque rectangle covering everything the card draws. */}
-            <div
-              className="mx-auto flex w-full max-w-[76rem] flex-col items-center gap-6 px-6 text-center sm:flex-row sm:items-stretch sm:gap-10 sm:px-8 sm:text-left lg:gap-14 lg:px-14"
-              style={{ background: SURFACE }}
-            >
+            <div className="mx-auto flex w-full max-w-[76rem] flex-col items-center gap-6 px-6 text-center sm:flex-row sm:items-stretch sm:gap-10 sm:px-8 sm:text-left lg:gap-14 lg:px-14">
               <div
                 className="aspect-[484/596] w-[var(--portrait-sm)] shrink-0 overflow-hidden rounded-[1.5rem] sm:w-[var(--portrait)] sm:rounded-[2rem]"
                 style={
