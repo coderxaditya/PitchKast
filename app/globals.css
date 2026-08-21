@@ -510,24 +510,14 @@ body.is-loading {
   background-size: 140px 140px;
 }
 
-/* A gradient rather than blur(): a filter on a box this large costs
-   real paint time on mid-tier phones, and the gradient is already soft. */
-.about-bloom {
-  position: absolute;
-  pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgba(200, 169, 106, 0.11) 0%,
-    rgba(200, 169, 106, 0.04) 35%,
-    rgba(200, 169, 106, 0) 70%
-  );
-}
-
 /* ── Cursor spotlight ──────────────────────────────────────────
    The card lights where the pointer is. Coordinates arrive from one
    delegated pointermove listener on the section, written as custom
    properties, so hovering never triggers a React render. Pointer-gated:
-   touch has no cursor to follow, and a stuck highlight looks broken. */
+   touch has no cursor to follow, and a stuck highlight looks broken.
+
+   A gradient rather than blur(): a filter on a box this large costs
+   real paint time on mid-tier phones, and the gradient is already soft. */
 .spotlight::after {
   content: "";
   position: absolute;

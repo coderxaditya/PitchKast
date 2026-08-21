@@ -3,59 +3,56 @@
 import { useEffect, useRef } from "react";
 
 const SERVICES = [
-  "Technology consulting",
-  "Website development",
-  "Software and application development",
-  "Product development",
-  "UI/UX design",
-  "Branding and visual identity",
-  "Pitch decks and business presentations",
-  "Founder branding",
-  "LinkedIn management",
-  "Social media management",
-  "Content strategy",
-  "Content writing",
-  "SEO",
-  "Digital marketing",
-  "Lead generation",
-  "Business development",
-  "Outreach",
-  "Investor relations support",
-  "Fundraising support",
-  "Business strategy",
-  "Market research",
-  "Training and consulting",
-  "Other services specifically agreed in writing",
+  "Founder & Company Branding",
+  "Product & Technology",
+  "Growth & Marketing",
+  "Sales & Market Expansion",
+  "Fundraising & Strategic Growth",
 ] as const;
 
 /**
- * Scroll length. The reference spends about five viewports on six items, which
- * would be nineteen for twenty-three — far too long to sit through. This keeps
- * the same feel at roughly a quarter viewport per line.
+ * Scroll length, derived from the list rather than hard-coded.
+ *
+ * The drum makes SERVICES.length - 1 moves, and each wants a bit over half a
+ * viewport to feel deliberate rather than twitchy. Add the pinned pane itself
+ * and that is the whole track. Deriving it matters: this was 520vh when the
+ * list held twenty-three names, and leaving that number behind for five would
+ * have spent five viewports of scrolling on each move.
  */
-const TRACK_VH = 520;
+const STEP_VH = 55;
+const TRACK_VH = 100 + (SERVICES.length - 1) * STEP_VH;
 /** Fallback spacing, used only by the reduced-motion flat list. */
 const STEP = "clamp(3.2rem, 7vh, 5.6rem)";
 /**
- * Cylinder geometry. The angle is how far apart lines sit around the drum —
- * 17° puts roughly five either side of the front before they turn edge-on —
- * and the radius sets how far a line travels backwards as it goes over.
+ * Cylinder geometry. The angle is how far apart lines sit around the drum, and
+ * the radius sets how far a line travels backwards as it goes over.
+ *
+ * 17° was right for twenty-three names: it kept five or so alive either side
+ * of the front, and the list was long enough that the drum was always mid-turn.
+ * Five names at 17° would span only 68° in total — the whole list sitting near
+ * the front at once, barely curving, which is not the effect. 24° spreads the
+ * same five across ±48° from the focus, so the far ones genuinely turn away:
+ *
+ *   +/-1 step -> 24 deg, cos 0.91   near the front, full strength
+ *   +/-2      -> 48 deg, cos 0.67   clearly receding
+ *   +/-3      -> 72 deg, cos 0.31   nearly edge-on
+ *   +/-4      -> 96 deg, cos < 0    gone
  */
-const ANGLE = "17deg";
+const ANGLE = "24deg";
 /**
- * Front-of-drum spacing is R·sin(17°) ≈ 0.29R, so the radius has to clear the
+ * Front-of-drum spacing is R·sin(24°) ≈ 0.41R, so the radius has to clear the
  * tallest line or neighbours touch before the curve has even started.
  *
- * That constraint is what used to keep this section off phones. The longest
- * name is 44 characters and wraps to three lines on a narrow screen, so the
- * radius has to clear three lines, not one:
+ * This constraint is what used to keep the section off phones entirely. The
+ * longest name is now 30 characters and wraps to two lines inside the 22ch cap
+ * on a narrow screen, so the radius has to clear two lines:
  *
- *   3 lines x 1.05rem x 1.05 leading  ~=  53px
- *   needed R  =  53 / 0.29            ~=  183px
+ *   2 lines x 1.05rem x 1.05 leading  ~=  35px
+ *   needed R  =  35 / 0.41            ~=  85px
  *
- * The 200px floor covers that with margin, including on a short landscape
- * phone where 30vh alone would only be ~190px. On a tall screen 30vh takes
- * over and the drum grows with the viewport as before.
+ * The 200px floor clears that several times over, including on a short
+ * landscape phone where 30vh alone would only be ~190px. The wider angle also
+ * bought headroom here: at 17° the same two lines needed 121px.
  */
 const RADIUS = "clamp(200px, 30vh, 340px)";
 /**
@@ -153,9 +150,10 @@ export function Services() {
                 className="svc-item px-5 text-center sm:px-6"
                 style={{ "--svc-i": i } as React.CSSProperties}
               >
-                {/* The floor drops to 1.05rem so the longest name (44 chars)
-                    wraps to at most three lines on a 360px screen — which is
-                    what --svc-r's 200px floor is sized to clear. */}
+                {/* The 22ch cap keeps the longest name (30 chars) to two
+                    lines on a 360px screen — which is what --svc-r's 200px
+                    floor is sized to clear. Released from sm up, where the
+                    names fit on one line at any size in the clamp. */}
                 <span className="font-display mx-auto block max-w-[22ch] text-[clamp(1.05rem,4.6vw,3.6rem)] leading-[1.05] font-extrabold tracking-[-0.02em] text-balance text-neutral-950 sm:max-w-none md:leading-[0.95]">
                   {service}
                 </span>

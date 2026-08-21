@@ -96,23 +96,20 @@ export function About() {
     >
       {/* Depth layer. Kept first in DOM and at z-0 so the statically
           positioned content paints over it, and wrapped in its own clipper —
-          `overflow-hidden` on the section itself would break sticky. */}
+          `overflow-hidden` on the section itself would break sticky.
+
+          Three gold `about-bloom` glows used to sit here and were removed:
+          the section runs 7.3 viewports tall on a phone, so a bloom sized at
+          "30% height" became a 233x1779 ribbon. `radial-gradient(circle, …)`
+          defaults to farthest-corner, which sized the circle off that height —
+          the gold was still at full strength 628px out while the box was only
+          116px to its side, so it got sliced into a hard vertical band down
+          half the screen. Grain alone carries the texture now, and it tiles at
+          a fixed 140px so it cannot develop the same aspect problem. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
-        <span
-          className="about-bloom"
-          style={{ top: "2%", left: "-14%", width: "62%", height: "30%" }}
-        />
-        <span
-          className="about-bloom"
-          style={{ top: "34%", right: "-16%", width: "58%", height: "28%" }}
-        />
-        <span
-          className="about-bloom"
-          style={{ bottom: "-6%", left: "12%", width: "66%", height: "26%" }}
-        />
         <span className="about-grain" />
       </div>
 
