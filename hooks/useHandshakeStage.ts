@@ -14,6 +14,10 @@ import {
   RENDERER,
   SNAP_EPSILON,
   USE_LENIS,
+  LENIS_LERP,
+  LENIS_WHEEL_MULTIPLIER,
+  LENIS_SYNC_TOUCH,
+  DAMPING_LENIS,
 } from "@/lib/scrub/config";
 import { clamp, easeInOut, norm } from "@/lib/scrub/math";
 import { FrameSequenceRenderer } from "@/lib/scrub/renderers/frame-sequence";
@@ -110,6 +114,12 @@ export function useHandshakeStage({
       );
     };
 
+    /* One stage of smoothing at a time: when Lenis is driving the page it
+       already eases the scroll position, so the follower is loosened to
+       near-tracking. Without this the two lags compound and the footage
+       drifts behind the scroll. */
+    const FOLLOWER_DAMPING = USE_LENIS ? DAMPING_LENIS : DAMPING;
+
     // ── Follower loop ────────────────────────────────────────
     const tick = () => {
       const delta = target - head;
@@ -122,7 +132,7 @@ export function useHandshakeStage({
         return;
       }
 
-      head += delta * (reduceMotion ? 1 : DAMPING);
+      head += delta * (reduceMotion ? 1 : FOLLOWER_DAMPING);
       renderer.render(Math.round(head), openFade());
     };
 
@@ -139,11 +149,26 @@ export function useHandshakeStage({
     const setupLenis = async () => {
       const Lenis = (await import("lenis")).default;
       if (cancelled) return;
-      lenis = new Lenis({ lerp: 0.1 });
+      lenis = new Lenis({
+        lerp: LENIS_LERP,
+        wheelMultiplier: LENIS_WHEEL_MULTIPLIER,
+        syncTouch: LENIS_SYNC_TOUCH,
+      });
       lenis.on("scroll", ScrollTrigger.update);
       lenisRaf = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(lenisRaf);
+      /* Lenis is stepped from gsap.ticker rather than its own rAF so the
+         smoothed scroll position and the scrub advance on the same frame.
+         lagSmoothing(0) stops GSAP quietly skipping time after a stall,
+         which would otherwise teleport the scroll on a slow first paint. */
       gsap.ticker.lagSmoothing(0);
+
+      /* Dev-only handle, alongside __stagePreview. Smooth scroll is felt
+         rather than seen in a DOM dump, so this is the way to confirm the
+         instance is live and carrying the intended options. */
+      if (process.env.NODE_ENV === "development") {
+        (window as unknown as Record<string, unknown>).__lenis = lenis;
+      }
     };
 
     // ── Boot ─────────────────────────────────────────────────
