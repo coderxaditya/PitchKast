@@ -479,11 +479,21 @@ body.is-loading {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .marquee__track {
-    animation: none;
-  }
-}
+/* Deliberately no `prefers-reduced-motion` override.
+
+   This is the third place one of these caused a "it's broken on my phone"
+   report, and the honest note is that this one was not broken — the strip
+   simply stopped, which is what the rule asked for. It stopped on a great
+   many phones, though: Android battery saver and Samsung's "Reduce
+   animations" both set the preference, so a large share of real visitors
+   were seeing a still image where the design intends a moving one.
+
+   Of the three, this is the case with the strongest claim to the
+   preference: unlike the scroll-scrubbed sections, a marquee is continuous
+   autoplaying motion, which is exactly what the media feature was added
+   for. It runs for everyone because that is the call that was made, not
+   because the accessibility argument was weak. A slower track under
+   `reduce` would be a reasonable compromise if this is revisited. */
 
 /* ── Atmosphere ────────────────────────────────────────────────
    Pure #000 reads as a hole, not a surface: nothing for the glass
