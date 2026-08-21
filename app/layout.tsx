@@ -5,7 +5,6 @@ import {
   Instrument_Serif, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Cursor } from "@/components/motion/Cursor";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -64,10 +63,7 @@ export default function RootLayout({
         geist.variable,
       )}
     >
-      <body className="is-loading bg-black">
-        <Cursor />
-        {children}
-      </body>
+      <body className="is-loading bg-black">{children}</body>
     </html>
   );
 }

@@ -813,35 +813,3 @@ body.is-loading {
     @apply font-sans;
   }
 }
-
-/* ── Custom cursor ────────────────────────────────────────────────────────
-   SmoothCursor sets `cursor: none` on <body> from JS, which an element with
-   its own cursor — every button, link, and the globe's markers — overrides,
-   leaving the native arrow drawn on top of the custom one. This hides it
-   everywhere instead.
-
-   Three guards on the rule:
-
-   - `pointer: fine` + `hover: hover`, matching the component's own device
-     test. A touch device never renders the cursor, so hiding the native one
-     there would be hiding nothing and breaking hybrid laptop/touch setups.
-   - `prefers-reduced-motion: no-preference`, matching the JS gate in
-     `Cursor`. When the custom cursor is not rendered, the real one must come
-     back — otherwise there is no pointer at all.
-   - text fields keep their I-beam, which is a genuine affordance rather than
-     decoration: it shows where the caret will land.
-   ────────────────────────────────────────────────────────────────────────── */
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  *,
-  *::before,
-  *::after {
-    cursor: none !important;
-  }
-
-  input,
-  textarea,
-  select,
-  [contenteditable="true"] {
-    cursor: text !important;
-  }
-}
