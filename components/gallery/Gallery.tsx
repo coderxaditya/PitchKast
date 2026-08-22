@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { ImageTrail } from "@/components/ui/image-trail";
 import { rememberScroll } from "@/lib/returnScroll";
+import { Lightbox } from "./Lightbox";
 import { ACCENT, SURFACE, galleryAlt, galleryImages } from "./images";
 
 /* This section is gated on a pointer test rather than a width: the trail
@@ -18,6 +19,7 @@ import { ACCENT, SURFACE, galleryAlt, galleryImages } from "./images";
 export function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
   const [warm, setWarm] = useState(false);
+  const [open, setOpen] = useState<number | null>(null);
 
   /* Warm the cache as the section approaches, not on page load.
      The trail spawns an <img> at the moment the cursor moves, so an unfetched
@@ -115,20 +117,45 @@ export function Gallery() {
           Moments.
         </h2>
 
-        <ul className="mt-10 grid grid-cols-2 gap-3">
+        {/* Two masonry columns, each photograph at its own aspect ratio.
+            The previous `aspect-[4/5] object-cover` forced every one into the
+            same box and cropped whatever did not fit, which is why the
+            previews showed a slice rather than the picture.
+
+            A button, not a bare image: this is the only way into the viewer on
+            a touch device, and it should answer to a keyboard and a screen
+            reader as well as a thumb. */}
+        <ul className="mt-10 columns-2 gap-3 [&>li]:mb-3">
           {galleryImages.map((src, i) => (
-            <li key={src} className="overflow-hidden rounded-lg bg-[#e7e4dd]">
-              <img
-                src={src}
-                alt={galleryAlt(i)}
-                loading="lazy"
-                decoding="async"
-                className="aspect-[4/5] w-full object-cover"
-              />
+            <li key={src} className="break-inside-avoid">
+              <button
+                type="button"
+                onClick={() => setOpen(i)}
+                aria-label={`Open ${galleryAlt(i)}`}
+                className="block w-full overflow-hidden rounded-lg bg-[#e7e4dd]"
+              >
+                <img
+                  src={src}
+                  alt={galleryAlt(i)}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-auto w-full"
+                />
+              </button>
             </li>
           ))}
         </ul>
       </div>
+
+      {open !== null && (
+        <Lightbox
+          images={galleryImages}
+          index={open}
+          onIndex={setOpen}
+          onClose={() => setOpen(null)}
+          alt={galleryAlt}
+        />
+      )}
     </section>
   );
 }

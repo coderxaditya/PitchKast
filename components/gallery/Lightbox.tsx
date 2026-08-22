@@ -1,0 +1,113 @@
+"use client";
+
+import { useCallback, useEffect } from "react";
+
+/**
+ * Full-size viewer, shared by the /gallery wall and the touch grid on the
+ * home page.
+ *
+ * Both places show cropped or scaled-down previews; this is where a
+ * photograph is actually seen. It carries its own controls rather than
+ * relying on the keyboard alone, because on a phone there is no Escape key
+ * and no arrow keys — the desktop-only version of this had no way out but
+ * the browser's back gesture.
+ */
+export function Lightbox({
+  images,
+  index,
+  onIndex,
+  onClose,
+  alt,
+}: {
+  images: readonly string[];
+  index: number;
+  onIndex: (next: number) => void;
+  onClose: () => void;
+  alt: (i: number) => string;
+}) {
+  const go = useCallback(
+    (delta: number) => onIndex((index + delta + images.length) % images.length),
+    [index, images.length, onIndex],
+  );
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
+    };
+    window.addEventListener("keydown", onKey);
+
+    /* Lock the page behind the overlay. `overflow: hidden` on the body leaves
+       the document with no scroll range, which is enough to stop Lenis too —
+       it moves the window rather than a transform, so with nowhere to go it
+       simply does not move. The overlay also opts out of Lenis's touch
+       handling, so a drag here is never read as a page scroll. */
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [go, onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt(index)}
+      data-lenis-prevent=""
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 p-4 sm:p-8"
+      onClick={onClose}
+    >
+      <img
+        src={images[index]}
+        alt={alt(index)}
+        /* Without this the click reaches the backdrop and dismisses the very
+           photograph that was just opened. */
+        onClick={(e) => e.stopPropagation()}
+        className="max-h-full max-w-full cursor-default rounded-lg object-contain"
+      />
+
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="font-body absolute top-4 right-4 grid h-12 w-12 place-items-center rounded-full border border-white/30 text-lg text-white transition-colors hover:bg-white/10 sm:top-6 sm:right-6"
+      >
+        &#10005;
+      </button>
+
+      {images.length > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Previous photograph"
+            onClick={(e) => {
+              e.stopPropagation();
+              go(-1);
+            }}
+            className="font-body absolute top-1/2 left-3 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 text-lg text-white transition-colors hover:bg-white/10 sm:left-6"
+          >
+            &#8592;
+          </button>
+          <button
+            type="button"
+            aria-label="Next photograph"
+            onClick={(e) => {
+              e.stopPropagation();
+              go(1);
+            }}
+            className="font-body absolute top-1/2 right-3 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 text-lg text-white transition-colors hover:bg-white/10 sm:right-6"
+          >
+            &#8594;
+          </button>
+        </>
+      )}
+
+      <span className="font-body absolute bottom-5 left-1/2 -translate-x-1/2 text-xs tabular-nums text-white/60">
+        {index + 1} / {images.length}
+      </span>
+    </div>
+  );
+}
