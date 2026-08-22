@@ -12,6 +12,28 @@ import { useCallback, useEffect } from "react";
  * and no arrow keys — the desktop-only version of this had no way out but
  * the browser's back gesture.
  */
+/**
+ * Shared control styling.
+ *
+ * The fill is opaque, and that is the whole point of it.
+ *
+ * It was `bg-black/55` — translucent — which meant the control took its
+ * appearance from whatever sat behind it. On a desktop the photograph leaves a
+ * wide gutter of near-black backdrop, so the buttons read as dark. On a phone
+ * the photograph fills the width and the arrows land on top of it, so a bright
+ * frame showed straight through and the same control read as a pale, washed
+ * disc. Same CSS, two different-looking buttons.
+ *
+ * A solid fill removes the dependency: the control is one colour in both
+ * places, whether it is sitting on the backdrop or on a sunlit photograph.
+ * The backdrop blur went with the translucency — there is nothing left to see
+ * through, and it was costing a paint.
+ */
+const CONTROL =
+  "grid place-items-center rounded-full border border-white/45 bg-neutral-950 text-white shadow-xl " +
+  "transition-colors duration-200 hover:border-white/80 hover:bg-neutral-800 " +
+  "h-12 w-12 text-lg sm:h-14 sm:w-14 sm:text-xl";
+
 export function Lightbox({
   images,
   index,
@@ -73,7 +95,7 @@ export function Lightbox({
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="font-body absolute top-4 right-4 grid h-12 w-12 place-items-center rounded-full border border-white/30 text-lg text-white transition-colors hover:bg-white/10 sm:top-6 sm:right-6"
+        className={`font-body absolute top-4 right-4 sm:top-6 sm:right-6 ${CONTROL}`}
       >
         &#10005;
       </button>
@@ -87,7 +109,7 @@ export function Lightbox({
               e.stopPropagation();
               go(-1);
             }}
-            className="font-body absolute top-1/2 left-3 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 text-lg text-white transition-colors hover:bg-white/10 sm:left-6"
+            className={`font-body absolute top-1/2 left-3 -translate-y-1/2 sm:left-6 ${CONTROL}`}
           >
             &#8592;
           </button>
@@ -98,14 +120,14 @@ export function Lightbox({
               e.stopPropagation();
               go(1);
             }}
-            className="font-body absolute top-1/2 right-3 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 text-lg text-white transition-colors hover:bg-white/10 sm:right-6"
+            className={`font-body absolute top-1/2 right-3 -translate-y-1/2 sm:right-6 ${CONTROL}`}
           >
             &#8594;
           </button>
         </>
       )}
 
-      <span className="font-body absolute bottom-5 left-1/2 -translate-x-1/2 text-xs tabular-nums text-white/60">
+      <span className="font-body absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-neutral-950 px-3 py-1 text-xs tabular-nums text-white/80">
         {index + 1} / {images.length}
       </span>
     </div>
