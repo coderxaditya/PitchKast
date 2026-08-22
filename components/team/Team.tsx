@@ -20,6 +20,10 @@ const TEAM = [
     name: "Soham Goel",
     role: "Founder & CEO, PitchKast",
     line: "Helping founders turn ideas into credibility.",
+    description: [
+      "Soham Goel is the Founder and CEO of PitchKast and an alumnus of IIT Patna. He leads the company’s vision, strategy, and growth, working closely with founders and businesses to strengthen their personal brand, digital presence, and market positioning.",
+      "With a strong interest in technology, entrepreneurship, and growth, Soham focuses on building PitchKast into a platform that helps founders communicate their ideas, establish credibility, and create meaningful business opportunities.",
+    ],
     src: "/team/soham-goel.jpeg",
     w: 1600,
     h: 1304,
@@ -28,6 +32,10 @@ const TEAM = [
     name: "Manish Goel",
     role: "Co-Founder & Head of Innovation Cell, PitchKast",
     line: "Turning ideas into scalable solutions.",
+    description: [
+      "Manish Goel is the Co-Founder and Head of Innovation Cell at PitchKast, driving innovation, strategic initiatives, and the development of new solutions that help founders and businesses build stronger brands and grow with purpose.",
+      "At PitchKast, he works closely on shaping the company’s vision, exploring new opportunities, and turning ideas into impactful, scalable solutions.",
+    ],
     src: "/team/manish-goel.jpeg",
     w: 800,
     h: 800,
@@ -36,6 +44,10 @@ const TEAM = [
     name: "Mohit Garg",
     role: "Global Business Head & HR Team Lead, PitchKast",
     line: "Growing the business and the team behind it.",
+    description: [
+      "Mohit Garg leads global business development and people operations at PitchKast, working across business growth, strategic partnerships, and team development. As the HR Team Lead, he also focuses on building a strong, collaborative team and fostering a culture that supports innovation and growth.",
+      "With a focus on business expansion and people management, Mohit plays a key role in strengthening PitchKast’s global presence and building the team behind its growth.",
+    ],
     src: "/team/mohit-garg.jpeg",
     w: 1600,
     h: 1425,
@@ -44,6 +56,10 @@ const TEAM = [
     name: "Aditya T",
     role: "Head of Tech Department & Product Manager, PitchKast",
     line: "Bridging technical execution and product strategy.",
+    description: [
+      "Aditya T is the Head of Tech Department and Product Manager at PitchKast, and an alumnus of IIIT Lucknow. With strong technical expertise and hands-on experience across the technology stack, he leads the development and execution of PitchKast’s technology and product initiatives.",
+      "He brings an end-to-end understanding of product development, from ideation and architecture to development, deployment, and optimization. His ability to bridge technical execution with product strategy plays a key role in building scalable and impactful solutions at PitchKast.",
+    ],
     src: "/team/aditya-t.jpeg",
     w: 868,
     h: 1024,
@@ -52,6 +68,10 @@ const TEAM = [
     name: "Sachin Bansal",
     role: "Advisor, PitchKast",
     line: "Strategic guidance on technology and scale.",
+    description: [
+      "Sachin Bansal serves as an Advisor at PitchKast, bringing extensive experience across technology, product, engineering, and business leadership. He is an alumnus of IIT Roorkee and has built his career working across startups and established organizations, with experience in leading technology and product teams.",
+      "At PitchKast, Sachin provides strategic guidance on technology, product development, business growth, and building scalable systems. His experience and industry perspective add valuable expertise to PitchKast’s team and long term vision.",
+    ],
     src: "/team/sachin-bansal.jpeg",
     w: 200,
     h: 200,
@@ -60,6 +80,10 @@ const TEAM = [
     name: "Shelly G",
     role: "Head of Training Department, PitchKast",
     line: "Fifteen years building industry-ready talent.",
+    description: [
+      "Shelly G is the Head of Training Department at PitchKast and an alumna of IMS Ghaziabad. She is a Gold Medalist from the Master of International Business, Batch of 2005.",
+      "With over 15 years of experience in training and developing young talent, Shelly brings extensive expertise in mentoring, skill development, and professional training. At PitchKast, she leads the training department and works towards building a strong, capable, and industry-ready team.",
+    ],
     src: "/team/shelly-g.png",
     w: 646,
     h: 1094,
@@ -265,6 +289,11 @@ export function Team() {
                 <p className="font-body mt-4 text-[clamp(0.95rem,3.6vw,1.35rem)] text-pretty text-neutral-800 italic sm:mt-7 sm:text-[clamp(1rem,1.5vw,1.35rem)]">
                   {member.line}
                 </p>
+                <div className="font-body mt-4 space-y-2.5 text-xs leading-relaxed text-neutral-600 sm:mt-6 sm:space-y-3 sm:text-sm lg:text-[0.9375rem] sm:leading-relaxed max-w-2xl">
+                  {member.description.map((paragraph, pIdx) => (
+                    <p key={pIdx}>{paragraph}</p>
+                  ))}
+                </div>
               </div>
             </div>
           </article>
