@@ -28,6 +28,7 @@ export interface FeatureCard {
 }
 
 export interface StackedFeatureCardsProps {
+  id?: string;
   heroCard: HeroCard;
   featureCards: FeatureCard[];
   sectionTitle?: string;
@@ -48,10 +49,10 @@ const Card = ({
   // Card stacking effect:
   // As we scroll down past this card, it scales down slightly.
   // target range for this card to scale down is when the NEXT cards come over it.
-  
+
   // To keep it simple, we use standard CSS sticky + framer-motion scale.
   const targetScale = 1 - (total - index) * 0.05;
-  
+
   const scale = useTransform(
     scrollYProgress,
     [index / total, (index + 1) / total],
@@ -84,7 +85,7 @@ const Card = ({
         <h3 className="font-body text-2xl font-bold tracking-[-0.02em] text-white lg:text-3xl">
           {card.title}
         </h3>
-        
+
         {card.description && (
           <h4 className="font-body mt-2 text-lg text-gold/90 lg:text-xl font-medium">
             {card.description}
@@ -117,20 +118,21 @@ const Card = ({
 };
 
 export function StackedFeatureCards({
+  id,
   heroCard,
   featureCards,
   sectionTitle,
   className,
 }: StackedFeatureCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
   return (
-    <section className={cn("relative bg-black py-28 lg:py-40 z-10", className)}>
+    <section id={id} className={cn("relative bg-black py-28 lg:py-40 z-10", className)}>
       <div className="mx-auto w-full max-w-[var(--shell)] px-6 sm:px-8 lg:px-14">
         {sectionTitle && (
           <div className="mb-16 flex items-center gap-4">

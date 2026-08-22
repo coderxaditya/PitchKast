@@ -177,6 +177,7 @@ export function Team() {
 
   return (
     <section
+      id="team"
       ref={trackRef}
       aria-label="Meet us"
       /* svh, not vh: on mobile `vh` is the *largest* viewport, which would make

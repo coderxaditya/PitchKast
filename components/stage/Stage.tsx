@@ -39,6 +39,7 @@ export function Stage() {
       {/* Scroll driver + pinned stage. The scrubbed footage takes the slot
           liquidGlass gave its autoplaying background video. */}
       <main
+        id="home"
         ref={trackRef}
         className="relative bg-black"
         style={{ height: `${TRACK_VH}vh` }}

@@ -5,6 +5,7 @@ import { Partners } from "@/components/partners/Partners";
 import { Services } from "@/components/services/Services";
 import { Stage } from "@/components/stage/Stage";
 import { Team } from "@/components/team/Team";
+import Footer from "@/components/footer/Footer";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Services />
       <Team />
       <Gallery />
+      <Footer />
     </>
   );
 }

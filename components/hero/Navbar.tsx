@@ -1,11 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { scrollToSection } from "@/lib/scrollToSection";
 
 import { ArrowUpRight } from "@/components/icons";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 
-const links = ["Home", "Voyages", "Worlds", "Innovation", "Plan Launch"];
+const links = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Case Studies", href: "#case-studies" },
+  { label: "Services", href: "#services" },
+  { label: "Team", href: "#team" },
+  { label: "Gallery", href: "#gallery" },
+];
 
 /**
  * Both CTAs point here. Declared once so the desktop and mobile buttons can
@@ -48,14 +56,16 @@ export function Navbar() {
     <nav className="pointer-events-auto absolute top-4 right-0 left-0 z-50 px-4 sm:px-8 lg:px-16">
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-1 justify-start">
-          <div
+          <a
+            href="#home"
+            onClick={(e) => scrollToSection(e, "#home")}
             className="liquid-glass flex items-center justify-center rounded-full px-4 sm:px-5"
             style={{ height: 48 }}
           >
             <span className="font-body text-sm leading-none font-semibold tracking-[0.16em] whitespace-nowrap text-white uppercase sm:text-base sm:tracking-[0.18em]">
               PITCHKAST
             </span>
-          </div>
+          </a>
         </div>
 
         {/* Desktop rail */}
@@ -64,11 +74,12 @@ export function Navbar() {
             <span className="rim-light" aria-hidden="true" />
             {links.map((link) => (
               <a
-                key={link}
-                href="#"
-                className="font-body px-4 py-2 text-sm font-medium text-white/90 xl:px-8"
+                key={link.label}
+                href={link.href}
+                onClick={(e) => scrollToSection(e, link.href)}
+                className="font-body px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors xl:px-8"
               >
-                {link}
+                {link.label}
               </a>
             ))}
           </div>
@@ -121,12 +132,15 @@ export function Navbar() {
         >
           {links.map((link) => (
             <a
-              key={link}
-              href="#"
-              onClick={() => setOpen(false)}
-              className="font-body rounded-full px-4 py-2.5 text-sm font-medium text-white/90"
+              key={link.label}
+              href={link.href}
+              onClick={(e) => {
+                setOpen(false);
+                scrollToSection(e, link.href);
+              }}
+              className="font-body rounded-full px-4 py-2.5 text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
-              {link}
+              {link.label}
             </a>
           ))}
         </div>

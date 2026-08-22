@@ -101,6 +101,7 @@ export function CaseStudies() {
 
   return (
     <StackedFeatureCards
+      id="case-studies"
       heroCard={heroCard}
       featureCards={featureCards}
       sectionTitle="Case Studies"

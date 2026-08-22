@@ -103,6 +103,7 @@ export function Services() {
 
   return (
     <section
+      id="services"
       ref={trackRef}
       aria-label="Services"
       /* A tall scroll track at every width — this is what the pinned pane

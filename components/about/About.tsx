@@ -90,6 +90,7 @@ export function About() {
 
   return (
     <section
+      id="about"
       ref={rootRef}
       aria-label="About PitchKast"
       className="relative z-10 bg-black py-28 lg:py-40"

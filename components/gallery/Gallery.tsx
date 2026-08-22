@@ -53,6 +53,7 @@ export function Gallery() {
 
   return (
     <section
+      id="gallery"
       ref={sectionRef}
       aria-label="Gallery"
       className="relative z-10"
