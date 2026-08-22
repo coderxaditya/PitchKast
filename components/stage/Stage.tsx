@@ -3,11 +3,8 @@
 import { useEffect, useRef } from "react";
 
 import { useHandshakeStage } from "@/hooks/useHandshakeStage";
-import {
-  RENDERER,
-  TRACK_VH,
-  VIDEO_SRC,
-} from "@/lib/scrub/config";
+import { takeScroll } from "@/lib/returnScroll";
+import { RENDERER, TRACK_VH, VIDEO_SRC } from "@/lib/scrub/config";
 import LightRays from "@/components/ui/LightRays";
 import { HeroGlobe } from "./HeroGlobe";
 import { Hero } from "@/components/hero/Hero";
@@ -27,6 +24,12 @@ export function Stage() {
   useEffect(() => {
     if (!ready) return;
     document.body.classList.remove("is-loading");
+
+    /* Restore only after `is-loading` is gone. While it is set the body is
+       `overflow: hidden`, so the page has no scroll range yet and any attempt
+       to move to the saved offset is silently dropped. */
+    const y = takeScroll();
+    if (y !== null) window.scrollTo(0, y);
   }, [ready]);
 
   return (

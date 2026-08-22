@@ -424,11 +424,21 @@ body.is-loading {
      of the head of the list at full opacity. That is what made the start and
      end of the section collide.
 
-     The second gate is a hard distance cutoff — beyond five positions from
-     the focus a line is gone no matter where its angle wrapped to. */
+     The second gate is a hard distance cutoff, and it is doing more work
+     than the wrap-around guard it started as. A cylinder does not space its
+     lines evenly on screen: near the front they sit R·sin(theta) apart, but
+     as they rotate away that sine flattens and they bunch together. Fading
+     purely on cos(theta) keeps a line visible right into that bunched zone,
+     which is fine while every line is one line tall — and not fine once one
+     of them wraps. A two-line name at 1024x768 overlapped its neighbour by
+     8px for exactly this reason.
+
+     2.2 retires a line at 66 degrees, before the compression bites. The
+     tightest visible pair is then 0.326R apart, which clears a wrapped line
+     against a single one at every size the page supports. */
   opacity: calc(
     clamp(0, calc(cos(var(--svc-theta)) * 1.12), 1) *
-      clamp(0, calc(6 - max(var(--svc-o), -1 * var(--svc-o))), 1)
+      clamp(0, calc(2.2 - max(var(--svc-o), -1 * var(--svc-o))), 1)
   );
 }
 

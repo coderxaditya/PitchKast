@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { peekScroll } from "@/lib/returnScroll";
+
 import {
   BG_FADE_OUT,
   DAMPING,
@@ -180,10 +182,14 @@ export function useHandshakeStage({
     };
 
     // ── Boot ─────────────────────────────────────────────────
-    // Always open on the first (black) frame — no restored scroll
-    // offset, no autoplay, nothing but the navbar and the headline.
+    // A fresh visit opens on the first (black) frame — no restored scroll
+    // offset, no autoplay, nothing but the navbar and the headline. A return
+    // from a sub-route is not a fresh visit: the reader was somewhere further
+    // down the page and expects to land back there, so the pin to the top is
+    // skipped and the offset restored once the frames are ready.
+    const returning = peekScroll() !== null;
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
+    if (!returning) window.scrollTo(0, 0);
 
     layout();
 
@@ -211,10 +217,12 @@ export function useHandshakeStage({
       })
       .then(() => {
         if (cancelled) return;
-        window.scrollTo(0, 0);
-        head = 0;
-        target = 0;
-        progress = 0;
+        if (!returning) {
+          window.scrollTo(0, 0);
+          head = 0;
+          target = 0;
+          progress = 0;
+        }
         ScrollTrigger.refresh();
         updateChrome();
         layout();

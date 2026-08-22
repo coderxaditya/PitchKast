@@ -1,4 +1,5 @@
 import { About } from "@/components/about/About";
+import { Gallery } from "@/components/gallery/Gallery";
 import { Partners } from "@/components/partners/Partners";
 import { Services } from "@/components/services/Services";
 import { Stage } from "@/components/stage/Stage";
@@ -12,6 +13,7 @@ export default function Home() {
       <About />
       <Services />
       <Team />
+      <Gallery />
     </>
   );
 }

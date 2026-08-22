@@ -31,7 +31,7 @@ function Sequence({
       role={hidden ? "presentation" : "list"}
     >
       {logos.map((logo) => (
-        <li key={logo.title} className="shrink-0" title={logo.title}>
+        <li key={logo.id} className="shrink-0" title={logo.title}>
           {logo.node}
         </li>
       ))}

@@ -1,159 +1,76 @@
 export type LogoItem = {
+  /** Stable list key. `title` cannot serve: two marks are unidentified and
+      would collide on the same label. */
+  id: string;
   title: string;
   ariaLabel: string;
   node: React.ReactNode;
 };
 
 /**
- * Placeholder client lockups — a geometric mark plus a wordmark, drawn in
- * `currentColor` so the strip controls its own colour and hover state.
+ * Client lockups.
  *
- * These are deliberately invented names. Swapping in the real thing is a
- * one-line change per entry: replace the `node` with an `<img>` of the real
- * mark; the marquee re-measures once fonts and images have settled.
+ * The files in `public/logos` are processed, not raw: the uploads were 2048px
+ * JPEG screenshots totalling 6.7MB, several with the mark reversed out of a
+ * solid colour. `scripts/process-logos.mjs` converts them to black on white,
+ * trims each to its own ink and fits them to a common height. Re-run it after
+ * dropping new files into `assets/logos-source`.
+ *
+ * Every mark therefore already *is* black and white — there is no
+ * `filter: grayscale()` here. Doing it in the file rather than at paint time
+ * means the white field matches the band exactly, so no logo shows a box.
  */
 
-function Lockup({ mark, name }: { mark: React.ReactNode; name: string }) {
+/**
+ * One slot, identical for every logo.
+ *
+ * A shared height alone does not work here: the widest mark is 6.4:1 and the
+ * narrowest 0.67:1, so at a common height one would be 255px across and
+ * another 29px. A fixed box with `object-contain` lets wide marks fill the
+ * width and tall ones fill the height, and every logo takes the same space.
+ */
+function Logo({ src, name }: { src: string; name: string }) {
   return (
-    <span className="flex items-center gap-2.5">
-      <svg
-        viewBox="0 0 24 24"
-        className="h-6 w-6 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        aria-hidden="true"
-      >
-        {mark}
-      </svg>
-      <span className="font-body text-xl font-semibold tracking-[-0.01em] whitespace-nowrap">
-        {name}
-      </span>
-    </span>
+    <img
+      src={src}
+      alt={name}
+      loading="lazy"
+      decoding="async"
+      className="h-14 w-40 object-contain"
+    />
   );
 }
 
-export const partnerLogos: LogoItem[] = [
-  {
-    title: "Northwind",
-    ariaLabel: "Northwind",
-    node: (
-      <Lockup
-        name="Northwind"
-        mark={
-          <>
-            <path d="M3 17L9 7l6 10" />
-            <path d="M13 12l4-6 4 11" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Cobalt",
-    ariaLabel: "Cobalt",
-    node: (
-      <Lockup
-        name="Cobalt"
-        mark={
-          <>
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-            <circle cx="12" cy="12" r="3.5" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Meridian",
-    ariaLabel: "Meridian",
-    node: (
-      <Lockup
-        name="Meridian"
-        mark={
-          <>
-            <circle cx="12" cy="12" r="8.5" />
-            <path d="M3.5 12h17" />
-            <path d="M12 3.5c2.4 2.5 3.6 5.4 3.6 8.5S14.4 18 12 20.5C9.6 18 8.4 15.1 8.4 12S9.6 6 12 3.5Z" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Halcyon",
-    ariaLabel: "Halcyon",
-    node: (
-      <Lockup
-        name="Halcyon"
-        mark={
-          <>
-            <path d="M12 3.5 20.5 12 12 20.5 3.5 12Z" />
-            <path d="M12 8.5 15.5 12 12 15.5 8.5 12Z" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Fathom",
-    ariaLabel: "Fathom",
-    node: (
-      <Lockup
-        name="Fathom"
-        mark={
-          <>
-            <path d="M3.5 8.5h17" />
-            <path d="M3.5 15.5h17" />
-            <path d="M9 3.5 7 20.5" />
-            <path d="M17 3.5l-2 17" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Ardent",
-    ariaLabel: "Ardent",
-    node: (
-      <Lockup
-        name="Ardent"
-        mark={
-          <>
-            <path d="M12 3.5c3 4 6 6.4 6 10a6 6 0 0 1-12 0c0-3.6 3-6 6-10Z" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Solstice",
-    ariaLabel: "Solstice",
-    node: (
-      <Lockup
-        name="Solstice"
-        mark={
-          <>
-            <circle cx="12" cy="12" r="4.5" />
-            <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19" />
-          </>
-        }
-      />
-    ),
-  },
-  {
-    title: "Verity",
-    ariaLabel: "Verity",
-    node: (
-      <Lockup
-        name="Verity"
-        mark={
-          <>
-            <path d="M12 3.5 20 7v6c0 4-3.4 6.9-8 7.5-4.6-.6-8-3.5-8-7.5V7Z" />
-            <path d="m8.8 12 2.2 2.2 4.2-4.4" />
-          </>
-        }
-      />
-    ),
-  },
+type Entry = { file: string; name: string };
+
+/**
+ * Order is the file order. Two marks are wordless — a ribbon and a graduation
+ * cap — and carry no name I can read off the artwork, so they are labelled
+ * neutrally rather than guessed at. Fill those in when you know them.
+ */
+const ENTRIES: Entry[] = [
+  { file: "logo-01.png", name: "PlayBox TV" },
+  { file: "logo-02.png", name: "Cotton Culture" },
+  { file: "logo-03.png", name: "DBMCI One" },
+  { file: "logo-04.png", name: "True Veda" },
+  { file: "logo-05.png", name: "Ice Global" },
+  { file: "logo-06.png", name: "NYNM" },
+  { file: "logo-07.png", name: "Sanat Enterprises" },
+  { file: "logo-08.png", name: "Mauritius" },
+  { file: "logo-09.png", name: "What China Reads" },
+  { file: "logo-10.png", name: "Ori" },
+  { file: "logo-11.png", name: "PIXL VFX" },
+  { file: "logo-12.png", name: "The VivaLuxury" },
+  { file: "logo-13.png", name: "Steady Rabbit" },
+  { file: "logo-14.png", name: "Client" },
+  { file: "logo-15.png", name: "Cezaa Wellness" },
+  { file: "logo-16.png", name: "OneAD" },
+  { file: "logo-17.png", name: "Client" },
 ];
+
+export const partnerLogos: LogoItem[] = ENTRIES.map(({ file, name }) => ({
+  id: file,
+  title: name,
+  ariaLabel: name,
+  node: <Logo src={`/logos/${file}`} name={name} />,
+}));

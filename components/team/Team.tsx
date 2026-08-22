@@ -21,8 +21,8 @@ const TEAM = [
     role: "Founder & CEO, PitchKast",
     line: "Helping founders turn ideas into credibility.",
     src: "/team/soham-goel.jpeg",
-    w: 960,
-    h: 1280,
+    w: 1600,
+    h: 1304,
   },
   {
     name: "Manish Goel",
@@ -45,8 +45,8 @@ const TEAM = [
     role: "Head of Tech Department & Product Manager, PitchKast",
     line: "Bridging technical execution and product strategy.",
     src: "/team/aditya-t.jpeg",
-    w: 786,
-    h: 1280,
+    w: 868,
+    h: 1024,
   },
   {
     name: "Sachin Bansal",
