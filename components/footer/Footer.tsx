@@ -4,6 +4,10 @@ import Image from "next/image";
 import { scrollToSection } from "@/lib/scrollToSection";
 import Link from "next/link";
 import { SocialDock } from "./SocialDock";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ArrowUpRight } from "@/components/icons";
+
+const BOOKING_URL = "https://calendly.com/goelsoham/founder-growth-strategy-call";
 
 export default function Footer() {
   return (
@@ -26,8 +30,14 @@ export default function Footer() {
           <p className="text-sm text-neutral-400">
             © copyright PitchKast 2026. All rights reserved.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-start gap-6">
             <SocialDock />
+            <RainbowButton asChild className="font-body rounded-full px-4 py-2">
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                Book a Discovery Call
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+            </RainbowButton>
           </div>
         </div>
 
@@ -60,7 +70,7 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h3 className="font-semibold text-neutral-100">Legal</h3>
             <div className="flex flex-col gap-4">
-              <Link href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/privacy" className="text-sm text-neutral-400 hover:text-white transition-colors">Privacy Policy</Link>
             </div>
           </div>
         </div>

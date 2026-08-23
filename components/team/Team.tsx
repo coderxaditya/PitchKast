@@ -24,6 +24,7 @@ const TEAM = [
       "Soham Goel is the Founder and CEO of PitchKast and an alumnus of IIT Patna. He leads the company’s vision, strategy, and growth, working closely with founders and businesses to strengthen their personal brand, digital presence, and market positioning.",
       "With a strong interest in technology, entrepreneurship, and growth, Soham focuses on building PitchKast into a platform that helps founders communicate their ideas, establish credibility, and create meaningful business opportunities.",
     ],
+    linkedin: "https://www.linkedin.com/in/sohamgoelsg/",
     src: "/team/soham-goel.jpeg",
     w: 1600,
     h: 1304,
@@ -36,6 +37,7 @@ const TEAM = [
       "Manish Goel is the Co-Founder and Head of Innovation Cell at PitchKast, driving innovation, strategic initiatives, and the development of new solutions that help founders and businesses build stronger brands and grow with purpose.",
       "At PitchKast, he works closely on shaping the company’s vision, exploring new opportunities, and turning ideas into impactful, scalable solutions.",
     ],
+    linkedin: "https://www.linkedin.com/in/manishgoel27/",
     src: "/team/manish-goel.jpeg",
     w: 800,
     h: 800,
@@ -48,6 +50,7 @@ const TEAM = [
       "Mohit Garg leads global business development and people operations at PitchKast, working across business growth, strategic partnerships, and team development. As the HR Team Lead, he also focuses on building a strong, collaborative team and fostering a culture that supports innovation and growth.",
       "With a focus on business expansion and people management, Mohit plays a key role in strengthening PitchKast’s global presence and building the team behind its growth.",
     ],
+    linkedin: "https://www.linkedin.com/in/mohit-garg-18b9a511a/",
     src: "/team/mohit-garg.jpeg",
     w: 1600,
     h: 1425,
@@ -60,6 +63,7 @@ const TEAM = [
       "Aditya T is the Head of Tech Department and Product Manager at PitchKast, and an alumnus of IIIT Lucknow. With strong technical expertise and hands-on experience across the technology stack, he leads the development and execution of PitchKast’s technology and product initiatives.",
       "He brings an end-to-end understanding of product development, from ideation and architecture to development, deployment, and optimization. His ability to bridge technical execution with product strategy plays a key role in building scalable and impactful solutions at PitchKast.",
     ],
+    linkedin: "https://www.linkedin.com/in/aditya-05a575411/",
     src: "/team/aditya-t.jpeg",
     w: 868,
     h: 1024,
@@ -72,6 +76,7 @@ const TEAM = [
       "Sachin Bansal serves as an Advisor at PitchKast, bringing extensive experience across technology, product, engineering, and business leadership. He is an alumnus of IIT Roorkee and has built his career working across startups and established organizations, with experience in leading technology and product teams.",
       "At PitchKast, Sachin provides strategic guidance on technology, product development, business growth, and building scalable systems. His experience and industry perspective add valuable expertise to PitchKast’s team and long term vision.",
     ],
+    linkedin: "https://www.linkedin.com/in/bansalsachin/",
     src: "/team/sachin-bansal.jpeg",
     w: 200,
     h: 200,
@@ -84,6 +89,7 @@ const TEAM = [
       "Shelly G is the Head of Training Department at PitchKast and an alumna of IMS Ghaziabad. She is a Gold Medalist from the Master of International Business, Batch of 2005.",
       "With over 15 years of experience in training and developing young talent, Shelly brings extensive expertise in mentoring, skill development, and professional training. At PitchKast, she leads the training department and works towards building a strong, capable, and industry-ready team.",
     ],
+    linkedin: "https://www.linkedin.com/in/shelly-goel-1992aa21a/",
     src: "/team/shelly-g.png",
     w: 646,
     h: 1094,
@@ -295,6 +301,23 @@ export function Team() {
                     <p key={pIdx}>{paragraph}</p>
                   ))}
                 </div>
+                {member.linkedin && (
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${member.name}'s LinkedIn`}
+                    className="mt-6 -ml-3 flex items-center justify-center size-12 rounded-full text-neutral-500 hover:bg-neutral-200 hover:text-black transition-colors"
+                  >
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="size-6">
+                      <title>LinkedIn</title>
+                      <path
+                        fill="currentColor"
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                      />
+                    </svg>
+                  </a>
+                )}
               </div>
             </div>
           </article>
