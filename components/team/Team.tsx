@@ -284,9 +284,28 @@ export function Team() {
                   wipe edge stays a single clean line. The text sits at the top
                   of that span; the rest is deliberate empty surface. */}
               <div className="flex min-w-0 flex-1 flex-col py-1">
-                <h3 className="font-body text-[clamp(1.6rem,7vw,4.2rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance text-neutral-950 sm:text-[clamp(2rem,4.17vw,4.2rem)]">
-                  {member.name}
-                </h3>
+                <div className="flex items-center gap-4">
+                  <h3 className="font-body text-[clamp(1.6rem,7vw,4.2rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance text-neutral-950 sm:text-[clamp(2rem,4.17vw,4.2rem)]">
+                    {member.name}
+                  </h3>
+                  {member.linkedin && (
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${member.name}'s LinkedIn`}
+                      className="flex items-center justify-center size-10 rounded-full bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-black transition-colors shrink-0"
+                    >
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="size-5">
+                        <title>LinkedIn</title>
+                        <path
+                          fill="currentColor"
+                          d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                        />
+                      </svg>
+                    </a>
+                  )}
+                </div>
                 <p
                   className="font-body mt-3 text-sm font-medium text-balance sm:mt-5 sm:text-base"
                   style={{ color: ACCENT }}
@@ -301,23 +320,6 @@ export function Team() {
                     <p key={pIdx}>{paragraph}</p>
                   ))}
                 </div>
-                {member.linkedin && (
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${member.name}'s LinkedIn`}
-                    className="mt-6 -ml-3 flex items-center justify-center size-12 rounded-full text-neutral-500 hover:bg-neutral-200 hover:text-black transition-colors"
-                  >
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="size-6">
-                      <title>LinkedIn</title>
-                      <path
-                        fill="currentColor"
-                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-                      />
-                    </svg>
-                  </a>
-                )}
               </div>
             </div>
           </article>
