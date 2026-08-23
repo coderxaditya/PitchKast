@@ -70,7 +70,7 @@ export function AboutPrinciple() {
             <Divider play={inView} delay={0.9} />
 
             <Rise delay={1.1} play={inView}>
-              <p className="font-body text-lead text-ink py-7 leading-[1.6] text-pretty">
+              <p className="font-body text-lead text-ink-muted py-7 leading-[1.6] text-pretty">
                 We sit on the founder&rsquo;s side of the table.
               </p>
             </Rise>
