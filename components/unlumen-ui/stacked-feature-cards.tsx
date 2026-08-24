@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  type MotionValue,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface HeroCard {
@@ -44,15 +50,13 @@ const Card = ({
   card: FeatureCard;
   index: number;
   total: number;
-  scrollYProgress: any;
+  scrollYProgress: MotionValue<number>;
 }) => {
   // Card stacking effect:
   // As we scroll down past this card, it scales down slightly.
   // target range for this card to scale down is when the NEXT cards come over it.
 
   // To keep it simple, we use standard CSS sticky + framer-motion scale.
-  const targetScale = 1 - (total - index) * 0.05;
-
   const scale = useTransform(
     scrollYProgress,
     [index / total, (index + 1) / total],
@@ -63,13 +67,28 @@ const Card = ({
 
   return (
     <motion.div
-      style={{
-        top: `calc(120px + ${index * 20}px)`,
-        scale: index === total - 1 ? 1 : springScale,
-        transformOrigin: "top center",
-      }}
+      style={
+        {
+          /* The pin offset moved to CSS (.stack-card) so it can respond to
+             viewport *height*. It stays 120px + 20px per card on anything
+             900px tall or more — unchanged from the inline value this
+             replaced — and collapses on shorter screens, where the offsets
+             pushed the tallest card's bottom permanently below the fold.
+             An inline `top` would have won over any stylesheet rule. */
+          "--stack-i": index,
+          scale: index === total - 1 ? 1 : springScale,
+          transformOrigin: "top center",
+        } as React.CSSProperties
+      }
+      /* Pinned from sm up only. Below that the cards are 695-891px tall against
+         an 812px viewport, so a pinned card can never show its own bottom: the
+         metrics row of case studies 03 and 05 entered the fold but was covered
+         by the next card every time it did. No offset fixes that — card 05 is
+         taller than the phone. Static below sm lets each card scroll through
+         in full; the deck effect resumes at sm, where the cards are ~440-540px
+         and comfortably fit. */
       className={cn(
-        "sticky mb-10 w-full overflow-hidden rounded-[2rem] border border-white/5 bg-[#0a0a0a] p-8 lg:p-10 shadow-2xl",
+        "stack-card relative sm:sticky mb-10 w-full overflow-hidden rounded-[2rem] border border-white/5 bg-[#0a0a0a] p-8 lg:p-10 shadow-2xl",
         card.cardClassName,
         card.rotateClassName
       )}
@@ -148,10 +167,17 @@ export function StackedFeatureCards({
 
         <div
           ref={containerRef}
-          className="relative flex flex-col lg:flex-row items-start gap-12 lg:gap-24"
+          className="relative flex flex-col items-start gap-12 lg:flex-row lg:gap-16 xl:gap-24"
         >
           {/* Left: Sticky Hero Card */}
-          <div className="sticky top-32 w-full shrink-0 lg:w-[400px] xl:w-[450px]">
+          {/* Sticky only from lg, where this is genuinely a left column beside a
+              scrolling right column. Below lg the layout is a single flex
+              column, so `sticky` pinned this block behind all six cards for the
+              whole 5,000px of the section — and because the cards scale down to
+              0.96, the pinned heading showed through the gap on either side of
+              them as sliced, unreadable text. Static below lg lets it scroll
+              away as an ordinary section intro. */}
+          <div className="relative w-full shrink-0 lg:sticky lg:top-32 lg:w-[300px] xl:w-[450px]">
             <div className="flex flex-col gap-6">
               {heroCard.badge && (
                 <span className="font-body text-xs tracking-[0.24em] uppercase text-gold">

@@ -59,7 +59,7 @@ const DATA = {
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "#",
+        url: "https://www.linkedin.com/company/pitchkast-india/?viewAsMember=true",
         icon: Icons.linkedin,
       },
       X: {
@@ -111,6 +111,17 @@ export function SocialDock() {
                   <a
                     href={social.url}
                     aria-label={social.name}
+                    /* Real destinations open in a new tab, matching the text
+                       links in the footer. The placeholders are still "#", and
+                       a "#" opened in a new tab would spawn a blank copy of the
+                       page, so the attributes are conditional rather than
+                       blanket. */
+                    target={social.url.startsWith("http") ? "_blank" : undefined}
+                    rel={
+                      social.url.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
                       "size-12 rounded-full"

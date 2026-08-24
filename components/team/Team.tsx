@@ -113,11 +113,13 @@ const PORTRAIT_W = "min(33.6vw, 53.6vh)";
  * as two columns — so the portrait shares the viewport's height with the name,
  * role and line beneath it rather than sitting beside them.
  *
- * Capped on height first: at 0.812 aspect, 37svh of width is 45.6svh of
- * height, which leaves a little over half the pane for the text block and the
- * eyebrow. 70vw takes over on a wide-but-short screen.
+ * Capped on height first: at 0.812 aspect, 26svh of width is ~32svh of
+ * height. That is deliberately small — each card now carries a name, a role,
+ * a one-liner and two paragraphs of biography, and all of it has to fit
+ * inside one 100svh pane without running under the counter. 50vw takes over
+ * on a wide-but-short screen.
  */
-const PORTRAIT_W_SM = "min(70vw, 37svh)";
+const PORTRAIT_W_SM = "min(50vw, 26svh)";
 
 /**
  * Our light surface, shared with Services so the two read as one continuous
@@ -204,8 +206,13 @@ export function Team() {
         className="sticky top-0 h-[100svh] overflow-hidden"
         style={{ "--team-last": TEAM.length - 1 } as React.CSSProperties}
       >
+        {/* sm and up only. Below that this same label is rendered inside each
+            card instead — see the per-card copy further down. Here it is a
+            child of the pinned stage, so it holds still while cards slide
+            past; on a phone that read as a stuck label pinned over the
+            portrait rather than as part of the section. */}
         <p
-          className="font-body absolute top-7 left-1/2 z-20 -translate-x-1/2 text-xs tracking-[0.24em] uppercase sm:top-12"
+          className="font-body absolute top-7 left-1/2 z-20 hidden -translate-x-1/2 text-xs tracking-[0.24em] uppercase sm:top-12 sm:block"
           style={{ color: ACCENT }}
         >
           (Meet us)
@@ -257,7 +264,20 @@ export function Team() {
                 Below sm it becomes a single centred column — portrait above,
                 text below — and the same wipe still works, because the band is
                 still one opaque rectangle covering everything the card draws. */}
-            <div className="mx-auto flex w-full max-w-[76rem] flex-col items-center gap-6 px-6 text-center sm:flex-row sm:items-stretch sm:gap-10 sm:px-8 sm:text-left lg:gap-14 lg:px-14">
+            {/* Below sm: a single column that starts at the top of the pane
+                and reserves its bottom for the counter (pb-16), so the last
+                line of biography can never run underneath it. The card itself
+                is `items-center` on the article, which centred a column that
+                is now taller than the pane and pushed its head off-screen —
+                `self-start` overrides that below sm only. */}
+            <div className="mx-auto flex h-full w-full max-w-[76rem] flex-col items-center gap-[clamp(0.75rem,2svh,1.25rem)] px-6 pt-[clamp(1rem,3svh,1.75rem)] pb-14 text-center sm:h-auto sm:flex-row sm:items-stretch sm:gap-10 sm:px-8 sm:py-0 sm:text-left lg:gap-14 lg:px-14">
+              <p
+                className="font-body text-xs tracking-[0.24em] uppercase sm:hidden"
+                style={{ color: ACCENT }}
+              >
+                (Meet us)
+              </p>
+
               <div
                 className="aspect-[484/596] w-[var(--portrait-sm)] shrink-0 overflow-hidden rounded-[1.5rem] sm:w-[var(--portrait)] sm:rounded-[2rem]"
                 style={
@@ -283,9 +303,9 @@ export function Team() {
                   the band covers the same vertical span in both columns and the
                   wipe edge stays a single clean line. The text sits at the top
                   of that span; the rest is deliberate empty surface. */}
-              <div className="flex min-w-0 flex-1 flex-col py-1">
-                <div className="flex items-center gap-4">
-                  <h3 className="font-body text-[clamp(1.6rem,7vw,4.2rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance text-neutral-950 sm:text-[clamp(2rem,4.17vw,4.2rem)]">
+              <div className="flex min-w-0 w-full flex-1 flex-col text-left sm:w-auto sm:py-1 sm:text-left">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <h3 className="font-body text-[clamp(1.3rem,3.4svh,4.2rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance text-neutral-950 sm:text-[clamp(2rem,4.17vw,4.2rem)]">
                     {member.name}
                   </h3>
                   {member.linkedin && (
@@ -294,9 +314,9 @@ export function Team() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${member.name}'s LinkedIn`}
-                      className="flex items-center justify-center size-10 rounded-full bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-black transition-colors shrink-0"
+                      className="flex size-8 items-center justify-center rounded-full bg-neutral-100 sm:size-10 text-neutral-500 hover:bg-neutral-200 hover:text-black transition-colors shrink-0"
                     >
-                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="size-5">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="size-4 sm:size-5">
                         <title>LinkedIn</title>
                         <path
                           fill="currentColor"
@@ -307,15 +327,15 @@ export function Team() {
                   )}
                 </div>
                 <p
-                  className="font-body mt-3 text-sm font-medium text-balance sm:mt-5 sm:text-base"
+                  className="font-body mt-[clamp(0.35rem,1svh,0.5rem)] text-[clamp(0.75rem,1.75svh,0.875rem)] leading-snug font-medium text-balance sm:mt-5 sm:text-base"
                   style={{ color: ACCENT }}
                 >
                   {member.role}
                 </p>
-                <p className="font-body mt-4 text-[clamp(0.95rem,3.6vw,1.35rem)] text-pretty text-neutral-800 italic sm:mt-7 sm:text-[clamp(1rem,1.5vw,1.35rem)]">
+                <p className="font-body mt-[clamp(0.5rem,1.5svh,0.75rem)] text-[clamp(0.8125rem,2svh,1.35rem)] leading-snug text-pretty text-neutral-800 italic sm:mt-7 sm:text-[clamp(1rem,1.5vw,1.35rem)]">
                   {member.line}
                 </p>
-                <div className="font-body mt-4 space-y-2.5 text-xs leading-relaxed text-neutral-600 sm:mt-6 sm:space-y-3 sm:text-sm lg:text-[0.9375rem] sm:leading-relaxed max-w-2xl">
+                <div className="font-body mt-[clamp(0.5rem,1.75svh,0.875rem)] max-w-2xl space-y-[clamp(0.375rem,1.25svh,0.625rem)] text-[clamp(0.625rem,1.6svh,0.8125rem)] leading-[1.55] text-neutral-600 sm:mt-6 sm:space-y-3 sm:text-sm sm:leading-relaxed lg:text-[0.9375rem]">
                   {member.description.map((paragraph, pIdx) => (
                     <p key={pIdx}>{paragraph}</p>
                   ))}

@@ -853,3 +853,29 @@ html.lenis {
     @apply font-sans;
   }
 }
+
+/* ── Stacked case-study cards ──────────────────────────────────
+   Each card pins a little lower than the one before it, so the stack reads
+   as a deck rather than a single sheet. The offset is set here rather than
+   inline because it has to answer to viewport height.
+
+   Why: the tallest card is 648px. At the original 120px base plus 20px per
+   card, card five pinned at 200px and its bottom sat at 848px — off the
+   fold on any display shorter than that, and it is covered by card six
+   before it ever gets the chance to scroll up. Measured on 1280x800: the
+   metrics row of case study 05 entered the viewport at some point but was
+   never once uncovered while it was there. At 1440x900 every card reads
+   fine, which is why the full offsets are kept above 900 and only short
+   screens get the collapsed ones. */
+.stack-card {
+  top: calc(120px + var(--stack-i) * 20px);
+}
+@media (max-height: 899px) {
+  /* 32 + 4*12 = 80, so the 648px card ends at 728 — inside a 768-tall
+     laptop with room to spare. Nothing here is fixed-positioned at the top
+     of the page (the navbar is absolute, over the hero only), so a small
+     offset costs nothing. */
+  .stack-card {
+    top: calc(32px + var(--stack-i) * 12px);
+  }
+}
