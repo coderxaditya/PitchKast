@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+
 import { Globe3D, GlobeMarker } from "@/components/ui/3d-globe";
 
 /**
@@ -148,6 +150,31 @@ const GLOBE_BOX = "118.1vmin";
 const OPENING_ROTATION_Y = -135;
 
 export function HeroGlobe() {
+  /**
+   * Drag-to-rotate is offered only where there is a cursor.
+   *
+   * On a touch screen the globe fills most of the hero, and a drag on it is
+   * indistinguishable from the drag someone makes to scroll the page. The
+   * globe won that contest every time: OrbitControls claimed the gesture,
+   * `data-lenis-prevent-touch` told Lenis to keep its hands off, and
+   * @react-three/fiber's `touch-action: none` stopped the browser scrolling
+   * natively as a last resort. Three separate mechanisms, all agreeing that a
+   * finger on the globe means "spin", so the page simply would not move.
+   *
+   * A capability test, not a width one: what matters is whether a pointer can
+   * hover and aim precisely, which is the same question the gallery asks.
+   * Auto-rotation is untouched — the globe still turns on its own everywhere.
+   */
+  const [canRotate, setCanRotate] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const apply = () => setCanRotate(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   return (
     <div className="pointer-events-none absolute inset-0">
       {/* Positioned rather than grid-centred on purpose. Grid applies *safe*
@@ -156,12 +183,12 @@ export function HeroGlobe() {
           all off the bottom, dropping the globe 81px low. A translate centres
           it honestly and lets it overflow both edges evenly. */}
       <div
-        /* The globe is dragged to rotate. Now that touch is smoothed, a drag
-           here would otherwise be read as a scroll gesture and the page would
-           slide away under the finger. This hands touch on the globe back to
-           OrbitControls; the wheel is untouched, so scrolling over the globe
-           still scrolls the page. */
-        data-lenis-prevent-touch=""
+        /* Only where the globe can actually be dragged. It hands touch on the
+           globe to OrbitControls instead of to Lenis, which is what a spinnable
+           globe needs and what an unspinnable one must not have. The wheel is
+           untouched either way, so scrolling over the globe with a mouse still
+           scrolls the page. */
+        {...(canRotate ? { "data-lenis-prevent-touch": "" } : null)}
         className="pointer-events-auto absolute top-1/2 left-1/2"
         style={{
           height: GLOBE_BOX,
@@ -177,6 +204,7 @@ export function HeroGlobe() {
             atmosphereIntensity: 20,
             bumpScale: 5,
             autoRotateSpeed: 0.3,
+            enableRotate: canRotate,
             initialRotation: { x: 0, y: OPENING_ROTATION_Y },
           }}
         />

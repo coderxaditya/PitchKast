@@ -40,6 +40,16 @@ export interface Globe3DConfig {
   autoRotateSpeed?: number;
   /** Enable zoom */
   enableZoom?: boolean;
+  /**
+   * Enable drag-to-rotate. Defaults to true.
+   *
+   * Turning this off also releases the canvas's `touch-action`, which
+   * @react-three/fiber pins to `none` so that a drag is never stolen by the
+   * browser's own scrolling. That is the right default for a globe you can
+   * spin, and exactly wrong for one you cannot: it leaves a dead rectangle
+   * that swallows every scroll gesture that starts on it.
+   */
+  enableRotate?: boolean;
   /** Enable pan */
   enablePan?: boolean;
   /** Min zoom distance */
@@ -490,6 +500,7 @@ function Scene({ markers, config, onMarkerClick, onMarkerHover }: SceneProps) {
         makeDefault
         enablePan={config.enablePan}
         enableZoom={config.enableZoom}
+        enableRotate={config.enableRotate}
         minDistance={config.minDistance}
         maxDistance={config.maxDistance}
         rotateSpeed={0.4}
@@ -535,6 +546,7 @@ const defaultConfig: Required<Globe3DConfig> = {
   autoRotateSpeed: 0.3,
   enableZoom: false,
   enablePan: false,
+  enableRotate: true,
   minDistance: 5,
   maxDistance: 15,
   initialRotation: { x: 0, y: 0 },
@@ -575,6 +587,12 @@ export function Globe3D({
         }}
         style={{
           background: mergedConfig.backgroundColor || "transparent",
+          /* r3f writes `touch-action: none` onto its container so a drag is
+             never handed to the browser as a scroll. With rotation off there
+             is no drag to protect, and leaving it would make the globe a
+             region the page cannot be scrolled from. `style` is spread after
+             r3f's own, so this wins. */
+          ...(mergedConfig.enableRotate ? null : { touchAction: "auto" }),
         }}
       >
         <Suspense fallback={<LoadingFallback />}>
