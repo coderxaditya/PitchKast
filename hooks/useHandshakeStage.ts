@@ -8,7 +8,9 @@ import { peekScroll } from "@/lib/returnScroll";
 
 import {
   BG_FADE_OUT,
-  DAMPING,
+  FOLLOWER_LAMBDA,
+  FOLLOWER_LAMBDA_LENIS,
+  FOLLOWER_MAX_DT,
   FRAME_COUNT,
   HERO_FADE_IN,
   HERO_FADE_OUT,
@@ -16,15 +18,8 @@ import {
   RENDERER,
   SNAP_EPSILON,
   USE_LENIS,
-  LENIS_LERP,
-  LENIS_WHEEL_MULTIPLIER,
-  LENIS_SYNC_TOUCH,
-  LENIS_SYNC_TOUCH_LERP,
-  LENIS_TOUCH_INERTIA_EXPONENT,
-  LENIS_TOUCH_MULTIPLIER,
-  LENIS_RESPECT_REDUCED_MOTION,
-  DAMPING_LENIS,
 } from "@/lib/scrub/config";
+import { lenisOptions, setLenis } from "@/lib/smoothScroll";
 import { clamp, easeInOut, norm } from "@/lib/scrub/math";
 import { FrameSequenceRenderer } from "@/lib/scrub/renderers/frame-sequence";
 import { VideoRenderer } from "@/lib/scrub/renderers/video";
@@ -124,10 +119,16 @@ export function useHandshakeStage({
        already eases the scroll position, so the follower is loosened to
        near-tracking. Without this the two lags compound and the footage
        drifts behind the scroll. */
-    const FOLLOWER_DAMPING = USE_LENIS ? DAMPING_LENIS : DAMPING;
+    const lambda = USE_LENIS ? FOLLOWER_LAMBDA_LENIS : FOLLOWER_LAMBDA;
 
     // ── Follower loop ────────────────────────────────────────
-    const tick = () => {
+    /* gsap.ticker hands the callback (time, deltaTime, frame); deltaTime is
+       the milliseconds since the previous tick. Using it is the whole point:
+       the fraction of the remaining distance covered per tick is now derived
+       from elapsed time rather than assumed to be one 60Hz frame, so a 120Hz
+       phone, a 60Hz laptop and a device dropping frames all settle over the
+       same wall-clock interval. */
+    const tick = (_time: number, deltaMs: number) => {
       const delta = target - head;
 
       if (Math.abs(delta) < SNAP_EPSILON) {
@@ -138,7 +139,9 @@ export function useHandshakeStage({
         return;
       }
 
-      head += delta * (reduceMotion ? 1 : FOLLOWER_DAMPING);
+      const dt = Math.min(deltaMs / 1000, FOLLOWER_MAX_DT);
+      const k = reduceMotion ? 1 : 1 - Math.exp(-lambda * dt);
+      head += delta * k;
       renderer.render(Math.round(head), openFade());
     };
 
@@ -155,15 +158,8 @@ export function useHandshakeStage({
     const setupLenis = async () => {
       const Lenis = (await import("lenis")).default;
       if (cancelled) return;
-      lenis = new Lenis({
-        lerp: LENIS_LERP,
-        wheelMultiplier: LENIS_WHEEL_MULTIPLIER,
-        syncTouch: LENIS_SYNC_TOUCH,
-        syncTouchLerp: LENIS_SYNC_TOUCH_LERP,
-        touchInertiaExponent: LENIS_TOUCH_INERTIA_EXPONENT,
-        touchMultiplier: LENIS_TOUCH_MULTIPLIER,
-        respectReducedMotion: LENIS_RESPECT_REDUCED_MOTION,
-      });
+      lenis = new Lenis(lenisOptions());
+      setLenis(lenis);
       lenis.on("scroll", ScrollTrigger.update);
       lenisRaf = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(lenisRaf);
@@ -205,9 +201,36 @@ export function useHandshakeStage({
       },
     });
 
+    /* ── Resize ────────────────────────────────────────────────
+       On a touch device the browser fires `resize` continuously while the
+       address bar retracts and returns — many times per scroll gesture, and
+       always mid-gesture. The old handler answered each one by re-allocating
+       the canvas backing store and running ScrollTrigger.refresh(), which
+       re-measures every trigger on the page. That is the most expensive thing
+       the site can do, done at the worst possible moment, and it is why the
+       scrub stuttered on a phone while scrolling perfectly on a desktop.
+
+       Two changes. Everything is debounced to the trailing edge, so a burst
+       costs one pass instead of thirty. And a height-only change on a coarse
+       pointer is treated as address-bar drift: the canvas is re-laid out so
+       the footage still fills the viewport, but the triggers are left alone,
+       because the track's height is in `vh` and has not actually moved. A
+       width change is a real resize — a rotation, a desktop drag — and gets
+       the full refresh. */
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    let lastWidth = window.innerWidth;
+    let resizeTimer = 0;
+
     const onResize = () => {
-      layout();
-      ScrollTrigger.refresh();
+      const width = window.innerWidth;
+      const widthChanged = width !== lastWidth;
+      lastWidth = width;
+
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        layout();
+        if (widthChanged || !coarsePointer) ScrollTrigger.refresh();
+      }, 150);
     };
     window.addEventListener("resize", onResize);
 
@@ -247,8 +270,10 @@ export function useHandshakeStage({
 
     return () => {
       cancelled = true;
+      window.clearTimeout(resizeTimer);
       gsap.ticker.remove(tick);
       if (lenisRaf) gsap.ticker.remove(lenisRaf);
+      setLenis(null);
       lenis?.destroy();
       window.removeEventListener("resize", onResize);
       trigger.kill();

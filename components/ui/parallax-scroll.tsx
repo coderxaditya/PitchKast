@@ -44,6 +44,11 @@ export const ParallaxScroll = ({
 
   return (
     <div
+      /* Marks the element that actually scrolls on this route. The page body
+         is exactly one viewport tall, so this box is the only scroller — both
+         framer-motion's `useScroll({ container })` above and the route's Lenis
+         instance need to find it. */
+      data-gallery-scroller=""
       className={cn("h-[40rem] items-start overflow-y-auto w-full", className)}
       ref={gridRef}
     >

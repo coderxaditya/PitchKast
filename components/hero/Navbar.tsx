@@ -53,7 +53,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="pointer-events-auto fixed top-4 right-0 left-0 z-50 px-4 sm:px-8 lg:px-16">
+    <nav className="pointer-events-auto absolute top-4 right-0 left-0 z-50 px-4 sm:px-8 lg:px-16">
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-1 justify-start">
           <a

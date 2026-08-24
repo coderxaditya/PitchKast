@@ -111,17 +111,46 @@ export const BG_VIDEO_SRC =
 export const BG_FADE_OUT = 0.1;
 
 // ── Motion ────────────────────────────────────────────────────
-/** Follower stiffness per tick. Higher tracks the scroll more tightly. */
-export const DAMPING = 0.155;
 /**
- * Follower stiffness when Lenis is driving the page.
+ * Follower stiffness, as a decay rate **per second** rather than per frame.
  *
- * Lenis already smooths the scroll position, so the 0.155 follower would
- * be a second lag stacked on the first and the footage would visibly
- * trail the page. Loosening it to 0.42 hands the smoothing to Lenis and
- * leaves this loop doing little more than rounding to whole frames.
+ * The follower used to run `head += delta * k` once per ticker call, which
+ * makes the response a function of the display's refresh rate: at 120Hz it
+ * caught up in half the wall-clock time it took at 60Hz, and on a device
+ * dropping to 30 it took twice as long. The handshake therefore had a
+ * different weight on a 120Hz phone than on a 60Hz laptop — the same footage,
+ * the same scroll distance, a different feel per device.
+ *
+ * These are the exact 60Hz equivalents of the per-frame values they replace,
+ * via `lambda = -60 * ln(1 - k)`:
+ *
+ *     0.155 per frame  ->  10.10 per second
+ *     0.42  per frame  ->  32.68 per second
+ *
+ * so a 60Hz display behaves identically to before and every other refresh
+ * rate now matches it. Lenis already damps this way internally
+ * (`1 - exp(-lambda * dt)`); this brings the scrub onto the same footing.
  */
-export const DAMPING_LENIS = 0.42;
+export const FOLLOWER_LAMBDA = 10.1;
+/**
+ * Follower rate when Lenis is driving the page.
+ *
+ * Lenis already smooths the scroll position, so the slower follower would be
+ * a second lag stacked on the first and the footage would visibly trail the
+ * page. This hands the smoothing to Lenis and leaves the loop doing little
+ * more than rounding to whole frames.
+ */
+export const FOLLOWER_LAMBDA_LENIS = 32.68;
+/**
+ * Ceiling on the timestep fed to the follower, in seconds.
+ *
+ * A backgrounded tab, a long task or a garbage-collection pause hands the
+ * next tick a delta of hundreds of milliseconds. `1 - exp(-32.68 * 0.4)` is
+ * 0.9999, so the follower would snap the whole way in one frame and the
+ * footage would jump. Two frames at 60Hz is enough headroom to stay smooth
+ * across ordinary jitter while capping the damage from a stall.
+ */
+export const FOLLOWER_MAX_DT = 1 / 30;
 /** Frame distance below which the follower is considered settled. */
 export const SNAP_EPSILON = 0.015;
 /** Minimum share of viewport height the footage may occupy. */
