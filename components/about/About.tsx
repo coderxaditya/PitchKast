@@ -35,6 +35,9 @@ const CHAPTERS: Chapter[] = [
   { id: "about-07", index: "07", label: "Ownership Philosophy" },
 ];
 
+/** Height of one chapter button in the rail — Tailwind's `h-11`. */
+const RAIL_ITEM_H = 44;
+
 /** The section's opening — and the only h2 the About section owns. */
 function SectionOpener() {
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
@@ -122,7 +125,26 @@ export function About() {
             `sticky` needs to travel the full section. */}
         <div className="grid xl:grid-cols-[3.5rem_1fr] xl:gap-10">
           <div className="hidden xl:block">
-            <div className="sticky top-1/2 -translate-y-1/2">
+            {/* Centred by the sticky offset itself, not by a translate.
+                `top-1/2 -translate-y-1/2` centred it correctly but broke the
+                one guarantee sticky gives: a translate is applied after layout,
+                so it lifted the rail half its own height *above* the top of its
+                own column — over the section opener sitting above the grid.
+                Measured at 1440x900: the rail's box ran from y1197 while the
+                "Strategic growth, end to end." heading ran to y1252, a 55px
+                overlap sharing the same left edge. Folding the half-height into
+                `top` gives the same centring while sticky still clamps the rail
+                inside its column at both ends.
+
+                RAIL_ITEM_H is the `h-11` on each chapter button; the rail is
+                one per chapter, so its height is derived rather than guessed
+                and stays correct if a chapter is added. */}
+            <div
+              className="sticky"
+              style={{
+                top: `calc(50vh - ${(CHAPTERS.length * RAIL_ITEM_H) / 2}px)`,
+              }}
+            >
               <AboutRail chapters={CHAPTERS} />
             </div>
           </div>
