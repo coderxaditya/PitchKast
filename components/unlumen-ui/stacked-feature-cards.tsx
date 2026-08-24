@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -41,6 +41,13 @@ export interface StackedFeatureCardsProps {
   className?: string;
 }
 
+/* Deck geometry. These are the original values and they are what a desktop
+   still gets; see the clamp inside Card for when they are reduced. */
+const PIN_BASE = 120;
+const PIN_STEP = 20;
+/** Breathing room under a pinned card, so it never sits flush to the fold. */
+const PIN_GAP = 24;
+
 const Card = ({
   card,
   index,
@@ -65,30 +72,69 @@ const Card = ({
 
   const springScale = useSpring(scale, { stiffness: 300, damping: 28 });
 
+  /* ── Pin offset ────────────────────────────────────────────────
+     The deck fans out by pinning each card a little lower than the last:
+     `PIN_BASE + index * PIN_STEP`. That is the whole effect, and on a desktop
+     it works because a card is comfortably shorter than the window.
+
+     It stops working the moment a card is taller than the space beneath its
+     own pin line. A `position: sticky` element never rises above its `top`,
+     so a 891px card pinned at 220px keeps its last 299px below the fold
+     permanently — and the next card slides over it from the bottom before it
+     ever gets the chance to scroll up. That is not a tight fit, it is content
+     the reader cannot reach at any scroll position. On a 375x812 phone it hid
+     the metrics rows of case studies 03 and 05 outright.
+
+     So the offset is clamped against what the window can actually show:
+
+         top = min(PIN_BASE + i * PIN_STEP, viewport - height - PIN_GAP)
+
+     When the card fits, the second term is the larger one and the fan is
+     untouched — this is why nothing changes on a desktop. When the card is
+     taller than the window the clamp goes negative, which parks the card's
+     *bottom* just above the fold instead of its top: the card scrolls up
+     through the viewport as normal, every line passes the reader, and it pins
+     only once its last line is on screen. Nothing is ever sealed off.
+
+     Measured rather than assumed, because card height depends on how the
+     paragraphs wrap, which depends on the width. */
+  const ref = useRef<HTMLDivElement>(null);
+  const [pinTop, setPinTop] = useState(PIN_BASE + index * PIN_STEP);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const measure = () => {
+      /* offsetHeight, not getBoundingClientRect(): this element carries a
+         scale transform, and the rect would report the shrunken height. */
+      const fits = window.innerHeight - el.offsetHeight - PIN_GAP;
+      setPinTop(Math.min(PIN_BASE + index * PIN_STEP, fits));
+    };
+
+    measure();
+
+    /* The card's height changes with width (rewrapping) and with font load,
+       neither of which a resize listener alone catches. */
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [index]);
+
   return (
     <motion.div
-      style={
-        {
-          /* The pin offset moved to CSS (.stack-card) so it can respond to
-             viewport *height*. It stays 120px + 20px per card on anything
-             900px tall or more — unchanged from the inline value this
-             replaced — and collapses on shorter screens, where the offsets
-             pushed the tallest card's bottom permanently below the fold.
-             An inline `top` would have won over any stylesheet rule. */
-          "--stack-i": index,
-          scale: index === total - 1 ? 1 : springScale,
-          transformOrigin: "top center",
-        } as React.CSSProperties
-      }
-      /* Pinned from sm up only. Below that the cards are 695-891px tall against
-         an 812px viewport, so a pinned card can never show its own bottom: the
-         metrics row of case studies 03 and 05 entered the fold but was covered
-         by the next card every time it did. No offset fixes that — card 05 is
-         taller than the phone. Static below sm lets each card scroll through
-         in full; the deck effect resumes at sm, where the cards are ~440-540px
-         and comfortably fit. */
+      ref={ref}
+      style={{
+        top: pinTop,
+        scale: index === total - 1 ? 1 : springScale,
+        transformOrigin: "top center",
+      }}
       className={cn(
-        "stack-card relative sm:sticky mb-10 w-full overflow-hidden rounded-[2rem] border border-white/5 bg-[#0a0a0a] p-8 lg:p-10 shadow-2xl",
+        "sticky mb-10 w-full overflow-hidden rounded-[2rem] border border-white/5 bg-[#0a0a0a] p-8 lg:p-10 shadow-2xl",
         card.cardClassName,
         card.rotateClassName
       )}
@@ -167,7 +213,7 @@ export function StackedFeatureCards({
 
         <div
           ref={containerRef}
-          className="relative flex flex-col items-start gap-12 lg:flex-row lg:gap-16 xl:gap-24"
+          className="relative flex flex-col items-start gap-12 lg:flex-row lg:gap-24"
         >
           {/* Left: Sticky Hero Card */}
           {/* Sticky only from lg, where this is genuinely a left column beside a
@@ -177,7 +223,7 @@ export function StackedFeatureCards({
               0.96, the pinned heading showed through the gap on either side of
               them as sliced, unreadable text. Static below lg lets it scroll
               away as an ordinary section intro. */}
-          <div className="relative w-full shrink-0 lg:sticky lg:top-32 lg:w-[300px] xl:w-[450px]">
+          <div className="relative w-full shrink-0 lg:sticky lg:top-32 lg:w-[400px] xl:w-[450px]">
             <div className="flex flex-col gap-6">
               {heroCard.badge && (
                 <span className="font-body text-xs tracking-[0.24em] uppercase text-gold">
