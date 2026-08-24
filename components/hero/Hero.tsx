@@ -3,7 +3,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 
 import { BlurText } from "@/components/motion/BlurText";
-import { Navbar } from "./Navbar";
 import { Rise } from "@/components/motion/Rise";
 import StatsCounter from "@/components/ui/stats-counter";
 import { CheckIcon, GlobeIcon } from "@/components/icons";
@@ -67,8 +66,6 @@ export function Hero({ play }: { play: boolean }) {
          this full-screen box. The navbar re-enables them for itself. */
       className="hero-driven pointer-events-none absolute inset-0 z-10 flex h-full flex-col"
     >
-      <Navbar />
-
       <div
         className="my-auto flex flex-col items-center justify-center px-4 pt-32 text-center [@media(max-height:720px)]:pt-20"
       >

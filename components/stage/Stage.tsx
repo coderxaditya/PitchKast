@@ -8,6 +8,7 @@ import { RENDERER, TRACK_VH, VIDEO_SRC } from "@/lib/scrub/config";
 import LightRays from "@/components/ui/LightRays";
 import { HeroGlobe } from "./HeroGlobe";
 import { Hero } from "@/components/hero/Hero";
+import { Navbar } from "@/components/hero/Navbar";
 import { Loader } from "./Loader";
 
 export function Stage() {
@@ -35,6 +36,18 @@ export function Stage() {
   return (
     <>
       <Loader pct={loadPct} done={ready} />
+
+      {/* Outside <main> on purpose. The navbar used to live inside <Hero>,
+          which carries `.hero-driven` — and that sets `transform`, `filter`
+          and `opacity` all at once. Any one of those makes an element the
+          containing block for `position: fixed` descendants, so a fixed navbar
+          in there would have stayed glued to the hero instead of the viewport,
+          and the hero's fade would have taken it out with the rest of the copy.
+          Hoisting it here is what actually lets it stick.
+
+          z-50 keeps it under the loader (z-90) and the gallery lightbox
+          (z-100), both of which should cover it. */}
+      <Navbar />
 
       {/* Scroll driver + pinned stage. The scrubbed footage takes the slot
           liquidGlass gave its autoplaying background video. */}
