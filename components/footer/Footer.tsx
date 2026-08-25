@@ -17,12 +17,18 @@ export default function Footer() {
         {/* Left Section - Logo and Copyright */}
         <div className="flex flex-col gap-6 lg:w-1/3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 relative rounded overflow-hidden flex items-center justify-center bg-white/5 p-1">
+            {/* object-contain, and no `p-1`. The previous source was a
+                2400x1792 canvas whose artwork covered 16.8% of it, so
+                `object-cover` in this square box cropped to the middle of that
+                canvas and rendered an almost empty orange tile. The mark is
+                now pre-cropped square, so it fills the box exactly. */}
+            <div className="w-8 h-8 relative overflow-hidden rounded">
               <Image
-                src="/footerLogo/Screenshot2026-07-09at2.41.03AM.png"
-                alt="PitchKast Logo"
+                src="/brand/logo.png"
+                alt="PitchKast"
                 fill
-                className="object-cover"
+                sizes="32px"
+                className="object-contain"
               />
             </div>
             <span className="text-xl font-bold tracking-tight">PitchKast</span>
@@ -78,9 +84,19 @@ export default function Footer() {
 
       {/* Massive Background Text */}
       <div className="w-full mt-24 lg:mt-32 flex justify-center items-end pointer-events-none select-none h-48 lg:h-64 overflow-hidden relative">
-        <h1 className="text-[20vw] lg:text-[18vw] leading-none font-bold tracking-tighter text-neutral-900 absolute bottom-[-10%] md:bottom-[-20%] lg:bottom-[-25%]">
+        {/* A <div>, not an <h1>. This is a decorative wordmark bleeding off
+            the bottom of the page, but as a heading it was the highest-ranked
+            one in the document — so it defined the homepage's topic as the
+            company's own name rather than what the company does. aria-hidden
+            because a screen reader announcing "heading level 1, PitchKast" at
+            the very end of the page is noise; the name is already in the
+            title, the logo link and the copyright line. */}
+        <div
+          aria-hidden="true"
+          className="text-[20vw] lg:text-[18vw] leading-none font-bold tracking-tighter text-neutral-900 absolute bottom-[-10%] md:bottom-[-20%] lg:bottom-[-25%]"
+        >
           PitchKast
-        </h1>
+        </div>
       </div>
     </footer>
   );

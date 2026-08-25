@@ -56,24 +56,44 @@ export const LENIS_WHEEL_MULTIPLIER = 0.85;
 export const LENIS_SYNC_TOUCH = true;
 
 /**
- * Catch-up rate for touch, kept slightly tighter than the wheel value.
+ * Catch-up rate while a finger is down.
  *
  * A finger is a direct-manipulation input — the content is expected to be
- * under the fingertip — so the same 0.065 that reads as luxurious on a
- * wheel reads as lag on a drag. This is close enough to feel like the same
- * site without the content sliding out from under the finger.
+ * under the fingertip — so the same 0.065 that reads as luxurious on a wheel
+ * reads as lag on a drag. 0.075 is Lenis's own default and sits just under
+ * the previous 0.09: a fractionally longer settle, which is the "little
+ * delay" without the content sliding out from under the finger.
+ *
+ * This governs the drag only. The coast after release runs on LENIS_LERP.
  */
-export const LENIS_SYNC_TOUCH_LERP = 0.09;
+export const LENIS_SYNC_TOUCH_LERP = 0.075;
 
 /**
- * How far a fling coasts after the finger lifts, as an exponent on release
- * velocity. Lenis defaults to 1.7; a touch above that lengthens the glide
- * to match the long wheel settle.
+ * How far a fling coasts after the finger lifts.
+ *
+ * Lenis applies this as an exponent on release velocity — literally
+ * `|velocity| ** exponent` — so its effect is not linear, and above a
+ * velocity of 1 a higher exponent multiplies the distance rather than adding
+ * to it. At the ~4 units a hard flick produces, the previous 1.9 travelled
+ * 4^1.9 = 13.9 while this travels 4^1.45 = 7.3: a little over half the coast.
+ *
+ * This is the knob that actually answers "one flick should not reach the end
+ * of the page". The old value was above Lenis's own 1.7 default, so it was
+ * lengthening the very fling that needed shortening — damping and lerp cannot
+ * fix that, because they change how you arrive, not how far you are thrown.
  */
-export const LENIS_TOUCH_INERTIA_EXPONENT = 1.9;
+export const LENIS_TOUCH_INERTIA_EXPONENT = 1.45;
 
-/** Distance one touch-drag covers, as a multiple of the default. */
-export const LENIS_TOUCH_MULTIPLIER = 1.1;
+/**
+ * Distance one touch-drag covers, as a multiple of the default.
+ *
+ * Applied to the raw finger displacement, so it is the touch counterpart of
+ * LENIS_WHEEL_MULTIPLIER and works the same way: below 1, every gesture
+ * covers less ground and reaching the end of a long page takes deliberate
+ * scrolling rather than one throw. 0.9 against the previous 1.1 is ~18% less
+ * travel per drag.
+ */
+export const LENIS_TOUCH_MULTIPLIER = 0.9;
 
 /**
  * Lenis honours `prefers-reduced-motion` by default, and honouring it means

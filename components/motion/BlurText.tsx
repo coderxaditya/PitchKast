@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { motion } from "framer-motion";
 
 /**
@@ -30,7 +31,7 @@ export function BlurText({
    * one as a `<p>` left the About section with no heading structure at all,
    * which is how screen-reader users navigate a long page.
    */
-  as?: "p" | "span" | "h2" | "h3" | "h4";
+  as?: "p" | "span" | "h1" | "h2" | "h3" | "h4";
   play: boolean;
 }) {
   const words = text.split(" ");
@@ -56,24 +57,36 @@ export function BlurText({
       }}
     >
       {words.map((word, i) => (
-        <motion.span
-          key={i}
-          initial={fromSnapshot}
-          animate={play ? animateKeyframes : fromSnapshot}
-          transition={{
-            duration: stepDuration * 2,
-            times: [0, 0.5, 1],
-            ease: "easeOut",
-            delay: (i * delay) / 1000,
-          }}
-          style={{
-            display: "inline-block",
-            marginRight: "0.28em",
-            willChange: "transform, filter, opacity",
-          }}
-        >
-          {word}
-        </motion.span>
+        /* The fragment carries a real space after every word but the last.
+           Without it the words are adjacent <span>s separated only by a
+           margin, so the element's text content is "StrategicGrowthPartners":
+           one run-on token to a crawler extracting the h1, and one run-on word
+           to a screen reader reading it aloud.
+
+           The space costs nothing visually. This is a flex container, and a
+           text node of pure whitespace between two flex items is not rendered
+           at all — the spec drops it rather than making it an anonymous item.
+           Verified below by measuring the heading's width before and after. */
+        <Fragment key={i}>
+          {i > 0 ? " " : null}
+          <motion.span
+            initial={fromSnapshot}
+            animate={play ? animateKeyframes : fromSnapshot}
+            transition={{
+              duration: stepDuration * 2,
+              times: [0, 0.5, 1],
+              ease: "easeOut",
+              delay: (i * delay) / 1000,
+            }}
+            style={{
+              display: "inline-block",
+              marginRight: "0.28em",
+              willChange: "transform, filter, opacity",
+            }}
+          >
+            {word}
+          </motion.span>
+        </Fragment>
       ))}
     </Tag>
   );

@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { BackLink } from "@/components/gallery/BackLink";
 import { GalleryPageView } from "@/components/gallery/GalleryPageView";
 import { ACCENT, SURFACE } from "@/components/gallery/images";
 
 export const metadata: Metadata = {
-  title: "Gallery — PitchKast",
+  /* Just the page name — the root layout's title template appends the brand,
+     so writing it here as well produced "Gallery - PitchKast - PitchKast". */
+  title: "Gallery",
+  description:
+    "Moments from PitchKast — the team, the work, and the founders we build with.",
+  alternates: { canonical: "/gallery" },
 };
 
 export default function GalleryPage() {
@@ -18,6 +24,7 @@ export default function GalleryPage() {
           handshake hook, which only exists on the home page. Stepping out of
           the gallery section into "View all" therefore crossed a boundary
           where the scroll changed character entirely. */}
+      <BreadcrumbJsonLd name="Gallery" path="/gallery" />
       <SmoothScroll wrapperSelector="[data-gallery-scroller]" />
 
       <header className="mx-auto flex max-w-5xl items-end justify-between px-10 pt-14 pb-8">

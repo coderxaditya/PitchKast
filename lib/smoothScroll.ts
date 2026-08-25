@@ -30,6 +30,20 @@ export function lenisOptions(): LenisOptions {
     touchInertiaExponent: LENIS_TOUCH_INERTIA_EXPONENT,
     touchMultiplier: LENIS_TOUCH_MULTIPLIER,
     respectReducedMotion: LENIS_RESPECT_REDUCED_MOTION,
+
+    /* A nested scrollable element scrolls itself instead of handing the
+       gesture up to the page. The site already marks the two places this
+       matters by hand — `data-lenis-prevent` on the gallery lightbox,
+       `data-lenis-prevent-touch` on the globe — and this makes the general
+       case work without anyone remembering to add an attribute. The manual
+       markers stay: the globe is not a scroller, so only the explicit
+       attribute covers it. */
+    allowNestedScroll: true,
+
+    /* Kills an in-flight fling when the route changes. Without it, tapping
+       "View all" mid-flick carries the leftover velocity into the gallery
+       route, which lands already scrolling. */
+    stopInertiaOnNavigate: true,
   };
 }
 

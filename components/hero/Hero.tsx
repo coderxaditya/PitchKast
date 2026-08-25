@@ -76,6 +76,13 @@ export function Hero({ play }: { play: boolean }) {
         <div>
           <BlurText
             play={play}
+            /* The homepage's one and only h1.
+               It rendered as a <p> (BlurText's default tag), which left the
+               page with no h1 in the content at all — the only one in the
+               document was the decorative wordmark at the very bottom of the
+               footer. A crawler therefore read "PitchKast" as the page's
+               subject and this headline as body copy, which is backwards. */
+            as="h1"
             text="Strategic Growth Partners"
             className="font-heading max-w-2xl justify-center text-5xl leading-[0.8] tracking-[-3px] text-white italic min-[400px]:text-6xl min-[400px]:tracking-[-4px] md:text-7xl lg:text-[5.5rem] [@media(max-height:720px)]:text-5xl"
           />
