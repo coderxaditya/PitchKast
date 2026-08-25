@@ -85,7 +85,7 @@ export function AboutRail({ chapters }: { chapters: Chapter[] }) {
                     "font-body text-[0.6rem] tracking-[0.18em] tabular-nums transition-colors duration-500",
                     isActive
                       ? "text-gold"
-                      : "text-white/25 group-hover:text-white/55",
+                      : "text-white/50 group-hover:text-white/80",
                   )}
                 >
                   {chapter.index}

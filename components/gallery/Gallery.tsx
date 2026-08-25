@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { ImageTrail } from "@/components/ui/image-trail";
 import { rememberScroll } from "@/lib/returnScroll";
+import { HoverHint } from "./HoverHint";
 import { Lightbox } from "./Lightbox";
 import { ACCENT, SURFACE, galleryAlt, galleryImages } from "./images";
 
@@ -60,7 +61,10 @@ export function Gallery() {
       style={{ background: SURFACE }}
     >
       {/* ── Desktop: the trail ── */}
-      <div className="hidden [@media(hover:hover)_and_(pointer:fine)]:block">
+      {/* `relative` so the first-visit hint can pin itself to this branch
+          rather than to the whole section, which on a phone is a completely
+          different height. */}
+      <div className="relative hidden [@media(hover:hover)_and_(pointer:fine)]:block">
         <ImageTrail
           images={galleryImages as unknown as string[]}
           threshold={74}
@@ -81,11 +85,15 @@ export function Gallery() {
             <h2 className="font-heading mt-6 text-[clamp(2.6rem,8vw,6rem)] leading-none tracking-[-0.03em] text-[#8a6a28] italic">
               Moments.
             </h2>
-            <p className="font-body mt-6 text-sm text-neutral-500">
+            <p className="font-body text-lead mt-7 text-neutral-700">
               Move your cursor to look around.
             </p>
           </div>
         </ImageTrail>
+
+        {/* Teaches the gesture on a first visit, then never again. Gates
+            itself on pointer, storage and visibility — see the component. */}
+        <HoverHint sectionRef={sectionRef} />
       </div>
 
       {/* Above the trail overlay, which sits at z-50 and is pointer-events-none,

@@ -42,7 +42,7 @@ export function FounderPortrait({
             stroke="currentColor"
             strokeWidth="1.1"
             strokeLinecap="round"
-            className="h-7 w-7 text-white/25"
+            className="h-7 w-7 text-white/50"
           >
             <circle cx="12" cy="8.5" r="3.75" />
             <path d="M4.75 20.25a7.25 7.25 0 0 1 14.5 0" />

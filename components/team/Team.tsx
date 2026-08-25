@@ -137,7 +137,7 @@ export function Team() {
             style={{ background: ACCENT }}
           />
           <span
-            className="font-body text-sm tabular-nums text-neutral-500"
+            className="font-body text-sm tabular-nums text-neutral-700"
             aria-live="polite"
           >
             {active + 1}/{TEAM.length}
@@ -241,7 +241,7 @@ export function Team() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${member.name}'s LinkedIn`}
-                      className="flex size-8 items-center justify-center rounded-full bg-neutral-100 sm:size-10 text-neutral-500 hover:bg-neutral-200 hover:text-black transition-colors shrink-0"
+                      className="flex size-8 items-center justify-center rounded-full bg-neutral-100 sm:size-10 text-neutral-700 hover:bg-neutral-200 hover:text-black transition-colors shrink-0"
                     >
                       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="size-4 sm:size-5">
                         <title>LinkedIn</title>
@@ -262,7 +262,16 @@ export function Team() {
                 <p className="font-body mt-[clamp(0.5rem,1.5svh,0.75rem)] text-[clamp(0.8125rem,2svh,1.35rem)] leading-snug text-pretty text-neutral-800 italic sm:mt-7 sm:text-[clamp(1rem,1.5vw,1.35rem)]">
                   {member.line}
                 </p>
-                <div className="font-body mt-[clamp(0.5rem,1.75svh,0.875rem)] max-w-2xl space-y-[clamp(0.375rem,1.25svh,0.625rem)] text-[clamp(0.625rem,1.6svh,0.8125rem)] leading-[1.55] text-neutral-600 sm:mt-6 sm:space-y-3 sm:text-sm sm:leading-relaxed lg:text-[0.9375rem]">
+                {/* The biography reads as body copy now, not as a footnote:
+                    one Tailwind step up at every width (14 -> 16px on sm,
+                    15 -> 17px on lg, and the mobile clamp raised in both floor
+                    and ceiling), and lifted from neutral-600 to neutral-800 —
+                    600 on this light surface sat around 4.6:1 and rendered as
+                    grey filler; 800 reads as content while the gold role line
+                    keeps the accent. Mobile sizes stay svh-driven because the
+                    whole card must fit one 100svh pane above the counter; the
+                    overflow probe below re-verifies the worst case. */}
+                <div className="font-body mt-[clamp(0.5rem,1.75svh,0.875rem)] max-w-2xl space-y-[clamp(0.375rem,1.25svh,0.625rem)] text-[clamp(0.75rem,1.85svh,0.9375rem)] leading-[1.55] text-neutral-800 sm:mt-6 sm:space-y-3 sm:text-base sm:leading-relaxed lg:text-[1.0625rem]">
                   {member.description.map((paragraph, pIdx) => (
                     <p key={pIdx}>{paragraph}</p>
                   ))}

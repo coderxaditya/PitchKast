@@ -64,7 +64,7 @@ function StageCard({ stage }: { stage: (typeof STAGES)[number] }) {
 
       <div className="font-body text-micro text-ink-muted mt-4 flex items-center gap-2">
         <span>{stage.from}</span>
-        <span className="text-gold/70" aria-hidden="true">
+        <span className="text-gold" aria-hidden="true">
           &rarr;
         </span>
         <span className="text-ink-soft">{stage.to}</span>
@@ -84,7 +84,7 @@ export function AboutHero() {
           {/* Lead-in sits back so the promise below carries the weight. */}
           <BlurText
             play={inView}
-            text="More than an agency."
+            text="More than a company."
             className="font-heading text-display-xs text-ink-faint leading-[1.05] tracking-[-0.5px] italic"
           />
           <BlurText

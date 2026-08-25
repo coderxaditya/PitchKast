@@ -39,9 +39,20 @@
   --text-display-xl: clamp(3.4rem, 1.2rem + 9.5vw, 9rem);
 
   --color-ink: rgba(255, 255, 255, 0.92);
-  --color-ink-soft: rgba(255, 255, 255, 0.72);
-  --color-ink-muted: rgba(255, 255, 255, 0.55);
-  --color-ink-faint: rgba(255, 255, 255, 0.4);
+  --color-ink-soft: rgba(255, 255, 255, 0.82);
+  /* Raised 0.55 -> 0.72 (7.3:1). At 0.55 the About chapters' body copy read
+     as recessed texture rather than as writing — accurate to the reference
+     template, but this site wants the copy read, not skimmed past. The
+     hierarchy survives: full-white display type still leads, ink-muted is
+     now "clearly legible prose", and ink-faint keeps the truly decorative
+     layer dim. */
+  --color-ink-muted: rgba(255, 255, 255, 0.72);
+  /* Only the three two-tone display headlines use this ("not vendors.",
+     "You own everything."'s ghost line, the hero's ghost). 0.58 keeps the
+     two-tone contrast against full white while letting the ghost half be
+     read rather than squinted at — at display size the 3:1 large-text
+     threshold needs ~0.42, so this clears it with room. */
+  --color-ink-faint: rgba(255, 255, 255, 0.58);
 }
 
 /* Vertical rhythm between chapters, and the section's reading measure. */

@@ -88,11 +88,17 @@ export function Navbar() {
         {/* CTA lives outside the rail, hard right. */}
         <div className="hidden flex-1 justify-end lg:flex">
           {/* rounded-full rather than the component's default rounded-sm —
-              every other control in this nav is a pill. */}
-          <RainbowButton asChild className="font-body rounded-full px-4 py-2">
+              every other control in this nav is a pill. h-12 matches the 48px
+              logo pill and menu button, which the default h-9 sat small
+              against; this is the page's one conversion action and it was the
+              shortest thing in the nav. */}
+          <RainbowButton
+            asChild
+            className="font-body h-12 rounded-full px-7 text-base"
+          >
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
               Book a Discovery Call
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="size-5" />
             </a>
           </RainbowButton>
         </div>

@@ -6,7 +6,17 @@ import { BlurText } from "@/components/motion/BlurText";
 import { Navbar } from "./Navbar";
 import { Rise } from "@/components/motion/Rise";
 import StatsCounter from "@/components/ui/stats-counter";
-import { CheckIcon, GlobeIcon } from "@/components/icons";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ArrowUpRight, CheckIcon, GlobeIcon } from "@/components/icons";
+import { scrollToSection } from "@/lib/scrollToSection";
+
+/**
+ * Same Calendly link the navbar and footer use. Declared here as well rather
+ * than imported from Navbar so the hero does not depend on a sibling
+ * component's internals; all three are the same string by convention.
+ */
+const BOOKING_URL =
+  "https://calendly.com/goelsoham/founder-growth-strategy-call";
 
 /** Matches the `Rise` delay on the card row, so the count starts as it fades in. */
 const STATS_DELAY = 1.1;
@@ -83,10 +93,45 @@ export function Hero({ play }: { play: boolean }) {
                footer. A crawler therefore read "PitchKast" as the page's
                subject and this headline as body copy, which is backwards. */
             as="h1"
-            text="Strategic Growth Partners"
-            className="font-heading max-w-2xl justify-center text-5xl leading-[0.8] tracking-[-3px] text-white italic min-[400px]:text-6xl min-[400px]:tracking-[-4px] md:text-7xl lg:text-[5.5rem] [@media(max-height:720px)]:text-5xl"
+            text="We Build Brands That Move Businesses Forward."
+            /* Longer line than the old three-word headline, so the measure is
+               widened (max-w-2xl -> 4xl) and the leading opened slightly —
+               0.8 was tuned for words with no descender collisions across
+               lines; at three wrapped lines it stacked "Businesses" into
+               "Brands". Type scale itself is unchanged. */
+            className="font-heading max-w-4xl justify-center text-5xl leading-[0.92] tracking-[-3px] text-white italic min-[400px]:text-6xl min-[400px]:tracking-[-4px] md:text-7xl lg:text-[5.5rem] [@media(max-height:720px)]:text-5xl"
           />
         </div>
+
+        {/* CTA pair, reference-style: the conversion action in the house
+            rainbow treatment, the proof action as a quiet glass pill beside
+            it. pointer-events-auto because the hero shell disables pointer
+            events so drags reach the globe — without it neither button
+            would be clickable. */}
+        <Rise
+          delay={0.9}
+          play={play}
+          className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-4 [@media(max-height:720px)]:mt-6"
+        >
+          <RainbowButton
+            asChild
+            className="font-body h-12 rounded-full px-7 text-base"
+          >
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+              Book a Discovery Call
+              <ArrowUpRight className="size-5" />
+            </a>
+          </RainbowButton>
+
+          <a
+            href="#case-studies"
+            onClick={(e) => scrollToSection(e, "#case-studies")}
+            className="liquid-glass font-body inline-flex h-12 items-center gap-2 rounded-full px-7 text-base font-medium text-white transition-all duration-300 hover:scale-[1.045] hover:bg-white/10"
+          >
+            View Case Studies
+            <ArrowUpRight className="size-5" />
+          </a>
+        </Rise>
 
         {/* Cards are fixed-width by design; below sm they share the row instead
             so the pair never runs past the viewport edges. */}

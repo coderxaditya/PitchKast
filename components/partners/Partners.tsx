@@ -13,7 +13,7 @@ export function Partners() {
   return (
     <section className="relative z-10 bg-white py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-7xl px-6">
-        <p className="font-body text-center text-sm font-medium text-neutral-500">
+        <p className="font-body text-center text-sm font-medium text-neutral-300">
           Trusted by experts.
         </p>
         {/* Instrument Serif rather than the reference's bold sans — it keeps
@@ -27,7 +27,7 @@ export function Partners() {
         <LogoMarquee
           logos={partnerLogos}
           ariaLabel="Clients and partners"
-          className="text-neutral-400"
+          className="text-neutral-200"
         />
       </div>
     </section>

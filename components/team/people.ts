@@ -25,7 +25,7 @@
 export const TEAM = [
   {
     name: "Soham Goel",
-    role: "Founder & CEO, PitchKast",
+    role: "Founder & CEO",
     line: "Helping founders turn ideas into credibility.",
     description: [
       "Soham Goel is the Founder and CEO of PitchKast and an alumnus of IIT Patna. He leads the company’s vision, strategy, and growth, working closely with founders and businesses to strengthen their personal brand, digital presence, and market positioning.",
@@ -38,7 +38,7 @@ export const TEAM = [
   },
   {
     name: "Manish Goel",
-    role: "Co-Founder & Head of Innovation Cell, PitchKast",
+    role: "Co-Founder & Head of Innovation Cell",
     line: "Turning ideas into scalable solutions.",
     description: [
       "Manish Goel is the Co-Founder and Head of Innovation Cell at PitchKast, driving innovation, strategic initiatives, and the development of new solutions that help founders and businesses build stronger brands and grow with purpose.",
@@ -51,7 +51,7 @@ export const TEAM = [
   },
   {
     name: "Mohit Garg",
-    role: "Global Business Head & HR Team Lead, PitchKast",
+    role: "Global Business Head & HR Team Lead",
     line: "Growing the business and the team behind it.",
     description: [
       "Mohit Garg leads global business development and people operations at PitchKast, working across business growth, strategic partnerships, and team development. As the HR Team Lead, he also focuses on building a strong, collaborative team and fostering a culture that supports innovation and growth.",
@@ -64,7 +64,7 @@ export const TEAM = [
   },
   {
     name: "Aditya T",
-    role: "Head of Tech Department & Product Manager, PitchKast",
+    role: "Head of Tech Department & Product Manager",
     line: "Bridging technical execution and product strategy.",
     description: [
       "Aditya T is the Head of Tech Department and Product Manager at PitchKast, and an alumnus of IIIT Lucknow. With strong technical expertise and hands-on experience across the technology stack, he leads the development and execution of PitchKast’s technology and product initiatives.",
@@ -84,7 +84,7 @@ export const TEAM = [
   },
   {
     name: "Sachin Bansal",
-    role: "Advisor, PitchKast",
+    role: "Advisor",
     line: "Strategic guidance on technology and scale.",
     description: [
       "Sachin Bansal serves as an Advisor at PitchKast, bringing extensive experience across technology, product, engineering, and business leadership. He is an alumnus of IIT Roorkee and has built his career working across startups and established organizations, with experience in leading technology and product teams.",
@@ -97,7 +97,7 @@ export const TEAM = [
   },
   {
     name: "Shelly G",
-    role: "Head of Training Department, PitchKast",
+    role: "Head of Training Department",
     line: "Fifteen years building industry-ready talent.",
     description: [
       "Shelly G is the Head of Training Department at PitchKast and an alumna of IMS Ghaziabad. She is a Gold Medalist from the Master of International Business, Batch of 2005.",

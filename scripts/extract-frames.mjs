@@ -24,7 +24,7 @@ import ffmpeg from "ffmpeg-static";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Keep in sync with FRAME_COUNT in lib/scrub/config.ts. */
-const FRAME_COUNT = 240;
+const FRAME_COUNT = 178;
 const FPS = 24;
 /** Source resolution — never upscale, there is nothing to gain. */
 const WIDTH = 1280;

@@ -7,6 +7,12 @@ import { cn } from "@/lib/utils"
 const rainbowButtonVariants = cva(
   cn(
     "relative cursor-pointer group transition-all animate-rainbow",
+    /* The highlight. Scale reads as "this is a button" faster than any colour
+       shift, the brightness lifts the white face, and the widened blur turns
+       the rainbow underglow into a halo. transition-all above already covers
+       Tailwind v4's standalone `scale` property. */
+    "hover:scale-[1.045] hover:brightness-110 active:scale-[0.97]",
+    "hover:before:h-2/5 hover:before:[filter:blur(1.1rem)]",
     "inline-flex items-center justify-center gap-2 shrink-0",
     "rounded-sm outline-none focus-visible:ring-[3px] aria-invalid:border-destructive",
     "text-sm font-medium whitespace-nowrap",

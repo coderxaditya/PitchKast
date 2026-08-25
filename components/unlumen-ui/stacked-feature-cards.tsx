@@ -158,7 +158,7 @@ const Card = ({
         )}
 
         {card.paragraphs && (
-          <div className="mt-6 space-y-4 font-body text-sm leading-relaxed text-neutral-400 lg:text-[0.9375rem] lg:leading-[1.65]">
+          <div className="mt-6 space-y-4 font-body text-sm leading-relaxed text-neutral-200 lg:text-[0.9375rem] lg:leading-[1.65]">
             {card.paragraphs.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
@@ -233,7 +233,7 @@ export function StackedFeatureCards({
               <h3 className="font-heading text-4xl lg:text-5xl tracking-[-0.02em] text-white italic">
                 {heroCard.title}
               </h3>
-              <p className="font-body text-neutral-400 text-lg leading-relaxed">
+              <p className="font-body text-neutral-200 text-lg leading-relaxed">
                 {heroCard.description}
               </p>
             </div>

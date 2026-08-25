@@ -33,15 +33,27 @@ export default function Footer() {
             </div>
             <span className="text-xl font-bold tracking-tight">PitchKast</span>
           </div>
-          <p className="text-sm text-neutral-400">
+          <p className="text-sm text-neutral-300">
             © copyright PitchKast 2026. All rights reserved.
+          </p>
+          {/* Corporate disclosure — sits a step quieter than the copyright
+              line above it, since it is legal provenance rather than a claim
+              the reader needs to act on. `text-pretty` keeps "Himadri
+              Infrabuild Private Limited" from breaking across an awkward
+              last line. */}
+          <p className="mt-2 max-w-[46ch] text-xs leading-relaxed text-pretty text-neutral-300">
+            PitchKast &mdash; A service brand operating under its parent
+            company, Himadri Infrabuild Private Limited.
           </p>
           <div className="mt-8 flex flex-col items-start gap-6">
             <SocialDock />
-            <RainbowButton asChild className="font-body rounded-full px-4 py-2">
+            <RainbowButton
+              asChild
+              className="font-body h-12 rounded-full px-7 text-base"
+            >
               <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
                 Book a Discovery Call
-                <ArrowUpRight className="h-4 w-4" />
+                <ArrowUpRight className="size-5" />
               </a>
             </RainbowButton>
           </div>
@@ -53,12 +65,12 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h3 className="font-semibold text-neutral-100">Pages</h3>
             <div className="flex flex-col gap-4">
-              <a href="#home" onClick={(e) => scrollToSection(e, "#home")} className="text-sm text-neutral-400 hover:text-white transition-colors">Home</a>
-              <a href="#about" onClick={(e) => scrollToSection(e, "#about")} className="text-sm text-neutral-400 hover:text-white transition-colors">About</a>
-              <a href="#case-studies" onClick={(e) => scrollToSection(e, "#case-studies")} className="text-sm text-neutral-400 hover:text-white transition-colors">Case Studies</a>
-              <a href="#services" onClick={(e) => scrollToSection(e, "#services")} className="text-sm text-neutral-400 hover:text-white transition-colors">Services</a>
-              <a href="#team" onClick={(e) => scrollToSection(e, "#team")} className="text-sm text-neutral-400 hover:text-white transition-colors">Team</a>
-              <a href="#gallery" onClick={(e) => scrollToSection(e, "#gallery")} className="text-sm text-neutral-400 hover:text-white transition-colors">Gallery</a>
+              <a href="#home" onClick={(e) => scrollToSection(e, "#home")} className="text-sm text-neutral-200 hover:text-white transition-colors">Home</a>
+              <a href="#about" onClick={(e) => scrollToSection(e, "#about")} className="text-sm text-neutral-200 hover:text-white transition-colors">About</a>
+              <a href="#case-studies" onClick={(e) => scrollToSection(e, "#case-studies")} className="text-sm text-neutral-200 hover:text-white transition-colors">Case Studies</a>
+              <a href="#services" onClick={(e) => scrollToSection(e, "#services")} className="text-sm text-neutral-200 hover:text-white transition-colors">Services</a>
+              <a href="#team" onClick={(e) => scrollToSection(e, "#team")} className="text-sm text-neutral-200 hover:text-white transition-colors">Team</a>
+              <a href="#gallery" onClick={(e) => scrollToSection(e, "#gallery")} className="text-sm text-neutral-200 hover:text-white transition-colors">Gallery</a>
             </div>
           </div>
 
@@ -66,9 +78,9 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h3 className="font-semibold text-neutral-100">Socials</h3>
             <div className="flex flex-col gap-4">
-              <Link href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Instagram</Link>
-              <Link href="#" className="text-sm text-neutral-400 hover:text-white transition-colors">Twitter</Link>
-              <Link href="https://www.linkedin.com/company/pitchkast-india/?viewAsMember=true" className="text-sm text-neutral-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</Link>
+              <Link href="#" className="text-sm text-neutral-200 hover:text-white transition-colors">Instagram</Link>
+              <Link href="#" className="text-sm text-neutral-200 hover:text-white transition-colors">Twitter</Link>
+              <Link href="https://www.linkedin.com/company/pitchkast-india/?viewAsMember=true" className="text-sm text-neutral-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</Link>
             </div>
           </div>
 
@@ -76,7 +88,7 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h3 className="font-semibold text-neutral-100">Legal</h3>
             <div className="flex flex-col gap-4">
-              <Link href="/privacy" className="text-sm text-neutral-400 hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/privacy" className="text-sm text-neutral-200 hover:text-white transition-colors">Privacy Policy</Link>
             </div>
           </div>
         </div>

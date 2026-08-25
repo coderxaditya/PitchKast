@@ -90,7 +90,10 @@ export function AboutSystem() {
                         <span
                           className={cn(
                             "font-body text-eyebrow shrink-0 tracking-[0.2em] transition-colors duration-500",
-                            isActive ? "text-gold" : "text-white/25",
+                            /* Inactive still reads as "not this one", but
+                               white/25 read as disabled — these rows are
+                               buttons the reader is meant to try. */
+                            isActive ? "text-gold" : "text-white/60",
                           )}
                         >
                           {stage.index}
@@ -100,7 +103,7 @@ export function AboutSystem() {
                             "font-display text-display-xs leading-none font-extrabold tracking-[0.02em] uppercase transition-colors duration-500",
                             isActive
                               ? "text-white"
-                              : "text-white/35 group-hover:text-white/70",
+                              : "text-white/60 group-hover:text-white/90",
                           )}
                         >
                           {stage.label}
@@ -115,7 +118,7 @@ export function AboutSystem() {
                         <span
                           className={cn(
                             "font-body text-eyebrow tabular-nums transition-colors duration-500",
-                            isActive ? "text-ink-muted" : "text-white/25",
+                            isActive ? "text-ink-muted" : "text-white/60",
                           )}
                         >
                           {stage.services.length}

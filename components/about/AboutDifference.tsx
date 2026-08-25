@@ -55,7 +55,7 @@ export function AboutDifference() {
             <Rise key={principle.index} delay={0.3 + i * 0.12} play={inView}>
               <article className="liquid-glass glass-on-black spotlight group flex h-full flex-col rounded-[1.5rem] p-7 lg:p-8 hover:-translate-y-1.5">
                 <div className="flex items-center gap-3">
-                  <span className="font-body text-eyebrow text-gold/60 group-hover:text-gold tracking-[0.22em] transition-colors duration-500">
+                  <span className="font-body text-eyebrow text-gold/90 group-hover:text-gold tracking-[0.22em] transition-colors duration-500">
                     {principle.index}
                   </span>
                   <span

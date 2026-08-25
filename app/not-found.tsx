@@ -35,7 +35,7 @@ export default function NotFound() {
         <h1 className="font-heading mt-6 text-[clamp(2.4rem,8vw,4.5rem)] leading-none tracking-[-0.03em] text-white italic">
           Nothing here.
         </h1>
-        <p className="font-body mx-auto mt-6 max-w-[42ch] text-sm text-neutral-400">
+        <p className="font-body mx-auto mt-6 max-w-[42ch] text-sm text-neutral-200">
           That page has moved or never existed.
         </p>
         <Link
