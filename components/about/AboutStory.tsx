@@ -30,7 +30,7 @@ const REFUSALS = [
 ] as const;
 
 export function AboutStory() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
 
   return (
     <div ref={ref}>
@@ -52,14 +52,14 @@ export function AboutStory() {
           </div>
 
           <div className="lg:col-span-7">
-            <Rise delay={0.9} play={inView}>
+            <Rise delay={0.315} play={inView}>
               <p className="font-body text-lead text-ink-soft max-w-[58ch] leading-[1.75] text-pretty">
                 Early-stage companies rarely need another disconnected service
                 provider. They need people who understand the bigger picture.
               </p>
             </Rise>
 
-            <Rise delay={1.05} play={inView}>
+            <Rise delay={0.367} play={inView}>
               <p className="font-body text-body text-ink-muted mt-8 max-w-[62ch] leading-[1.85] text-pretty">
                 That is why PitchKast works alongside founders across the
                 journey, combining{" "}
@@ -77,14 +77,14 @@ export function AboutStory() {
               </p>
             </Rise>
 
-            <Rise delay={1.2} play={inView}>
+            <Rise delay={0.42} play={inView}>
               <p className="font-body text-body text-ink-muted mt-6 max-w-[62ch] leading-[1.85] text-pretty">
                 Every engagement has named people, transparent progress, and
                 work delivered in your name.
               </p>
             </Rise>
 
-            <Rise delay={1.35} play={inView}>
+            <Rise delay={0.472} play={inView}>
               <ul className="mt-12 border-t border-white/10">
                 {REFUSALS.map((refusal) => (
                   <li

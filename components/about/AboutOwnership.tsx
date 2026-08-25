@@ -15,7 +15,7 @@ import { useInView } from "./useInView";
  * last of the two full-width chapters, so the section ends wide.
  */
 export function AboutOwnership() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.12);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
 
   return (
     <div ref={ref}>
@@ -38,7 +38,7 @@ export function AboutOwnership() {
           </div>
 
           <div className="lg:col-span-6 lg:col-start-7 lg:pt-3">
-            <Rise delay={0.7} play={inView}>
+            <Rise delay={0.245} play={inView}>
               <p className="font-body text-body text-ink-muted max-w-[58ch] leading-[1.85] text-pretty">
                 From code and infrastructure to identity, content, credentials,
                 and documentation, everything we create is registered in your
@@ -46,7 +46,7 @@ export function AboutOwnership() {
               </p>
             </Rise>
 
-            <Rise delay={0.9} play={inView}>
+            <Rise delay={0.315} play={inView}>
               <p className="font-body text-body text-ink-muted mt-5 max-w-[58ch] leading-[1.85] text-pretty">
                 Because the goal isn&rsquo;t to make you dependent on PitchKast.
               </p>

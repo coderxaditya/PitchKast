@@ -36,7 +36,7 @@ const PRINCIPLES = [
  * small changes on one easing curve, no scaling or colour washes.
  */
 export function AboutDifference() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
 
   return (
     <div ref={ref}>
@@ -52,7 +52,7 @@ export function AboutDifference() {
             titles to three lines and reads cramped rather than considered. */}
         <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
           {PRINCIPLES.map((principle, i) => (
-            <Rise key={principle.index} delay={0.3 + i * 0.12} play={inView}>
+            <Rise key={principle.index} delay={0.1 + i * 0.05} play={inView}>
               <article className="liquid-glass glass-on-black spotlight group flex h-full flex-col rounded-[1.5rem] p-7 lg:p-8 hover:-translate-y-1.5">
                 <div className="flex items-center gap-3">
                   <span className="font-body text-eyebrow text-gold/90 group-hover:text-gold tracking-[0.22em] transition-colors duration-500">

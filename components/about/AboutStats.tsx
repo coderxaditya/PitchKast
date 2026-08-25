@@ -21,7 +21,7 @@ const STATS = [
  * width rather than boxed two-up, so they can carry real scale.
  */
 export function AboutStats() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
 
   return (
     <div ref={ref}>
@@ -32,7 +32,7 @@ export function AboutStats() {
           {STATS.map((stat, i) => (
             <Rise
               key={stat.value}
-              delay={0.3 + i * 0.12}
+              delay={0.1 + i * 0.05}
               play={inView}
               className={cn(
                 "group py-10 lg:py-6",

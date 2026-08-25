@@ -24,7 +24,13 @@ export function useInView<T extends HTMLElement>(threshold = 0.2) {
         setInView(true);
         io.disconnect();
       },
-      { threshold },
+      /* rootMargin grows the viewport 25% past its bottom edge, so a panel
+         starts revealing while it is still below the fold and is already
+         settled by the time the reader reaches it. Without this the sequence
+         only begins once the panel is `threshold` visible — which is exactly
+         when the reader is looking at it, so they watch it assemble instead
+         of reading it. */
+      { threshold, rootMargin: "0px 0px 25% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();

@@ -74,7 +74,7 @@ function StageCard({ stage }: { stage: (typeof STAGES)[number] }) {
 }
 
 export function AboutHero() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
   const secondLine = useDelayed(inView, 420);
 
   return (
@@ -94,7 +94,7 @@ export function AboutHero() {
             className="font-heading text-display-lg mx-auto mt-2 max-w-[16ch] leading-[0.92] tracking-[-0.03em] text-white italic"
           />
 
-          <Rise delay={1.05} play={inView}>
+          <Rise delay={0.367} play={inView}>
             <p className="font-body text-lead text-ink-soft mx-auto mt-8 max-w-[46ch] leading-relaxed text-balance">
               PitchKast is an end-to-end growth partner for early-stage
               founders.
@@ -104,7 +104,7 @@ export function AboutHero() {
 
         {/* The arc, at full width — three stages reading left to right with a
             pulse travelling the rail between them. */}
-        <Rise delay={1.25} play={inView} className="mt-16 lg:mt-20">
+        <Rise delay={0.438} play={inView} className="mt-16 lg:mt-20">
           <ol className="mx-auto flex max-w-6xl flex-col items-stretch md:flex-row md:items-center">
             {STAGES.map((stage, i) => (
               <Fragment key={stage.label}>
@@ -115,7 +115,7 @@ export function AboutHero() {
           </ol>
         </Rise>
 
-        <Rise delay={1.5} play={inView}>
+        <Rise delay={0.525} play={inView}>
           <p className="font-body text-body text-ink-muted mx-auto mt-16 max-w-[62ch] text-center leading-[1.85] text-pretty lg:mt-20">
             We bring product, design, growth, and fundraising expertise together
             under one accountable team, helping founders move from an idea to a

@@ -35,7 +35,7 @@ const STAGES = [
 ] as const;
 
 export function AboutSystem() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
   /* One stage is always open — an all-collapsed state would leave the chapter
      looking empty, and it has to explain itself without a click. */
   const [active, setActive] = useState(0);
@@ -58,7 +58,7 @@ export function AboutSystem() {
                 text="One team. Three stages. Seven disciplines."
                 className="font-heading text-display-sm max-w-[15ch] leading-[1.0] tracking-[-0.02em] text-white italic"
               />
-              <Rise delay={0.95} play={inView}>
+              <Rise delay={0.332} play={inView}>
                 <p className="font-body text-body text-ink-muted mt-7 max-w-[42ch] leading-[1.85] text-pretty">
                   We believe building a company should not mean managing seven
                   different vendors.
@@ -68,7 +68,7 @@ export function AboutSystem() {
           </div>
 
           <div className="lg:col-span-7">
-            <Rise delay={1.1} play={inView}>
+            <Rise delay={0.385} play={inView}>
               <ul className="border-t border-white/10">
                 {STAGES.map((stage, i) => {
                   const isActive = i === active;

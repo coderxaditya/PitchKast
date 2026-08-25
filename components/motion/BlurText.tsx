@@ -13,9 +13,9 @@ import { motion } from "framer-motion";
  */
 export function BlurText({
   text = "",
-  delay = 100,
+  delay = 45,
   className = "",
-  stepDuration = 0.35,
+  stepDuration = 0.22,
   align = "center",
   as: Tag = "p",
   play,

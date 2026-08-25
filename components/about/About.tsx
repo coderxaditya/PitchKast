@@ -40,7 +40,7 @@ const RAIL_ITEM_H = 44;
 
 /** The section's opening — and the only h2 the About section owns. */
 function SectionOpener() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.3);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
 
   return (
     <div ref={ref} className="pb-[var(--chapter-gap)]">

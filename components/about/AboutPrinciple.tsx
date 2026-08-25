@@ -33,7 +33,7 @@ function Divider({ play, delay }: { play: boolean; delay: number }) {
  * payoff, and everything under it is deliberately quiet.
  */
 export function AboutPrinciple() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.15);
+  const { ref, inView } = useInView<HTMLDivElement>(0.04);
 
   return (
     <div ref={ref}>
@@ -67,17 +67,17 @@ export function AboutPrinciple() {
 
         <div className="mt-16 grid gap-x-16 lg:grid-cols-12 lg:mt-20">
           <div className="lg:col-span-7 lg:col-start-6">
-            <Divider play={inView} delay={0.9} />
+            <Divider play={inView} delay={0.315} />
 
-            <Rise delay={1.1} play={inView}>
+            <Rise delay={0.385} play={inView}>
               <p className="font-body text-lead text-ink-muted py-7 leading-[1.6] text-pretty">
                 We sit on the founder&rsquo;s side of the table.
               </p>
             </Rise>
 
-            <Divider play={inView} delay={1.15} />
+            <Divider play={inView} delay={0.402} />
 
-            <Rise delay={1.3} play={inView}>
+            <Rise delay={0.455} play={inView}>
               <p className="font-body text-body text-ink-muted max-w-[58ch] py-7 leading-[1.85] text-pretty">
                 That means we are willing to tell you when something should be
                 built, when something should be changed, and when something
@@ -85,16 +85,16 @@ export function AboutPrinciple() {
               </p>
             </Rise>
 
-            <Divider play={inView} delay={1.4} />
+            <Divider play={inView} delay={0.49} />
 
-            <Rise delay={1.6} play={inView}>
+            <Rise delay={0.56} play={inView}>
               <p className="font-body text-body text-ink-muted max-w-[58ch] py-7 leading-[1.85] text-pretty">
                 We measure ourselves by the outcome, not by how many
                 deliverables we can put on an invoice.
               </p>
             </Rise>
 
-            <Divider play={inView} delay={1.65} />
+            <Divider play={inView} delay={0.577} />
           </div>
         </div>
       </Chapter>

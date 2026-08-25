@@ -60,13 +60,13 @@ export const LENIS_SYNC_TOUCH = true;
  *
  * A finger is a direct-manipulation input — the content is expected to be
  * under the fingertip — so the same 0.065 that reads as luxurious on a wheel
- * reads as lag on a drag. 0.085 tracks the finger tightly — the first
- * tuning pass used Lenis's 0.075 default and the drag itself read as laggy,
- * which was most of the "too much delay" complaint.
+ * reads as lag on a drag. 0.1 tracks the finger closely: the content stays
+ * under the fingertip during the drag, and the *smoothing* people actually
+ * want lives in the coast after release (LENIS_LERP), not in the drag.
  *
  * This governs the drag only. The coast after release runs on LENIS_LERP.
  */
-export const LENIS_SYNC_TOUCH_LERP = 0.085;
+export const LENIS_SYNC_TOUCH_LERP = 0.1;
 
 /**
  * How far a fling coasts after the finger lifts.
@@ -76,26 +76,29 @@ export const LENIS_SYNC_TOUCH_LERP = 0.085;
  * velocity of 1 a higher exponent multiplies the distance rather than adding
  * to it. This has been tuned twice from real feedback: the original 1.9
  * threw a hard flick ~7 screens (page reached the end in one gesture), the
- * corrective 1.45 landed ~1.5 screens and read as wading — every section
- * cost several swipes. 1.62 sits between: a hard flick covers roughly 2.5-3
- * screens, which is where native iOS momentum lives.
+ * corrective 1.45 landed ~1.5 screens and read as wading, and 1.62 (~2.9
+ * screens) still cost several swipes per section on a page this long. 1.7
+ * measures at ~5.1 screens per hard flick: a section is one or two gestures,
+ * and it is still less than half the original runaway's 11.8. 1.78 was tried
+ * and reached 7.0, which is close enough to the original problem to be worth
+ * avoiding.
  *
  * This is the knob for "how far one flick carries" — damping and lerp cannot
  * change that, because they shape how you arrive, not how far you are thrown.
  */
-export const LENIS_TOUCH_INERTIA_EXPONENT = 1.62;
+export const LENIS_TOUCH_INERTIA_EXPONENT = 1.7;
 
 /**
  * Distance one touch-drag covers, as a multiple of the default.
  *
  * Applied to the raw finger displacement, so it is the touch counterpart of
- * LENIS_WHEEL_MULTIPLIER and works the same way. 1 is the browser-native
- * distance: the page moves exactly as far as the finger does. The 0.9 of the
- * previous pass shaved every single drag by 10%, which compounded with the
- * shortened inertia into "I have to scroll a lot" — the inertia exponent is
- * the right place to tame flings; the drag itself should feel 1:1.
+ * LENIS_WHEEL_MULTIPLIER and works the same way. 1 is browser-native — the
+ * page moves exactly as far as the finger does — and 1.15 gives each drag a
+ * little more reach, which is what stops a long page needing a dozen swipes.
+ * Above roughly 1.3 the content starts outrunning the fingertip and the drag
+ * stops feeling attached to it, so this stays well under that.
  */
-export const LENIS_TOUCH_MULTIPLIER = 1;
+export const LENIS_TOUCH_MULTIPLIER = 1.15;
 
 /**
  * Lenis honours `prefers-reduced-motion` by default, and honouring it means

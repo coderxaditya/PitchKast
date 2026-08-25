@@ -28,13 +28,18 @@ export function Rise({
     <motion.div
       ref={ref}
       className={className}
-      initial={{ filter: "blur(10px)", opacity: 0, y: 20 }}
+      /* 6px of travel and a 4px blur, down from 20px and 10px. The heavy
+         version read as a whole panel assembling itself, which is fine when
+         you are already looking at it and useless when you are scrolling
+         past — at 10px of blur the copy is unreadable for most of the
+         animation, so the reader sees a smear and keeps going. */
+      initial={{ filter: "blur(4px)", opacity: 0, y: 6 }}
       animate={
         play
           ? { filter: "blur(0px)", opacity: 1, y: 0 }
-          : { filter: "blur(10px)", opacity: 0, y: 20 }
+          : { filter: "blur(4px)", opacity: 0, y: 6 }
       }
-      transition={{ duration: 0.8, ease: "easeOut", delay }}
+      transition={{ duration: 0.42, ease: "easeOut", delay }}
       onAnimationComplete={() => {
         /* Only strip the filter once settled *visible*. Clearing it on the way
            out would also wipe the blur(10px) the next entry needs to animate
