@@ -5,7 +5,7 @@ import { StackedFeatureCards } from "@/components/unlumen-ui/stacked-feature-car
 const CASE_STUDIES = [
   {
     id: 1,
-    location: "San Francisco, United States",
+    location: "San Francisco, United States of America",
     category: "SaaS & Technology Founder",
     goal: "Building a founder brand from scratch",
     paragraphs: [
@@ -17,7 +17,7 @@ const CASE_STUDIES = [
   },
   {
     id: 2,
-    location: "United States & Taiwan",
+    location: "United States of America & Taiwan",
     category: "B2B Technology",
     goal: "Taking one product into two markets",
     paragraphs: [
@@ -30,7 +30,7 @@ const CASE_STUDIES = [
   },
   {
     id: 3,
-    location: "United States",
+    location: "United States of America",
     category: "B2B SaaS Founder",
     goal: "Getting the founder and the sales pipeline on the same page",
     paragraphs: [
@@ -43,7 +43,7 @@ const CASE_STUDIES = [
   },
   {
     id: 4,
-    location: "United States",
+    location: "United States of America",
     category: "Professional Services",
     goal: "Finding something worth saying",
     paragraphs: [

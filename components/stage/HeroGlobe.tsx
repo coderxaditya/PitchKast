@@ -13,12 +13,54 @@ import { Globe3D, GlobeMarker } from "@/components/ui/3d-globe";
  * Coordinates are decimal degrees, north and east positive.
  */
 const markers: GlobeMarker[] = [
-  // Americas
+  /* Americas — seven across the continental United States.
+     Spread coast to coast rather than clustered on one seaboard: at this
+     globe's radius two pins closer than roughly 8 degrees overlap into one
+     blob at the default camera distance, and every pair below clears that.
+     Avatars 15-18 are new; Singapore's and Australia's repeat here because
+     the avatar set stops at 18, and those two sit on the opposite face of
+     the globe — they are never on screen at the same time as these. */
   {
     lat: 40.7128,
     lng: -74.006,
     src: "https://assets.aceternity.com/avatars/1.webp",
-    label: "United States",
+    label: "New York",
+  },
+  {
+    lat: 34.0522,
+    lng: -118.2437,
+    src: "https://assets.aceternity.com/avatars/15.webp",
+    label: "Los Angeles",
+  },
+  {
+    lat: 41.8781,
+    lng: -87.6298,
+    src: "https://assets.aceternity.com/avatars/16.webp",
+    label: "Chicago",
+  },
+  {
+    lat: 29.7604,
+    lng: -95.3698,
+    src: "https://assets.aceternity.com/avatars/17.webp",
+    label: "Houston",
+  },
+  {
+    lat: 25.7617,
+    lng: -80.1918,
+    src: "https://assets.aceternity.com/avatars/18.webp",
+    label: "Miami",
+  },
+  {
+    lat: 47.6062,
+    lng: -122.3321,
+    src: "https://assets.aceternity.com/avatars/13.webp",
+    label: "Seattle",
+  },
+  {
+    lat: 39.7392,
+    lng: -104.9903,
+    src: "https://assets.aceternity.com/avatars/14.webp",
+    label: "Denver",
   },
 
   // Europe

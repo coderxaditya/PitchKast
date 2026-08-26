@@ -59,12 +59,33 @@ export function Navbar() {
           <a
             href="#home"
             onClick={(e) => scrollToSection(e, "#home")}
-            className="liquid-glass flex items-center justify-center rounded-full px-4 sm:px-5"
-            style={{ height: 48 }}
+            /* No `liquid-glass` here any more. The mark is meant to float, and
+               a glass pill with a rim light around it is the opposite of that
+               — so the wordmark now sits directly on the page while the menu
+               button and CTA keep their pills. Height still 48 so the row's
+               alignment is untouched. */
+            /* No fixed height any more — it was pinned to 48 to match the
+               pill controls, which would now crop the larger mark. The row is
+               `items-center`, so the logo simply sets its own height and stays
+               centred against the CTA and menu button. */
+            className="flex items-center justify-center"
+            aria-label="PitchKast — back to top"
           >
-            <span className="font-body text-sm leading-none font-semibold tracking-[0.16em] whitespace-nowrap text-white uppercase sm:text-base sm:tracking-[0.18em]">
-              PITCHKAST
-            </span>
+            {/* Transparent PNG, not the supplied black-backed file: the mark
+                has to sit on the hero video as well as on black, and an opaque
+                black rectangle would show as a square over the footage. */}
+            <img
+              src="/brand/landing-mark-256.png"
+              alt="PitchKast"
+              width={304}
+              height={256}
+              decoding="async"
+              /* Height only, `w-auto` — the intrinsic 1.188 aspect does the
+                 rest, so the two axes can never drift out of ratio. ~1.5x the
+                 previous 44/48: large enough to read as the brand anchor
+                 rather than as another control in the row. */
+              className="h-16 w-auto sm:h-[72px]"
+            />
           </a>
         </div>
 
