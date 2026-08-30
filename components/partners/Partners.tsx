@@ -13,7 +13,7 @@ export function Partners() {
   return (
     <section className="relative z-10 bg-white py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-7xl px-6">
-        <p className="font-body text-center text-sm font-medium text-neutral-300">
+        <p className="font-body text-center text-sm font-medium text-neutral-950">
           Trusted by experts.
         </p>
         {/* Instrument Serif rather than the reference's bold sans — it keeps
