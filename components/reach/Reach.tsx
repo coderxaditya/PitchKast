@@ -1,6 +1,7 @@
 import { Container } from "@/components/flat/Container";
 import WorldMap from "@/components/ui/world-map";
 import { ARCS, COUNTRIES } from "./countries";
+import { ARC_POINTS } from "./projected";
 
 /**
  * Global reach.
@@ -17,6 +18,15 @@ import { ARCS, COUNTRIES } from "./countries";
  * Every arc starts in Gurgaon, so the drawing reads as reach outward instead
  * of traffic between arbitrary pairs.
  */
+/* The map's geometry is generated, so it can go stale. Comparing the counts
+   turns a forgotten `node scripts/build-world-map.mjs` into a build failure
+   naming the fix, rather than a map quietly missing a country. */
+if (ARC_POINTS.length !== ARCS.length) {
+  throw new Error(
+    `World map is stale: ${ARC_POINTS.length} generated arcs vs ${ARCS.length} in countries.ts. Run: node scripts/build-world-map.mjs`,
+  );
+}
+
 export function Reach() {
   return (
     <div className="on-dark bg-ink py-20 sm:py-24 lg:py-28">
@@ -38,7 +48,7 @@ export function Reach() {
             horizontally. */}
         <div className="mt-12 overflow-x-auto sm:mt-14 sm:overflow-x-visible">
           <div className="min-w-[32rem] sm:min-w-0">
-            <WorldMap dots={ARCS} />
+            <WorldMap />
           </div>
         </div>
 

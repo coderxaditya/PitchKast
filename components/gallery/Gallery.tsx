@@ -28,17 +28,14 @@ export function Gallery() {
       className="scroll-mt-20 bg-surface py-20 sm:py-24 lg:py-32"
     >
       <Container>
-        <div>
-          <p className="text-eyebrow font-bold tracking-[0.12em] text-action-strong uppercase">
-            Gallery
-          </p>
-          <h2
-            id="gallery-title"
-            className="mt-4 text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-ink"
-          >
-            Moments.
-          </h2>
-        </div>
+        {/* "Gallery" is the heading now rather than a label above one — with
+            "Moments." gone there was nothing left for it to label. */}
+        <h2
+          id="gallery-title"
+          className="text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-ink"
+        >
+          Gallery
+        </h2>
 
         {/* A button, not a bare image: this is the way into the viewer, and it
             should answer to a keyboard and a screen reader as well as a tap. */}

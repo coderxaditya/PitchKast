@@ -138,6 +138,27 @@ body {
   }
 }
 
+/* ============================================================
+   World-map arcs
+   ------------------------------------------------------------
+   The draw-in, as a keyframe rather than a motion library.
+   Every path carries `pathLength="1"`, which normalises its
+   geometry, so one dash length draws arcs of any real length
+   and the stagger is a per-path delay.
+   ============================================================ */
+
+.map-arc {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: map-arc-draw 1s ease-out forwards;
+}
+
+@keyframes map-arc-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -164,6 +185,14 @@ body {
   .marquee__track {
     animation-duration: calc(var(--marquee-duration, 28s) * 2) !important;
     animation-iteration-count: infinite !important;
+  }
+
+  /* The blanket rule above collapses the arc animation to nothing, which would
+     freeze every path at `stroke-dashoffset: 1` — fully undrawn, so the map
+     would show pins and no connections at all. Drawn is the correct resting
+     state; it simply arrives without the sweep. */
+  .map-arc {
+    stroke-dashoffset: 0;
   }
 }
 
