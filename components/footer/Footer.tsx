@@ -1,114 +1,175 @@
-"use client";
+import { ArrowUpRight } from "lucide-react";
 
-import Image from "next/image";
-import { scrollToSection } from "@/lib/scrollToSection";
-import Link from "next/link";
+import { Button } from "@/components/flat/Button";
+import { Container } from "@/components/flat/Container";
 import { SocialDock } from "./SocialDock";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { ArrowUpRight } from "@/components/icons";
+import {
+  BOOKING_URL,
+  NAV_LINKS,
+  SOCIAL_LINKS,
+  isExternal,
+} from "@/lib/site";
 
-const BOOKING_URL = "https://calendly.com/goelsoham/founder-growth-strategy-call";
+function Column({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <h3 className="text-eyebrow font-bold tracking-[0.12em] text-action uppercase">
+        {title}
+      </h3>
+      <ul className="mt-5 flex flex-col gap-3.5">{children}</ul>
+    </div>
+  );
+}
 
+/**
+ * `py-1 -my-1` grows the tap target without moving anything.
+ *
+ * At the footer's text size these links were 20px tall, under the 24px floor
+ * for a pointer target. The padding takes the box to 28px; the matching
+ * negative margin takes the same amount back out of the layout, so the column's
+ * spacing is unchanged and only the hittable area grows.
+ */
+const LINK =
+  "inline-block py-1 -my-1 text-white/70 transition-colors duration-200 hover:text-white";
+
+/**
+ * Site footer.
+ *
+ * Same content as before — mark and wordmark, copyright, the parent-company
+ * disclosure, the social dock, the booking call to action, and three link
+ * columns — restyled to the flat system.
+ *
+ * The dock is the previous build's component, brought back unchanged apart
+ * from its colours, which were tuned for a page carrying shadcn's dark tokens.
+ * This page does not, so left alone it would paint dark icons on a dark bar.
+ *
+ * Navigation is plain anchors. The document scrolls smoothly on its own, so
+ * the scripted handler the old footer used has nothing left to add.
+ */
 export default function Footer() {
   return (
-    <footer className="bg-neutral-950 text-white py-16 px-6 md:px-12 lg:px-24 overflow-hidden relative border-t border-neutral-800">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-16 lg:gap-8 relative z-10">
+    <footer className="on-dark relative overflow-hidden bg-ink pt-20 sm:pt-24">
+      <Container>
+        <div className="lg:grid lg:grid-cols-12 lg:gap-12">
+          {/* ── Identity ── */}
+          <div className="lg:col-span-5">
+            <div className="flex items-center gap-2.5">
+              {/* The supplied artwork as a square tile, cropped by
+                  `scripts/build-footer-logo.mjs`. That source is black line
+                  art on a solid orange field with the art covering 4% of a
+                  2400x1792 canvas, so using it directly renders an almost
+                  empty orange rectangle. The script crops a square around the
+                  measured artwork and changes nothing else — the orange field
+                  and the black ink are the file's own.
 
-        {/* Left Section - Logo and Copyright */}
-        <div className="flex flex-col gap-6 lg:w-1/3">
-          <div className="flex items-center gap-3">
-            {/* object-contain, and no `p-1`. The previous source was a
-                2400x1792 canvas whose artwork covered 16.8% of it, so
-                `object-cover` in this square box cropped to the middle of that
-                canvas and rendered an almost empty orange tile. The mark is
-                now pre-cropped square, so it fills the box exactly. */}
-            <div className="w-8 h-8 relative overflow-hidden rounded">
-              <Image
-                src="/brand/logo.png"
-                alt="PitchKast"
-                fill
-                sizes="32px"
-                className="object-contain"
+                  The radius is applied here rather than baked into the file,
+                  so it stays tied to the system's own value. */}
+              <img
+                src="/brand/footer-mark-256.png"
+                alt=""
+                width={256}
+                height={256}
+                className="size-9 rounded-flat"
               />
+              <span className="text-[1.375rem] font-extrabold tracking-[-0.02em] text-white">
+                PitchKast
+              </span>
             </div>
-            <span className="text-xl font-bold tracking-tight">PitchKast</span>
-          </div>
-          <p className="text-sm text-neutral-300">
-            © copyright PitchKast 2026. All rights reserved.
-          </p>
-          {/* Corporate disclosure — sits a step quieter than the copyright
-              line above it, since it is legal provenance rather than a claim
-              the reader needs to act on. `text-pretty` keeps "Himadri
-              Infrabuild Private Limited" from breaking across an awkward
-              last line. */}
-          <p className="mt-2 max-w-[46ch] text-xs leading-relaxed text-pretty text-neutral-300">
-            PitchKast &mdash; A service brand operating under its parent
-            company, Himadri Infrabuild Private Limited.
-          </p>
-          <div className="mt-8 flex flex-col items-start gap-6">
-            <SocialDock />
-            <RainbowButton
-              asChild
-              className="font-body h-12 rounded-full px-7 text-base"
-            >
+
+            <p className="mt-6 text-sm text-white/70">
+              &copy; copyright PitchKast 2026. All rights reserved.
+            </p>
+
+            {/* Corporate disclosure — a step quieter than the copyright above
+                it, since it is legal provenance rather than a claim the reader
+                needs to act on. */}
+            <p className="mt-3 max-w-[46ch] text-xs leading-relaxed text-pretty text-white/55">
+              PitchKast &mdash; A service brand operating under its parent
+              company, Himadri Infrabuild Private Limited.
+            </p>
+
+            {/* The dock from the previous build, restored as it was. */}
+            <div className="mt-8">
+              <SocialDock />
+            </div>
+
+            <Button asChild size="md" className="mt-8">
               <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
                 Book a Discovery Call
-                <ArrowUpRight className="size-5" />
+                <ArrowUpRight className="size-5" strokeWidth={2.5} />
               </a>
-            </RainbowButton>
+            </Button>
+          </div>
+
+          {/* ── Links ── */}
+          <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:col-span-7 lg:mt-0">
+            <Column title="Pages">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className={LINK}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </Column>
+
+            <Column title="Socials">
+              {SOCIAL_LINKS.map((social) => (
+                <li key={social.label}>
+                  <a
+                    href={social.href}
+                    target={isExternal(social.href) ? "_blank" : undefined}
+                    rel={
+                      isExternal(social.href) ? "noopener noreferrer" : undefined
+                    }
+                    className={LINK}
+                  >
+                    {social.label}
+                  </a>
+                </li>
+              ))}
+            </Column>
+
+            <Column title="Legal">
+              <li>
+                <a href="/privacy" className={LINK}>
+                  Privacy Policy
+                </a>
+              </li>
+            </Column>
           </div>
         </div>
+      </Container>
 
-        {/* Right Section - Navigation Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-16 lg:w-2/3">
-          {/* Pages */}
-          <div className="flex flex-col gap-5">
-            <h3 className="font-semibold text-neutral-100">Pages</h3>
-            <div className="flex flex-col gap-4">
-              <a href="#home" onClick={(e) => scrollToSection(e, "#home")} className="text-sm text-neutral-200 hover:text-white transition-colors">Home</a>
-              <a href="#about" onClick={(e) => scrollToSection(e, "#about")} className="text-sm text-neutral-200 hover:text-white transition-colors">About</a>
-              <a href="#case-studies" onClick={(e) => scrollToSection(e, "#case-studies")} className="text-sm text-neutral-200 hover:text-white transition-colors">Case Studies</a>
-              <a href="#services" onClick={(e) => scrollToSection(e, "#services")} className="text-sm text-neutral-200 hover:text-white transition-colors">Services</a>
-              <a href="#team" onClick={(e) => scrollToSection(e, "#team")} className="text-sm text-neutral-200 hover:text-white transition-colors">Team</a>
-              <a href="#gallery" onClick={(e) => scrollToSection(e, "#gallery")} className="text-sm text-neutral-200 hover:text-white transition-colors">Gallery</a>
-            </div>
-          </div>
+      {/* ── The wordmark ──────────────────────────────────────────
+          A div, not a heading. It is decoration bleeding off the bottom of the
+          page; as an h1 it was the highest-ranked heading in the document, so
+          it told a crawler the page's subject was the company's own name
+          rather than what the company does. Hidden from assistive tech, since
+          the name is already in the title, the logo link and the copyright.
 
-          {/* Socials */}
-          <div className="flex flex-col gap-5">
-            <h3 className="font-semibold text-neutral-100">Socials</h3>
-            <div className="flex flex-col gap-4">
-              <Link href="#" className="text-sm text-neutral-200 hover:text-white transition-colors">Instagram</Link>
-              <Link href="#" className="text-sm text-neutral-200 hover:text-white transition-colors">Twitter</Link>
-              <Link href="https://www.linkedin.com/company/pitchkast-india/?viewAsMember=true" className="text-sm text-neutral-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</Link>
-            </div>
-          </div>
-
-          {/* Legal */}
-          <div className="flex flex-col gap-5">
-            <h3 className="font-semibold text-neutral-100">Legal</h3>
-            <div className="flex flex-col gap-4">
-              <Link href="/privacy" className="text-sm text-neutral-200 hover:text-white transition-colors">Privacy Policy</Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Massive Background Text */}
-      <div className="w-full mt-24 lg:mt-32 flex justify-center items-end pointer-events-none select-none h-48 lg:h-64 overflow-hidden relative">
-        {/* A <div>, not an <h1>. This is a decorative wordmark bleeding off
-            the bottom of the page, but as a heading it was the highest-ranked
-            one in the document — so it defined the homepage's topic as the
-            company's own name rather than what the company does. aria-hidden
-            because a screen reader announcing "heading level 1, PitchKast" at
-            the very end of the page is noise; the name is already in the
-            title, the logo link and the copyright line. */}
-        <div
-          aria-hidden="true"
-          className="text-[20vw] lg:text-[18vw] leading-none font-bold tracking-tighter text-neutral-900 absolute bottom-[-10%] md:bottom-[-20%] lg:bottom-[-25%]"
-        >
+          Two things set its height. The top margin is effectively nothing,
+          because the left column ends at the call to action while the right
+          ends at the last link, so the grid row already leaves a stretch of
+          empty space under the shorter side. And the glyphs are nudged down
+          only slightly inside their clipping box, which is what makes the
+          wordmark sit high and still bleed off the bottom edge. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none mt-0 flex h-32 select-none justify-center overflow-hidden sm:mt-2 sm:h-44 lg:h-56"
+      >
+        <span /* Tracking opened from -0.05em. At this size that was tight enough for
+             the "st" pair to overlap — the t's crossbar ran into the s. Outfit's
+             own kerning handles the pair correctly at -0.02em. */
+          className="translate-y-[6%] text-[20vw] leading-none font-extrabold tracking-[-0.02em] text-white/[0.07] lg:text-[18vw]">
           PitchKast
-        </div>
+        </span>
       </div>
     </footer>
   );

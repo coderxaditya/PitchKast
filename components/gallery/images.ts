@@ -1,6 +1,5 @@
 /**
- * The gallery photographs, shared by the section on the home page and the
- * dedicated `/gallery` route so the two can never drift apart.
+ * The gallery photographs.
  *
  * `alt` says what each file is rather than what is in it. These are real
  * photographs whose contents I have not seen, and an invented description
@@ -22,33 +21,23 @@ export const galleryImages = [
 
 export const galleryAlt = (i: number) => `PitchKast gallery photograph ${i + 1}`;
 
-/** Shared with Services and Team so the light chapter reads as one surface. */
-export const SURFACE = "#f4f3f0";
-/** Brand gold darkened for light surfaces; ~4.5:1 on SURFACE. */
-export const ACCENT = "#8a6a28";
-
 /**
- * The wall order for the /gallery page.
+ * True pixel size of each file, in the same order as `galleryImages`.
  *
- * Ten photographs split three ways leaves 4/4/2, so the third column runs out
- * well before the others and the bottom right of the page sits empty. This
- * pads the set to fifteen — five per column — by repeating five of them.
- *
- * The order is written out rather than generated, because ParallaxScroll
- * slices the array into equal thirds in sequence: appending the repeats would
- * put photographs 1-5 in the first column and those same five, in the same
- * order, in the third. Each repeat here sits in a different column and at a
- * different height from its original.
- *
- * Indices are into `galleryImages`, so this can never drift from the files.
+ * These exist to reserve the right box before the file arrives. Without them
+ * a lazily-loaded image has zero height until it decodes, and the masonry
+ * columns balance against nothing — the grid lands lopsided on first paint and
+ * then jumps as each photograph lands. Measured, not estimated.
  */
-const WALL_ORDER = [
-  0, 1, 2, 3, 4, //  column one
-  5, 6, 7, 8, 9, //  column two
-  7, 2, 9, 4, 6, //  column three — repeats, none level with its original
-] as const;
-
-export const galleryWall = WALL_ORDER.map((i) => galleryImages[i]);
-
-/** Position of a wall slot within the real set, for the viewer's counter. */
-export const galleryWallSource = (slot: number) => WALL_ORDER[slot] ?? 0;
+export const galleryDims: readonly (readonly [number, number])[] = [
+  [2048, 959],
+  [2048, 1062],
+  [1280, 963],
+  [2047, 1536],
+  [1200, 1600],
+  [1280, 719],
+  [1280, 720],
+  [1080, 573],
+  [956, 746],
+  [1280, 960],
+];

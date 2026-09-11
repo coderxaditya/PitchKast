@@ -1,83 +1,71 @@
-"use client";
+import { Plus } from "lucide-react";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MotionAccordion } from "@/components/unlumen-ui/motion-faqs-accordion";
-import { faqData } from "./faqData";
+import { Container } from "@/components/flat/Container";
+import { faqSelection } from "./selection";
 
-function CategoryAccordion({ category, isOpen, onToggle }: { category: typeof faqData[0], isOpen: boolean, onToggle: () => void }) {
-  return (
-    <div className="border-b border-white/10 last:border-0">
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center justify-between py-6 text-left"
-      >
-        <span className="text-2xl md:text-3xl font-medium tracking-tight text-white/90">
-          {category.section}
-        </span>
-        <motion.span
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70"
-        >
-          {isOpen ? (
-            <svg width="14" height="14" viewBox="0 0 14 2" fill="none">
-              <path d="M1 1h12" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-            </svg>
-          )}
-        </motion.span>
-      </button>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="pb-8 pt-2">
-              <MotionAccordion 
-                items={category.questions.map(q => ({
-                  question: q.question,
-                  answer: <span className="whitespace-pre-wrap">{q.answer}</span>
-                }))} 
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
+/**
+ * Frequently asked questions.
+ *
+ * Native `<details>` rather than a JavaScript accordion. It opens and closes
+ * with no script at all, it is keyboard operable and announced correctly for
+ * free, and it works on a page where JavaScript failed to load — which an
+ * accordion holding the answer to "how much does this cost" should.
+ *
+ * Six of the forty-five, chosen in `selection.ts`. The other thirty-nine are
+ * still in the data file; they are simply not on the page.
+ */
 export function Faq() {
-  const [openSection, setOpenSection] = useState<string | null>(faqData[0].section);
-
   return (
-    <section className="relative z-10 bg-[#0a0a0a] px-6 py-24 sm:py-32 flex flex-col items-center justify-center">
-      <div className="w-full max-w-4xl">
-        <div className="mb-14 text-center">
-          <h2 className="font-heading text-[clamp(2.6rem,8vw,6rem)] leading-none tracking-[-0.03em] text-[#8a6a28] italic">
-            FAQs.
-          </h2>
-        </div>
-        
-        <div className="flex flex-col">
-          {faqData.map((category) => (
-            <CategoryAccordion
-              key={category.section}
-              category={category}
-              isOpen={openSection === category.section}
-              onToggle={() => setOpenSection(openSection === category.section ? null : category.section)}
-            />
+    <section
+      id="faq"
+      aria-labelledby="faq-title"
+      className="scroll-mt-20 bg-canvas py-20 sm:py-24 lg:py-32"
+    >
+      <Container>
+        <h2
+          id="faq-title"
+          className="mx-auto max-w-3xl text-center text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-balance text-ink"
+        >
+          Frequently asked questions
+        </h2>
+
+        {/* Thick rules between items, which is the one place the system asks
+            for a border — a stack of questions needs the structure, and there
+            is no shadow available to give it. */}
+        <div className="mx-auto mt-12 max-w-3xl border-t-2 border-ink sm:mt-14">
+          {faqSelection.map((entry) => (
+            <details
+              key={entry.question}
+              className="group border-b-2 border-ink"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-lg font-bold text-pretty text-ink transition-colors duration-200 hover:text-action-strong [&::-webkit-details-marker]:hidden">
+                {entry.question}
+                <Plus
+                  className="size-6 shrink-0 transition-transform duration-200 group-open:rotate-45"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                />
+              </summary>
+
+              <div className="pb-7">
+                {/* Answers use blank lines between paragraphs and single
+                    newlines inside them — the "how to get started" answer is a
+                    numbered list built that way. Splitting on the blank line
+                    and keeping the single ones with `whitespace-pre-line`
+                    preserves both without touching the source text. */}
+                {entry.answer.split("\n\n").map((block) => (
+                  <p
+                    key={block}
+                    className="mt-4 leading-relaxed whitespace-pre-line text-pretty text-ink-soft first:mt-0"
+                  >
+                    {block}
+                  </p>
+                ))}
+              </div>
+            </details>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -1,110 +1,133 @@
-"use client";
+import { Container } from "@/components/flat/Container";
+import {
+  CASE_STUDIES,
+  CASE_STUDIES_INTRO,
+  type CaseStudy,
+} from "./studies";
 
-import { StackedFeatureCards } from "@/components/unlumen-ui/stacked-feature-cards";
+/**
+ * Three accents, cycled by position.
+ *
+ * Written out as whole class strings rather than assembled from the tone name.
+ * Tailwind scans source text statically, so `text-${tone}-800` is never seen by
+ * the compiler and never generated — a class built that way ships as no style
+ * at all, which is exactly how a link in the old gallery shipped invisible.
+ *
+ * Chip text sits two steps darker than its own tint: measured at 7.15:1,
+ * 6.78:1 and 6.37:1, so every chip clears AA for small text rather than
+ * relying on the tint being "light enough".
+ */
+const TONES = [
+  { label: "text-action-strong", chip: "bg-blue-100 text-blue-800" },
+  { label: "text-emerald-700", chip: "bg-emerald-100 text-emerald-800" },
+  { label: "text-amber-700", chip: "bg-amber-100 text-amber-800" },
+] as const;
 
-const CASE_STUDIES = [
-  {
-    id: 1,
-    location: "San Francisco, United States of America",
-    category: "SaaS & Technology Founder",
-    goal: "Building a founder brand from scratch",
-    paragraphs: [
-      "The founder had years of experience in technology, but very little of that was visible online. His LinkedIn did not reflect the work he was doing or the conversations he could contribute to.",
-      "We spent time understanding his work, his opinions, and the kind of people he wanted to reach. From there, we rebuilt his profile and started creating content around things he actually knew and cared about.",
-      "The growth came through consistent posting and genuine engagement, without paid promotions."
-    ],
-    metrics: ["6,300+ Organic Followers", "30 Days", "100% Organic Growth"]
-  },
-  {
-    id: 2,
-    location: "United States of America & Taiwan",
-    category: "B2B Technology",
-    goal: "Taking one product into two markets",
-    paragraphs: [
-      "The challenge here was not creating a brand from zero. It was making an existing product work in two very different markets.",
-      "We worked on the product positioning, messaging, sales material, and founder's LinkedIn presence. The core story stayed the same, while the way we communicated it changed depending on the market.",
-      "The first measurable response came within the first week. The work eventually helped open up additional revenue opportunities for the business."
-    ],
-    metrics: ["33% Revenue Uplift", "2 Markets", "First Result Within 1 Week"],
-    note: "The revenue figure is client reported and attributed to the additional streams and organic reach generated through the engagement."
-  },
-  {
-    id: 3,
-    location: "United States of America",
-    category: "B2B SaaS Founder",
-    goal: "Getting the founder and the sales pipeline on the same page",
-    paragraphs: [
-      "The founder was already doing outreach, but his LinkedIn presence and sales conversations were operating separately.",
-      "We brought the two together.",
-      "First, we worked on his positioning and profile. Then we built content around his experience and started reaching out to prospects who actually fit his ICP. Every message was written individually rather than pushed through a generic sequence.",
-      "The idea was simple: someone should be able to discover the founder through his content and immediately understand what he does."
-    ],
-    metrics: ["Founder Branding", "ICP Research", "Personalised Outreach", "Lead Generation"]
-  },
-  {
-    id: 4,
-    location: "United States of America",
-    category: "Professional Services",
-    goal: "Finding something worth saying",
-    paragraphs: [
-      "This client did not need more posts. He needed a clearer point of view.",
-      "We went through his experience, work, and the subjects he could speak about with authority. That became the foundation for his positioning and content.",
-      "We then rebuilt the profile and created a regular content system around his own ideas instead of filling the calendar with generic industry posts."
-    ],
-    metrics: ["Personal Brand Strategy", "Profile Optimisation", "Content Creation", "Organic Engagement"]
-  },
-  {
-    id: 5,
-    location: "India",
-    category: "Education",
-    goal: "Turning a campus into content",
-    paragraphs: [
-      "An education institution came to us with a much bigger challenge than managing an Instagram page.",
-      "There were students, parents, faculty, and recruiters to speak to, each looking for something different.",
-      "We took over the social media strategy and execution across Instagram, X, LinkedIn, and other platforms. Our team handled scripting, shoots, editing, design, and scheduling, with regular content production happening on campus.",
-      "One production day could generate content for multiple platforms, which made the entire system much easier to manage.",
-      "Within three months, the institution crossed 1 lakh organic impressions, with no paid amplification."
-    ],
-    metrics: ["1L+ Organic Impressions", "3 Months", "4+ Platforms", "0 Paid Amplification"]
-  },
-  {
-    id: 6,
-    location: "Founder & Business Growth",
-    category: "Technology, Consumer, Media & Education",
-    goal: "Different businesses, similar problems",
-    paragraphs: [
-      "Our client portfolio covers very different industries, from technology and media to consumer brands, healthcare, education, and trade.",
-      "What usually brings them to us is straightforward. They have built something, but their online presence has not caught up with the business.",
-      "Our work has included founder branding, product positioning, content, social media, and lead generation depending on what the business actually needed.",
-      "We do not start with a fixed package. We start with where the business is today and build from there."
-    ],
-    metrics: ["Founder Branding", "Product Positioning", "Content Strategy", "Lead Generation", "Social Media Growth"]
-  }
-];
-
-export function CaseStudies() {
-  const heroCard = {
-    badge: "Track Record",
-    title: "Proven Growth",
-    description: "See how we help founders turn ideas into credibility. We don't just build profiles, we build positioning that scales.",
-  };
-
-  const featureCards = CASE_STUDIES.map(cs => ({
-    value: String(cs.id).padStart(2, "0"),
-    title: cs.category,
-    description: cs.goal,
-    location: cs.location,
-    paragraphs: cs.paragraphs,
-    metrics: cs.metrics,
-    note: cs.note
-  }));
-
+function Card({ study, tone }: { study: CaseStudy; tone: (typeof TONES)[number] }) {
   return (
-    <StackedFeatureCards
+    <article
+      /* White card on the grey ground — the system's "colour block" with the
+         page, not the card, carrying the tint. No border and no shadow; the
+         value step between #ffffff and #f3f4f6 is what defines the edge.
+         `group` so the chips can respond to a hover anywhere on the card. */
+      className="group flex h-full flex-col rounded-flat bg-canvas p-7 transition-transform duration-200 hover:scale-[1.02] sm:p-9"
+    >
+      {/* ── Index and place ── */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p
+          className={`text-eyebrow font-bold tracking-[0.12em] uppercase ${tone.label}`}
+        >
+          Case Study {String(study.id).padStart(2, "0")}
+        </p>
+        <p className="rounded-full bg-surface px-3.5 py-1.5 text-xs font-semibold tracking-[0.06em] text-ink-soft uppercase">
+          {study.location}
+        </p>
+      </div>
+
+      {/* ── What it was ── */}
+      <h3 className="mt-6 text-display-sm leading-[1.05] font-extrabold tracking-[-0.02em] text-balance text-ink">
+        {study.category}
+      </h3>
+      <p className="mt-3 text-lg font-semibold text-ink-soft">{study.goal}</p>
+
+      {/* ── What we did ──────────────────────────────────────────
+          `flex-1` so the chip row is pushed to the bottom edge of the card
+          regardless of how much copy sits above it — study 05 runs five
+          paragraphs and study 04 runs three. */}
+      <div className="mt-6 flex-1 space-y-4">
+        {study.paragraphs.map((paragraph) => (
+          <p key={paragraph} className="leading-relaxed text-ink-soft">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+
+      {/* ── What came of it ── */}
+      <ul className="mt-8 flex flex-wrap gap-2">
+        {study.metrics.map((metric) => (
+          <li
+            key={metric}
+            className={`rounded-full px-4 py-2 text-sm font-semibold ${tone.chip}`}
+          >
+            {metric}
+          </li>
+        ))}
+      </ul>
+
+      {/* Only study 02 has one. It was mapped through the old component and
+          never rendered, so the revenue figure has been sitting on the page
+          unqualified since it shipped. */}
+      {study.note ? (
+        <p className="mt-4 text-xs leading-relaxed text-ink-soft">
+          {study.note}
+        </p>
+      ) : null}
+    </article>
+  );
+}
+
+/**
+ * Case studies.
+ *
+ * Two columns of independently sized cards. A grid rather than CSS columns:
+ * multi-column flow fills the left column top to bottom before starting the
+ * right, which would put studies one to three down one side and four to six
+ * down the other. These are numbered and meant to be read across.
+ *
+ * Cards stretch to their row's height rather than each taking its own, so the
+ * two columns line up. The chip row is pushed to the bottom edge by `flex-1`
+ * on the copy above it, which means the metrics sit on the same line across a
+ * row even though study 05 runs five paragraphs and study 04 runs three.
+ */
+export function CaseStudies() {
+  return (
+    <section
       id="case-studies"
-      heroCard={heroCard}
-      featureCards={featureCards}
-      sectionTitle="Case Studies"
-    />
+      aria-labelledby="case-studies-title"
+      className="scroll-mt-20 bg-surface py-20 sm:py-24 lg:py-32"
+    >
+      <Container>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-eyebrow font-bold tracking-[0.12em] text-action-strong uppercase">
+            {CASE_STUDIES_INTRO.eyebrow}
+          </p>
+          <h2
+            id="case-studies-title"
+            className="mt-4 text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-balance text-ink"
+          >
+            {CASE_STUDIES_INTRO.title}
+          </h2>
+          <p className="mt-5 text-lg leading-relaxed text-pretty text-ink-soft">
+            {CASE_STUDIES_INTRO.description}
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-6 sm:mt-16 lg:grid-cols-2">
+          {CASE_STUDIES.map((study, i) => (
+            <Card key={study.id} study={study} tone={TONES[i % TONES.length]} />
+          ))}
+        </div>
+      </Container>
+    </section>
   );
 }

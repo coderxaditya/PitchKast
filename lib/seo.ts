@@ -64,7 +64,6 @@ export const SOCIAL_PROFILES = [
 /** Routes worth listing in the sitemap, in descending priority. */
 export const ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
-  { path: "/gallery", priority: 0.6, changeFrequency: "monthly" as const },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" as const },
 ];
 

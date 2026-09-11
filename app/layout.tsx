@@ -4,41 +4,28 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
-  SITE_TAGLINE,
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo";
-import {
-  Barlow,
-  Barlow_Condensed,
-  Instrument_Serif, Geist } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-
-/* Self-hosted at build time — the same faces liquidGlass pulled from the
-   Google Fonts CDN, minus the third-party round trip. */
-const instrumentSerif = Instrument_Serif({
+/**
+ * The one face on the site.
+ *
+ * The flat system asks for a single geometric sans carrying every level of
+ * hierarchy through weight and size alone, so the four-family stack this
+ * replaced (a display serif, two Barlows and Geist) is gone rather than
+ * reduced. Self-hosted at build time by next/font, so there is no CDN round
+ * trip and no layout shift while the face arrives.
+ */
+const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
-
-const barlow = Barlow({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-barlow",
-  display: "swap",
-});
-
-const barlowCondensed = Barlow_Condensed({
-  subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-barlow-condensed",
+  /* 400 body, 500/600 labels and buttons, 700/800 headings. Nothing on the
+     page uses a weight outside this set. */
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-outfit",
   display: "swap",
 });
 
@@ -119,7 +106,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
 };
@@ -132,19 +119,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      /* `dark` is the truth here — the site is black-on-white-text throughout.
-         It flips shadcn's tokens to their dark values, which is what makes the
-         rainbow button render its white face with a dark label. */
-      className={cn(
-        "dark",
-        instrumentSerif.variable,
-        barlow.variable,
-        barlowCondensed.variable,
-        "font-sans",
-        geist.variable,
-      )}
+      /* No `dark` class any more. The flat system is a single light palette,
+         so shadcn's tokens stay on their light values and every surface is
+         declared explicitly rather than inherited from a theme flip. */
+      className={cn(outfit.variable, "font-sans")}
     >
-      <body className="is-loading bg-black">
+      {/* `is-loading` is gone with the loader it belonged to. It set
+         `overflow: hidden` and was cleared by the scroll stage on mount;
+         with no stage to clear it, leaving it here would lock the page. */}
+      <body>
         {/* Ahead of the content so a crawler that only reads the first chunk
             of the document still gets the entity description. */}
         <JsonLd />

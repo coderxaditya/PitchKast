@@ -5,60 +5,63 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   Theme — mirrors the liquidGlass tailwind.config
+   Flat design system — tokens
+   ------------------------------------------------------------
+   One palette, light only. The hex values are Tailwind's own
+   Blue 500, Emerald 500, Amber 500, Gray 100/200/900, so the
+   stock utilities and these semantic aliases always agree.
+
+   Names are by role, not by hue: a section says `bg-action`
+   because it is the call-to-action block, and the day the blue
+   changes there is one line to edit. They deliberately avoid
+   `--color-primary` and friends, which shadcn's stylesheet
+   already owns.
    ============================================================ */
 
 @theme {
-  --font-heading: var(--font-instrument-serif), serif;
-  --font-body: var(--font-barlow), sans-serif;
-  --font-display: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+  /* Outfit carries every weight on the page. Geometric sans, so the
+     letterforms echo the circles and squares the layout is built from. */
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 
-  /* The warm accent from the original brand pass. Registered here so it is
-     reachable as text-gold / bg-gold rather than an arbitrary hex. */
-  --color-gold: #c8a96a;
+  /* ── Ground and ink ─────────────────────────────────────── */
+  --color-canvas: #ffffff;
+  --color-surface: #f3f4f6; /* Gray 100 — the alternate section ground */
+  --color-hairline: #e5e7eb; /* Gray 200 — used sparingly, never as a shadow */
+  --color-ink: #111827; /* Gray 900 — body text, and the dark section ground */
+  --color-ink-soft: #4b5563; /* Gray 600 — secondary copy on light grounds */
 
-  /* ── Type scale ──────────────────────────────────────────────
-     One modular scale for the whole About section, replacing the
-     arbitrary per-panel values it grew. Display steps are fluid, so
-     the section reads at the right size at every width instead of
-     stepping between breakpoints.
+  /* ── The three section colours ──────────────────────────── */
+  --color-action: #3b82f6;
+  --color-action-strong: #2563eb; /* hover only */
+  --color-support: #10b981;
+  --color-support-strong: #059669;
+  --color-highlight: #f59e0b;
+  --color-highlight-strong: #d97706;
 
-     Ink levels matter as much as size here: on black, white at 45%
-     resolves to 4.33:1 and fails AA for body text. --ink-muted is
-     the floor for anything small (5.3:1); the dimmer levels are for
-     display type only, where the 3:1 large-text threshold applies. */
-  --text-eyebrow: 0.6875rem;
-  --text-micro: 0.8125rem;
-  --text-body: 0.9375rem;
-  --text-lead: 1.0625rem;
-  --text-title: 1.375rem;
-  --text-display-xs: clamp(1.5rem, 1.1rem + 1.6vw, 2.1rem);
-  --text-display-sm: clamp(1.9rem, 1.3rem + 2.6vw, 3rem);
-  --text-display-md: clamp(2.4rem, 1.4rem + 4.4vw, 4.6rem);
-  --text-display-lg: clamp(3rem, 1.4rem + 7vw, 7rem);
-  --text-display-xl: clamp(3.4rem, 1.2rem + 9.5vw, 9rem);
+  /* ── Type scale ─────────────────────────────────────────────
+     Fluid across the whole range rather than stepped at
+     breakpoints, so a headline reads at the right size on a
+     phone and on a 27-inch display without a cascade of
+     per-breakpoint overrides. */
+  --text-display-xl: clamp(2.375rem, 1.4rem + 5.1vw, 6rem);
+  --text-display-lg: clamp(2.25rem, 1.5rem + 3.4vw, 4.5rem);
+  --text-display-md: clamp(1.875rem, 1.4rem + 2.1vw, 3rem);
+  --text-display-sm: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
+  /* Raised from 0.8125rem. These labels head every section — "About
+     PitchKast", "Global Reach", "What We Do" — and at 13px with wide tracking
+     they read as fine print above a very large heading rather than as part of
+     it. */
+  --text-eyebrow: 0.9375rem;
 
-  --color-ink: rgba(255, 255, 255, 0.92);
-  --color-ink-soft: rgba(255, 255, 255, 0.82);
-  /* Raised 0.55 -> 0.72 (7.3:1). At 0.55 the About chapters' body copy read
-     as recessed texture rather than as writing — accurate to the reference
-     template, but this site wants the copy read, not skimmed past. The
-     hierarchy survives: full-white display type still leads, ink-muted is
-     now "clearly legible prose", and ink-faint keeps the truly decorative
-     layer dim. */
-  --color-ink-muted: rgba(255, 255, 255, 0.72);
-  /* Only the three two-tone display headlines use this ("not vendors.",
-     "You own everything."'s ghost line, the hero's ghost). 0.58 keeps the
-     two-tone contrast against full white while letting the ghost half be
-     read rather than squinted at — at display size the 3:1 large-text
-     threshold needs ~0.42, so this clears it with room. */
-  --color-ink-faint: rgba(255, 255, 255, 0.58);
+  /* ── Radius ─────────────────────────────────────────────────
+     One value everywhere. Pills are opt-in per element and only
+     for tags and buttons, never for cards. */
+  --radius-flat: 0.5rem;
 }
 
-/* Vertical rhythm between chapters, and the section's reading measure. */
+/* Reading measure for every section's inner shell. */
 :root {
-  --chapter-gap: clamp(5.5rem, 11vh, 10rem);
-  --shell: 84rem;
+  --shell: 80rem; /* max-w-7xl */
 }
 
 html {
@@ -67,450 +70,46 @@ html {
 
 html,
 body {
-  background: #000;
-  color: #fff;
+  background: var(--color-canvas);
+  color: var(--color-ink);
 }
 
 body {
   margin: 0;
 }
 
-body.is-loading {
-  overflow: hidden;
-  height: 100vh;
-}
-
 /* ============================================================
-   Scroll-driven hero
+   Focus
    ------------------------------------------------------------
-   The one piece kept from the previous build. liquidGlass's hero is
-   a single static viewport; ours is pinned across a long scrub, so
-   the hero has to clear out to let the footage through.
-
-   `--heroFilter` resolves to `none` at rest rather than `blur(0px)`.
-   A filter of any length makes an element a backdrop root, which
-   would cut every `backdrop-filter` inside it off from the video
-   behind and flatten all the glass.
+   With no shadows in the system, the usual soft focus glow has
+   nothing to sit on. A solid offset ring is the replacement, and
+   it is declared once here rather than per component so nothing
+   can ship without one.
    ============================================================ */
 
-:root {
-  --bgFade: 1;
-  --heroFade: 1;
-  --heroY: 0px;
-  --heroFilter: none;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --color-1: oklch(66.2% 0.225 25.9);
-  --color-2: oklch(60.4% 0.26 302);
-  --color-3: oklch(69.6% 0.165 251);
-  --color-4: oklch(80.2% 0.134 225);
-  --color-5: oklch(90.7% 0.231 133);
+:where(a, button, [role="button"], input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 2px;
+  border-radius: var(--radius-flat);
 }
 
-/* Ambient background layer. Its own opacity is scroll-driven; the video
-   inside manages a separate rAF opacity for its loop crossfade. */
-.bg-veil {
-  opacity: var(--bgFade);
-}
-
-/* Oversized display word anchored to the bottom of the hero.
-   Given the same liquid-glass read as the chrome: translucent fill that lets
-   the video through, a lit rim, and a soft drop shadow for depth. */
-.giant-word {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 800;
-  text-transform: uppercase;
-  line-height: 0.78;
-  white-space: nowrap;
-  background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.34) 45%,
-    rgba(255, 255, 255, 0.16) 80%,
-    rgba(255, 255, 255, 0.06) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.6);
-  transform-origin: center center;
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25))
-    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.35));
-  user-select: none;
-  letter-spacing: -0.015em;
-}
-
-.hero-driven {
-  opacity: var(--heroFade);
-  transform: translate3d(0, var(--heroY), 0);
-  filter: var(--heroFilter);
-  will-change: opacity, transform;
+/* On the blue and dark grounds the blue ring disappears into the
+   background, so those sections invert it to white. */
+.on-dark :where(a, button, [role="button"], summary):focus-visible {
+  outline-color: #ffffff;
 }
 
 /* ============================================================
-   liquidGlass — ported verbatim
-   ============================================================ */
-
-.liquid-glass {
-  background: rgba(255, 255, 255, 0.01);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(4px);
-  border: none;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-.liquid-glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.4px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.15) 20%,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, 0) 60%,
-    rgba(255, 255, 255, 0.15) 80%,
-    rgba(255, 255, 255, 0.45) 100%
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* ============================================================
-   Revolving rim light
+   Logo marquee
    ------------------------------------------------------------
-   Same idea as magicui's shimmer-button: a conic gradient masked
-   down to the border ring. That component paints an opaque backdrop
-   over the middle to hide the rest of the gradient, which would
-   destroy the glass here — so this reuses the mask-composite trick
-   already used by `.liquid-glass::before`, leaving the centre
-   genuinely transparent.
-
-   The angle is animated rather than the element, so the arc travels
-   around the perimeter instead of the whole box spinning.
+   Carried across from the previous build unchanged, because it
+   already works: motion is a keyframed transform handed to the
+   compositor rather than a per-frame loop on the main thread, and
+   the track holds exactly two copies of the sequence so animating
+   to -50% lands copy two where copy one began. Seamless with no
+   measurement needed to make the join.
    ============================================================ */
 
-@property --rim-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.rim-light {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.4px; /* matches the static rim thickness */
-  background: conic-gradient(
-    from var(--rim-angle),
-    transparent 0deg,
-    transparent 300deg,
-    rgba(255, 255, 255, 0.9) 345deg,
-    rgba(255, 255, 255, 0) 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: rim-travel 3s linear infinite;
-}
-
-@keyframes rim-travel {
-  to {
-    --rim-angle: 360deg;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rim-light {
-    animation: none;
-  }
-}
-
-/* `.liquid-glass` is tuned for sitting over the video: a 1% white fill plus a
-   blur of whatever is behind. On solid black both come to nothing, so the card
-   collapses to a hairline. This adds an actual surface — background-image only,
-   so the glass rim and inset highlight survive untouched. Must stay after
-   `.liquid-glass`, whose `background` shorthand would otherwise reset it. */
-.glass-on-black {
-  background-image: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.025) 45%,
-    rgba(255, 255, 255, 0.012) 100%
-  );
-  /* `translate`, not `transform`. Tailwind v4 compiles `-translate-y-1` to the
-     standalone `translate` property, so easing `transform` here never touched
-     the hover lift on these cards — it snapped. */
-  transition:
-    background-image 0.5s ease,
-    translate 0.5s ease;
-}
-
-.glass-on-black:hover {
-  background-image: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.13) 0%,
-    rgba(255, 255, 255, 0.045) 45%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-}
-
-/* ── Meet-us stack ─────────────────────────────────────────────
-   Members do not crossfade — each one slides up from below and
-   stacks over the one before it, so the outgoing portrait is
-   progressively covered from its bottom edge. Cards paint no
-   background of their own: the photographs are opaque and do the
-   covering, which is why both names stay readable mid-transition.
-
-   Scroll writes a single property, --team-p; every card derives its
-   own offset from it, so a scroll tick is one style write. */
-@property --team-p {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 0;
-}
-@property --team-i {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-@property --team-local {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
-.team-card {
-  /* 0 while the card waits below, 1 once it has fully arrived. */
-  --team-local: clamp(
-    0,
-    calc(var(--team-p) * var(--team-last) - var(--team-i) + 1),
-    1
-  );
-  transform: translate3d(0, calc((1 - var(--team-local)) * 100%), 0);
-}
-
-/* No `prefers-reduced-motion` override here, deliberately.
-
-   There used to be one setting `transform: none`, and it was a bug rather
-   than an accommodation: these cards are `position: absolute; inset: 0`, so
-   removing the transform does not calm the motion — it drops all six on top
-   of one another at once, leaving whichever has the highest z-index drawn
-   over a pile of half-covered text while the counter reports someone else
-   entirely. Anyone whose device asks for reduced motion — Android battery
-   saver and Samsung's "Reduce animations" both do — saw a broken section, not
-   a quieter one.
-
-   The motion here is scroll-scrubbed: nothing moves unless the reader is
-   actively scrolling, and it stops the instant they stop. That is a different
-   risk profile from autoplaying animation. If a genuinely reduced variant is
-   wanted later it has to be a real alternative layout — a plain flowing list,
-   with the cards no longer absolutely positioned — not a transform removed
-   from underneath a stack that depends on it. */
-
-/* ── Services cylinder ─────────────────────────────────────────
-   The reference draws its service names into a three.js canvas.
-   Here they stay real DOM text and the curve is CSS 3D, so the list
-   is still selectable, indexable and readable by a screen reader —
-   and it costs no extra WebGL context on a page already running two.
-
-   Scroll writes exactly one custom property, --svc-p. Every line
-   derives its own position from that, so a scroll tick is a single
-   style write rather than 23. */
-@property --svc-p {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 0;
-}
-@property --svc-i {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-@property --svc-o {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-@property --svc-theta {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-/* The cylinder runs at every width.
-
-   It used to be gated to md and up because names run to 44 characters, which
-   wrap to two or three lines on a phone, and the curve spaces its lines on a
-   fixed angular step — so wrapped lines collided. That is a geometry problem
-   with a geometry fix, not a reason to drop the effect: front-of-drum spacing
-   is R·sin(θ), so the radius simply has to clear the tallest wrapped line.
-   `--svc-r` carries a floor that does exactly that, and the type scale is
-   tuned so nothing exceeds three lines. See Services.tsx for the numbers. */
-.svc-stage {
-  perspective: var(--svc-perspective, 820px);
-  perspective-origin: 50% 50%;
-}
-
-.svc-list {
-  transform-style: preserve-3d;
-}
-
-/* Lines sit on the surface of an actual cylinder rather than being rotated
-   in place. Each one is placed at angle θ around a circle of radius R:
-
-     y = R·sin θ        z = R·(cos θ − 1)      pitch = −θ
-
-   The z term is what makes it read as a drum — without it the lines rotate
-   but never travel backwards, so they flatten without ever receding. With
-   it, passed lines wrap up and over the top, bunching together and turning
-   edge-on exactly the way the reference does.
-
-   Fading on cos θ rather than on distance keeps roughly five lines alive on
-   each side and retires them as they turn away, so the curve stays visible
-   instead of dissolving after two steps. */
-.svc-item {
-  /* Signed distance from the focused line, in list positions. */
-  --svc-o: calc(var(--svc-i) - var(--svc-p) * var(--svc-last));
-  --svc-theta: calc(var(--svc-o) * var(--svc-angle));
-  position: absolute;
-  inset-inline: 0;
-  transform: translate3d(
-      0,
-      calc(var(--svc-r) * sin(var(--svc-theta))),
-      calc(var(--svc-r) * (cos(var(--svc-theta)) - 1))
-    )
-    rotateX(calc(-1 * var(--svc-theta)))
-    skewX(calc(var(--svc-theta) * 0.14));
-
-  /* Two gates multiplied together.
-
-     cos θ retires a line as it turns edge-on. On its own that is not enough:
-     23 lines at 17° span 374°, more than a full turn, so the tail of the list
-     comes back around past 270° where cos is positive again and lands on top
-     of the head of the list at full opacity. That is what made the start and
-     end of the section collide.
-
-     The second gate is a hard distance cutoff, and it is doing more work
-     than the wrap-around guard it started as. A cylinder does not space its
-     lines evenly on screen: near the front they sit R·sin(theta) apart, but
-     as they rotate away that sine flattens and they bunch together. Fading
-     purely on cos(theta) keeps a line visible right into that bunched zone,
-     which is fine while every line is one line tall — and not fine once one
-     of them wraps. A two-line name at 1024x768 overlapped its neighbour by
-     8px for exactly this reason.
-
-     2.2 retires a line at 66 degrees, before the compression bites. The
-     tightest visible pair is then 0.326R apart, which clears a wrapped line
-     against a single one at every size the page supports. */
-  opacity: calc(
-    clamp(0, calc(cos(var(--svc-theta)) * 1.12), 1) *
-      clamp(0, calc(2.2 - max(var(--svc-o), -1 * var(--svc-o))), 1)
-  );
-}
-
-/* The flat `prefers-reduced-motion` fallback that used to live here is gone
-   for the same reason as the one on .team-card — see that note. It replaced
-   the drum with a plain vertical list, so every phone with battery saver or
-   "Reduce animations" on rendered this section as flat text sliding past with
-   no curve at all, which is exactly the bug it looked like. --svc-step is
-   kept as a token for whenever a real reduced variant is built. */
-
-/* ── Lenis smooth scroll ───────────────────────────────────────
-   Lenis ships a stylesheet; rather than add an import we carry the
-   rules it actually needs here, next to everything else.
-
-   `height: auto` is the load-bearing one. Lenis measures the content
-   to compute its scroll limit, and a fixed height on html or body
-   makes that measurement wrong — the page would stop short of its own
-   end. `overscroll-behavior: none` matters now that touch is smoothed:
-   without it an upward fling at the top hands the gesture to Android's
-   pull-to-refresh mid-scroll.
-   ────────────────────────────────────────────────────────────── */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-html.lenis {
-  overscroll-behavior-y: none;
-}
-
-.lenis:not(.lenis-autoToggle).lenis-stopped {
-  overflow: clip;
-}
-
-/* Opt-outs: an element carrying one of these keeps its own gestures
-   instead of feeding them to the page scroll. */
-.lenis [data-lenis-prevent],
-.lenis [data-lenis-prevent-wheel],
-.lenis [data-lenis-prevent-touch] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-/* ── Logo marquee ──────────────────────────────────────────────
-   Driven by a CSS animation rather than a requestAnimationFrame
-   loop. The previous implementation moved the track from rAF on the
-   main thread, which is fine on a laptop but stalls on a phone,
-   where this page is already decoding a 240-frame sequence and
-   running two WebGL contexts. A keyframed transform is handed to
-   the compositor and keeps running while the main thread is busy.
-
-   The track holds exactly two copies of the sequence, so animating
-   to -50% lands copy two exactly where copy one began — seamless,
-   with no measurement needed to make the loop join. */
 .marquee {
   position: relative;
   overflow: hidden;
@@ -529,339 +128,71 @@ html.lenis {
   }
 }
 
-/* Pause on hover in CSS, gated to real pointers. Doing this in JS is
-   what stranded the strip on touch before: mobile browsers fire an
-   emulated mouseenter and often never send the matching mouseleave,
-   so the paused state latched and never cleared. A media query
-   cannot latch. */
+/* Paused on hover in CSS, gated to real pointers. Doing this in JS
+   stranded the strip on touch: mobile browsers fire an emulated
+   mouseenter and often never send the matching mouseleave, so the
+   paused state latched. A media query cannot latch. */
 @media (hover: hover) and (pointer: fine) {
   .marquee:hover .marquee__track {
     animation-play-state: paused;
   }
 }
 
-/* Deliberately no `prefers-reduced-motion` override.
-
-   This is the third place one of these caused a "it's broken on my phone"
-   report, and the honest note is that this one was not broken — the strip
-   simply stopped, which is what the rule asked for. It stopped on a great
-   many phones, though: Android battery saver and Samsung's "Reduce
-   animations" both set the preference, so a large share of real visitors
-   were seeing a still image where the design intends a moving one.
-
-   Of the three, this is the case with the strongest claim to the
-   preference: unlike the scroll-scrubbed sections, a marquee is continuous
-   autoplaying motion, which is exactly what the media feature was added
-   for. It runs for everyone because that is the call that was made, not
-   because the accessibility argument was weak. A slower track under
-   `reduce` would be a reasonable compromise if this is revisited. */
-
-/* ── Atmosphere ────────────────────────────────────────────────
-   Pure #000 reads as a hole, not a surface: nothing for the glass
-   to refract and no sense of depth behind the type. A film grain
-   plus two very low gold blooms give the section air to sit in.
-   The blooms sit *behind* the panels, so `backdrop-filter` on the
-   cards finally has something to sample. */
-.about-grain {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size: 140px 140px;
-}
-
-/* ── Cursor spotlight ──────────────────────────────────────────
-   The card lights where the pointer is. Coordinates arrive from one
-   delegated pointermove listener on the section, written as custom
-   properties, so hovering never triggers a React render. Pointer-gated:
-   touch has no cursor to follow, and a stuck highlight looks broken.
-
-   A gradient rather than blur(): a filter on a box this large costs
-   real paint time on mid-tier phones, and the gradient is already soft. */
-.spotlight::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: radial-gradient(
-    220px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0) 62%
-  );
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .spotlight:hover::after {
-    opacity: 1;
-  }
-}
-
-/* ── Focus ─────────────────────────────────────────────────────
-   The section is now keyboard-navigable via the chapter rail, so the
-   focus ring has to be visible against black rather than inherited. */
-:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
-}
-
-/* ── Build → Grow → Raise rail ─────────────────────────────────
-   A pulse that travels each connector, so the arc reads as a
-   direction rather than three unrelated cards. Horizontal only:
-   below sm the rail turns vertical and the cards stack, where a
-   travelling dot reads as noise. */
-.stage-pulse {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .stage-pulse {
-    display: block;
-    position: absolute;
-    top: 50%;
-    width: 5px;
-    height: 5px;
-    margin-top: -2.5px;
-    margin-left: -2.5px;
-    border-radius: 9999px;
-    background: var(--color-gold);
-    box-shadow: 0 0 9px 1px rgba(200, 169, 106, 0.75);
-    animation: stage-pulse-travel 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  }
-}
-
-@keyframes stage-pulse-travel {
-  0% {
-    left: 0%;
-    opacity: 0;
-  }
-  18% {
-    opacity: 1;
-  }
-  82% {
-    opacity: 1;
-  }
-  100% {
-    left: 100%;
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .stage-pulse {
-    animation: none;
-    opacity: 0.6;
-    left: 50%;
-  }
-}
-
-/* ── Reveal on scroll ──────────────────────────────────────────
-   Ported from the StringTune tutorial. Timing, easing and the
-   clip-path/scale/opacity trio are carried over verbatim; the
-   `.-inview` class is driven by an IntersectionObserver instead of
-   the CDN library. */
-.reveal-figure {
-  overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
-}
-
-.reveal-figure img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  scale: 2;
-  opacity: 0;
-  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
-}
-
-/* The transition lives on the in-view state only, so leaving the
-   viewport snaps back instantly and the next entry replays the wipe
-   in full — this is what `string-repeat` gives you upstream. */
-.reveal-figure.is-inview img {
-  scale: 1;
-  opacity: 1;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-  transition:
-    scale 1.5s cubic-bezier(0.86, 0, 0.31, 1),
-    opacity 1.5s cubic-bezier(0.86, 0, 0.31, 1),
-    clip-path 1.5s cubic-bezier(0.86, 0, 0.31, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal-figure img {
-    scale: 1;
-    opacity: 1;
-    clip-path: none;
-    transition: none;
-  }
-}
-
-.liquid-glass-strong {
-  background: rgba(255, 255, 255, 0.01);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(50px);
-  border: none;
-  box-shadow:
-    4px 4px 4px rgba(0, 0, 0, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-.liquid-glass-strong::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.4px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, 0) 60%,
-    rgba(255, 255, 255, 0.2) 80%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-@theme inline {
-  --font-sans: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
-  --color-color-5: var(--color-5);
-  --color-color-4: var(--color-4);
-  --color-color-3: var(--color-3);
-  --color-color-2: var(--color-2);
-  --color-color-1: var(--color-1);
-  @keyframes rainbow {
-  0% {
-    background-position: 0%;
-    }
-  100% {
-    background-position: 200%;
-    }
-  }
-  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
-  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear
-;
-  @keyframes shimmer-slide {
-  to {
-    transform: translate(calc(100cqw - 100%), 0);
-    }
-  }
-  @keyframes spin-around {
-  0% {
-    transform: translateZ(0) rotate(0);
-    }
-  15%, 35% {
-    transform: translateZ(0) rotate(90deg);
-    }
-  65%, 85% {
-    transform: translateZ(0) rotate(270deg);
-    }
-  100% {
-    transform: translateZ(0) rotate(360deg);
-    }
-  }}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-  --color-1: oklch(66.2% 0.225 25.9);
-  --color-2: oklch(60.4% 0.26 302);
-  --color-3: oklch(69.6% 0.165 251);
-  --color-4: oklch(80.2% 0.134 225);
-  --color-5: oklch(90.7% 0.231 133);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
-    @apply font-sans;
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* The one exception, and a deliberate one.
+
+     Android battery saver and Samsung's "Reduce animations" both set
+     this preference, so honouring it here stopped the strip for a
+     large share of real visitors — reported three separate times as
+     "it's broken on my phone". The strip is the only continuous
+     autoplaying motion on the site and it carries content (seventeen
+     client marks) that a frozen track hides most of. It keeps
+     running, slowed rather than stopped, which is the compromise the
+     previous build's note argued for. */
+  .marquee__track {
+    animation-duration: calc(var(--marquee-duration, 28s) * 2) !important;
+    animation-iteration-count: infinite !important;
   }
 }
 
+/* ============================================================
+   shadcn variables
+   ------------------------------------------------------------
+   Retained because `components/ui/*` reads them. Values are the
+   library's light defaults, with the radius pulled down to match
+   `--radius-flat`.
+   ============================================================ */
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.5rem;
+}

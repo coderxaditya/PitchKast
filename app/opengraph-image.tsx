@@ -26,30 +26,29 @@ export default function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#000",
-          /* The gold the site already uses for eyebrows, as a soft bloom so
-             the card is not a flat black rectangle in a feed. */
-          backgroundImage:
-            "radial-gradient(circle at 50% 42%, rgba(200,169,106,0.18), rgba(0,0,0,0) 55%)",
+          /* Blue 600 — the hero's own ground, so a shared link and the page
+             it opens are recognisably the same thing. Flat: a solid block of
+             colour, no gradient and no bloom. */
+          background: "#2563eb",
         }}
       >
         <div
           style={{
             fontSize: 116,
-            fontWeight: 700,
-            letterSpacing: "0.06em",
+            fontWeight: 800,
+            letterSpacing: "-0.02em",
             color: "#fff",
             display: "flex",
           }}
         >
-          PITCHKAST
+          PitchKast
         </div>
         <div
           style={{
             marginTop: 28,
             width: 120,
-            height: 2,
-            background: "#c8a96a",
+            height: 6,
+            background: "#fcd34d",
             display: "flex",
           }}
         />
@@ -57,7 +56,7 @@ export default function Image() {
           style={{
             marginTop: 30,
             fontSize: 34,
-            color: "#bdbdbd",
+            color: "#ffffff",
             letterSpacing: "0.02em",
             display: "flex",
           }}

@@ -1,34 +1,45 @@
 "use client";
 
+import { Container } from "@/components/flat/Container";
 import { LogoMarquee } from "./LogoMarquee";
 import { partnerLogos } from "./logos";
 
 /**
- * The white beat between the scrubbed hero and the About stack.
+ * The client strip.
  *
- * Deliberately the one light surface on the page: after ~8 viewport heights of
- * black the cut to white reads as a chapter break, which is exactly what it is.
+ * The marquee itself is untouched from the previous build — same speed, same
+ * gap, same seamless two-copy track, same seventeen marks. Only the band
+ * around it is restyled: the heading was set in a display serif that no longer
+ * exists on the site, so it is Outfit now at the weight the flat system uses
+ * for section headings.
+ *
+ * White ground, immediately after the blue hero. The cut from a saturated
+ * block to plain white is how this aesthetic separates sections, and it also
+ * suits the marks themselves, which are already processed to black on white.
  */
 export function Partners() {
   return (
-    <section className="relative z-10 bg-white py-24 sm:py-32 lg:py-40">
-      <div className="mx-auto max-w-7xl px-6">
-        <p className="font-body text-center text-sm font-medium text-neutral-950">
+    <section
+      /* No aria-label: the marquee inside already announces itself as a
+         region with that name, and labelling both makes a screen reader read
+         "Clients and partners" twice in a row. The h2 names this band. */
+      /* Cleared for the sticky header, so an in-page link does not land with
+         the heading tucked behind the bar. */
+      className="scroll-mt-20 bg-canvas py-20 sm:py-24 lg:py-28"
+    >
+      <Container>
+        <p className="text-center text-eyebrow font-bold tracking-[0.12em] text-action-strong uppercase">
           Trusted by experts.
         </p>
-        {/* Instrument Serif rather than the reference's bold sans — it keeps
-            this band in the same voice as the hero headline. */}
-        <h2 className="font-heading mt-3 text-center text-4xl leading-[0.95] tracking-[-0.02em] text-neutral-950 italic sm:text-5xl lg:text-6xl">
+        <h2 className="mt-4 text-center text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-balance text-ink">
           Used by the leaders.
         </h2>
-      </div>
+      </Container>
 
-      <div className="mt-14 sm:mt-20">
-        <LogoMarquee
-          logos={partnerLogos}
-          ariaLabel="Clients and partners"
-          className="text-neutral-200"
-        />
+      {/* Outside the container: the strip runs edge to edge, and its own
+          gradient masks do the visual containment. */}
+      <div className="mt-14 sm:mt-16">
+        <LogoMarquee logos={partnerLogos} ariaLabel="Clients and partners" />
       </div>
     </section>
   );

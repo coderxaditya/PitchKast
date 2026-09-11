@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { ACCENT } from "@/components/gallery/images";
-
 /**
  * A real 404.
  *
@@ -21,27 +18,20 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="grid min-h-[100svh] place-items-center bg-black px-6 text-center">
-      {/* Short enough not to scroll, mounted anyway so every route in the
-          app behaves identically — including if this page ever grows. */}
-      <SmoothScroll />
+    <main className="grid min-h-[100svh] place-items-center bg-surface px-6 text-center">
       <div>
-        <p
-          className="font-body text-xs tracking-[0.24em] uppercase"
-          style={{ color: ACCENT }}
-        >
-          (404)
+        <p className="text-eyebrow font-bold tracking-[0.12em] text-action-strong uppercase">
+          404
         </p>
-        <h1 className="font-heading mt-6 text-[clamp(2.4rem,8vw,4.5rem)] leading-none tracking-[-0.03em] text-white italic">
+        <h1 className="mt-5 text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-ink">
           Nothing here.
         </h1>
-        <p className="font-body mx-auto mt-6 max-w-[42ch] text-sm text-neutral-200">
+        <p className="mx-auto mt-5 max-w-[42ch] text-lg text-ink-soft">
           That page has moved or never existed.
         </p>
         <Link
           href="/"
-          className="font-body mt-10 inline-flex items-center gap-2 rounded-full border px-6 py-3 text-xs tracking-[0.18em] uppercase transition-colors duration-300 hover:bg-white/[0.06]"
-          style={{ borderColor: ACCENT, color: ACCENT }}
+          className="mt-9 inline-flex items-center rounded-flat bg-action px-7 py-4 font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-action-strong"
         >
           Back to PitchKast
         </Link>

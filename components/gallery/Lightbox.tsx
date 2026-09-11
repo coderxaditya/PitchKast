@@ -3,16 +3,13 @@
 import { useCallback, useEffect } from "react";
 
 /**
- * Full-size viewer, shared by the /gallery wall and the touch grid on the
- * home page.
+ * Full-size viewer for the gallery grid.
  *
- * Both places show cropped or scaled-down previews; this is where a
- * photograph is actually seen. It carries its own controls rather than
- * relying on the keyboard alone, because on a phone there is no Escape key
- * and no arrow keys — the desktop-only version of this had no way out but
- * the browser's back gesture.
- */
-/**
+ * The grid shows scaled-down previews; this is where a photograph is actually
+ * seen. It carries its own controls rather than relying on the keyboard
+ * alone, because on a phone there is no Escape key and no arrow keys.
+ *
+ * ---
  * Shared control styling.
  *
  * The fill is opaque, and that is the whole point of it.
@@ -60,11 +57,8 @@ export function Lightbox({
     };
     window.addEventListener("keydown", onKey);
 
-    /* Lock the page behind the overlay. `overflow: hidden` on the body leaves
-       the document with no scroll range, which is enough to stop Lenis too —
-       it moves the window rather than a transform, so with nowhere to go it
-       simply does not move. The overlay also opts out of Lenis's touch
-       handling, so a drag here is never read as a page scroll. */
+    /* Lock the page behind the overlay, so a scroll here does not move the
+       grid underneath. */
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -78,7 +72,6 @@ export function Lightbox({
       role="dialog"
       aria-modal="true"
       aria-label={alt(index)}
-      data-lenis-prevent=""
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 p-4 sm:p-8"
       onClick={onClose}
     >
@@ -95,7 +88,7 @@ export function Lightbox({
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className={`font-body absolute top-4 right-4 sm:top-6 sm:right-6 ${CONTROL}`}
+        className={`absolute top-4 right-4 sm:top-6 sm:right-6 ${CONTROL}`}
       >
         &#10005;
       </button>
@@ -109,7 +102,7 @@ export function Lightbox({
               e.stopPropagation();
               go(-1);
             }}
-            className={`font-body absolute top-1/2 left-3 -translate-y-1/2 sm:left-6 ${CONTROL}`}
+            className={`absolute top-1/2 left-3 -translate-y-1/2 sm:left-6 ${CONTROL}`}
           >
             &#8592;
           </button>
@@ -120,14 +113,14 @@ export function Lightbox({
               e.stopPropagation();
               go(1);
             }}
-            className={`font-body absolute top-1/2 right-3 -translate-y-1/2 sm:right-6 ${CONTROL}`}
+            className={`absolute top-1/2 right-3 -translate-y-1/2 sm:right-6 ${CONTROL}`}
           >
             &#8594;
           </button>
         </>
       )}
 
-      <span className="font-body absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-neutral-950 px-3 py-1 text-xs tabular-nums text-white/80">
+      <span className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-neutral-950 px-3 py-1 text-xs tabular-nums text-white/80">
         {index + 1} / {images.length}
       </span>
     </div>

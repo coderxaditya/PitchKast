@@ -1,171 +1,117 @@
-"use client";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-import { useEffect, useState, type ReactNode } from "react";
-
-import { BlurText } from "@/components/motion/BlurText";
-import { Navbar } from "./Navbar";
-import { Rise } from "@/components/motion/Rise";
-import StatsCounter from "@/components/ui/stats-counter";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { ArrowUpRight, CheckIcon, GlobeIcon } from "@/components/icons";
-import { scrollToSection } from "@/lib/scrollToSection";
+import { Button } from "@/components/flat/Button";
+import { Container } from "@/components/flat/Container";
+import { BOOKING_URL } from "@/lib/site";
 
 /**
- * Same Calendly link the navbar and footer use. Declared here as well rather
- * than imported from Navbar so the hero does not depend on a sibling
- * component's internals; all three are the same string by convention.
+ * The stats that used to sit in two glass cards beside the headline.
+ *
+ * They are inline under the buttons now, divided by hairlines. The band that
+ * would otherwise hold them further down the page belongs to the client logo
+ * strip, and a hero that ends on proof reads stronger than one that ends on a
+ * button.
+ *
+ * The count-up is gone with the rest of the motion layer. A number that
+ * animates on arrival is a number nobody on a slow connection ever sees
+ * finish, and the page is deliberately static now.
  */
-const BOOKING_URL =
-  "https://calendly.com/goelsoham/founder-growth-strategy-call";
+const STATS = [
+  /* Amber and emerald rather than one colour for both: the system asks for
+     stat figures to carry different accents, and at this size the 3:1 large
+     text threshold is the bar — amber-300 measures 3.58:1 on this ground and
+     emerald-300 3.39:1. */
+  { value: "25+", label: "Global Clients", tone: "text-amber-300" },
+  { value: "90+", label: "Projects delivered", tone: "text-emerald-300" },
+];
 
-/** Matches the `Rise` delay on the card row, so the count starts as it fades in. */
-const STATS_DELAY = 1.1;
-
-function StatCard({
-  icon,
-  value,
-  suffix,
-  label,
-  play,
-}: {
-  icon: ReactNode;
-  value: number;
-  suffix: string;
-  label: string;
-  play: boolean;
-}) {
-  /* StatsCounter starts on its own in-view check, and in the hero it is in
-     view from the first frame — so left alone it would run its whole count
-     while the card is still at opacity 0 behind the intro, and land on the
-     final number before anyone sees it. Mounting it on the same beat as the
-     card's reveal is what makes the count visible; the component itself is
-     untouched. */
-  const [armed, setArmed] = useState(false);
-
-  useEffect(() => {
-    if (!play) return;
-    const id = setTimeout(() => setArmed(true), STATS_DELAY * 1000);
-    return () => clearTimeout(id);
-  }, [play]);
-
+/**
+ * The landing block.
+ *
+ * Full-bleed colour, centred, and entirely static — no scrub, no pinning, no
+ * reveal. Hierarchy is carried by scale and weight alone, which is the whole
+ * argument of the system.
+ *
+ * The ground is Blue 600, not the Blue 500 the palette nominates. That is a
+ * contrast decision and it is measured: white on Blue 500 is 3.68:1, which
+ * fails AA for anything at body size, and the accent word drops to 2.55:1.
+ * One step down the ramp puts white at 5.17:1 and the accent at 3.58:1, so
+ * both clear their thresholds. Blue 500 remains the action colour everywhere
+ * it belongs — buttons on light grounds — and this is the only place that
+ * needs the deeper value.
+ */
+export function Hero() {
   return (
-    <div className="liquid-glass flex min-w-0 flex-1 flex-col justify-between rounded-[1.25rem] p-4 sm:w-[220px] sm:flex-none sm:p-5">
-      <div>{icon}</div>
-      <div className="mt-6 sm:mt-8">
-        <div className="font-heading text-3xl leading-none tracking-[-1px] text-white italic sm:text-4xl">
-          {armed ? (
-            <StatsCounter value={value} suffix={suffix} duration={2} />
-          ) : (
-            /* Same glyph count and tabular figures as the live counter, so
-               arming it cannot shift the card's layout. Invisible in practice:
-               the row is still at opacity 0 until this flips. */
-            <span className="tabular-nums">0{suffix}</span>
-          )}
-        </div>
-        <div className="font-body mt-2 text-xs font-light text-white">
-          {label}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function Hero({ play }: { play: boolean }) {
-  return (
-    <div
-      /* pointer-events-none so drags land on the globe behind rather than on
-         this full-screen box. The navbar re-enables them for itself. */
-      className="hero-driven pointer-events-none absolute inset-0 z-10 flex h-full flex-col"
+    <section
+      id="home"
+      aria-label="PitchKast"
+      /* `on-dark` flips the global focus ring to white; a blue ring on a blue
+         block is invisible. */
+      className="on-dark relative isolate overflow-hidden bg-action-strong"
     >
-      <Navbar />
+      {/* ── Decoration ──────────────────────────────────────────
+          Flat poster geometry: solid shapes at low opacity, no gradient and
+          no blur. Purely ornamental, so it is hidden from assistive tech and
+          takes no pointer events. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <span className="absolute -top-40 -right-32 size-[34rem] rounded-full bg-white/10" />
+        <span className="absolute top-1/3 -left-40 size-[26rem] rotate-45 rounded-flat bg-white/5" />
+        <span className="absolute -bottom-32 right-1/4 size-72 rounded-full bg-amber-400/15" />
+        <span className="absolute bottom-10 left-[12%] hidden size-40 rounded-full bg-emerald-400/15 lg:block" />
+      </div>
 
-      <div
-        className="my-auto flex flex-col items-center justify-center px-4 pt-32 text-center [@media(max-height:720px)]:pt-20"
-      >
-        {/* Heading leads the stack now, so no top margin. */}
-        <div>
-          <BlurText
-            play={play}
-            /* The homepage's one and only h1.
-               It rendered as a <p> (BlurText's default tag), which left the
-               page with no h1 in the content at all — the only one in the
-               document was the decorative wordmark at the very bottom of the
-               footer. A crawler therefore read "PitchKast" as the page's
-               subject and this headline as body copy, which is backwards. */
-            as="h1"
-            text="We Build Brands That Move Businesses Forward."
-            /* Longer line than the old three-word headline, so the measure is
-               widened (max-w-2xl -> 4xl) and the leading opened slightly —
-               0.8 was tuned for words with no descender collisions across
-               lines; at three wrapped lines it stacked "Businesses" into
-               "Brands". Type scale itself is unchanged. */
-            className="font-heading max-w-4xl justify-center text-5xl leading-[0.92] tracking-[-3px] text-white italic min-[400px]:text-6xl min-[400px]:tracking-[-4px] md:text-7xl lg:text-[5.5rem] [@media(max-height:720px)]:text-5xl"
-          />
-        </div>
+      <Container className="py-16 text-center sm:py-24 lg:py-36">
+        {/* ── Eyebrow ── */}
+        <p className="inline-flex rounded-full bg-amber-400 px-4 py-2 text-[0.6875rem] font-bold tracking-[0.12em] text-ink uppercase sm:px-5 sm:text-[0.8125rem]">
+          We Don&rsquo;t Chase Growth. We Create It.
+        </p>
 
-        {/* CTA pair, reference-style: the conversion action in the house
-            rainbow treatment, the proof action as a quiet glass pill beside
-            it. pointer-events-auto because the hero shell disables pointer
-            events so drags reach the globe — without it neither button
-            would be clickable. */}
-        <Rise
-          delay={0.9}
-          play={play}
-          className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-4 [@media(max-height:720px)]:mt-6"
-        >
-          <RainbowButton
-            asChild
-            className="font-body h-12 rounded-full px-7 text-base"
-          >
+        {/* The page's one h1. */}
+        <h1 className="mx-auto mt-7 max-w-[20ch] sm:mt-8 text-display-xl leading-[0.95] font-extrabold tracking-[-0.03em] text-balance text-white">
+          We Build Brands That{" "}
+          {/* One coloured word, on the verb the promise turns on. */}
+          <span className="text-amber-300">Move</span> Businesses Forward.
+        </h1>
+
+        {/* ── Actions ── */}
+        <div className="mt-9 flex flex-wrap sm:mt-11 items-center justify-center gap-4">
+          <Button asChild variant="onColor" size="md">
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
               Book a Discovery Call
-              <ArrowUpRight className="size-5" />
+              <ArrowRight className="size-5" strokeWidth={2.5} />
             </a>
-          </RainbowButton>
+          </Button>
 
-          <a
-            href="#case-studies"
-            onClick={(e) => scrollToSection(e, "#case-studies")}
-            className="liquid-glass font-body inline-flex h-12 items-center gap-2 rounded-full px-7 text-base font-medium text-white transition-all duration-300 hover:scale-[1.045] hover:bg-white/10"
-          >
-            View Case Studies
-            <ArrowUpRight className="size-5" />
-          </a>
-        </Rise>
+          <Button asChild variant="onColorOutline" size="md">
+            <a href="#case-studies">
+              View Case Studies
+              <ArrowUpRight className="size-5" strokeWidth={2.5} />
+            </a>
+          </Button>
+        </div>
 
-        {/* Cards are fixed-width by design; below sm they share the row instead
-            so the pair never runs past the viewport edges. */}
-        <Rise
-          delay={STATS_DELAY}
-          play={play}
-          className="mt-10 flex w-full max-w-[456px] items-stretch justify-center gap-4 sm:w-auto sm:max-w-none [@media(max-height:720px)]:mt-5 [@media(max-height:560px)]:hidden"
-        >
-          <StatCard
-            icon={<GlobeIcon />}
-            value={25}
-            suffix="+"
-            label="Global Clients"
-            play={play}
-          />
-          <StatCard
-            icon={<CheckIcon />}
-            value={90}
-            suffix="+"
-            label="Projects delivered"
-            play={play}
-          />
-        </Rise>
-
-        <Rise
-          delay={1.25}
-          play={play}
-          className="mt-8 flex flex-col items-center gap-4 [@media(max-height:720px)]:mt-4"
-        >
-          <div className="liquid-glass font-body rounded-full px-3.5 py-1 text-center text-xs font-medium text-white">
-            We Don&rsquo;t Chase Growth. We Create It.
-          </div>
-        </Rise>
-      </div>
-    </div>
+        {/* ── Proof ──────────────────────────────────────────────
+            `divide-x` rather than a border on each item, so the rule falls
+            between them and never on the outside edge. It is dropped below
+            sm, where the pair stacks. */}
+        <dl className="mx-auto mt-12 flex max-w-xl sm:mt-16 flex-col items-stretch gap-8 sm:flex-row sm:justify-center sm:gap-0 sm:divide-x sm:divide-white/25">
+          {STATS.map((stat) => (
+            <div key={stat.label} className="sm:px-12">
+              <dt className="sr-only">{stat.label}</dt>
+              <dd>
+                <span
+                  className={`block text-display-md leading-none font-extrabold tracking-[-0.02em] tabular-nums ${stat.tone}`}
+                >
+                  {stat.value}
+                </span>
+                <span className="mt-2 block text-[0.9375rem] font-medium text-white">
+                  {stat.label}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </Container>
+    </section>
   );
 }

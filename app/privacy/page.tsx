@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { SmoothScroll } from "@/components/SmoothScroll";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import PolicyPages from "./PolicyPages";
 
@@ -30,12 +29,6 @@ export const metadata: Metadata = {
 export default function PrivacyRoute() {
   return (
     <>
-      {/* This route had no smooth scroll at all — Lenis is created by the
-          handshake hook on the home page and by SmoothScroll on /gallery, and
-          nothing covered the policies. It is also the longest document on the
-          site, so it is the page where the difference is most felt. The window
-          is the scroller here; there is no nested overflow container. */}
-      <SmoothScroll />
       <BreadcrumbJsonLd name="Policies" path="/privacy" />
       <PolicyPages />
     </>
