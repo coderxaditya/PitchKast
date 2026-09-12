@@ -1,37 +1,26 @@
-import { About } from "@/components/about/About";
-import { CaseStudies } from "@/components/case-studies/CaseStudies";
-import Footer from "@/components/footer/Footer";
-import { Faq } from "@/components/faq/Faq";
-import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
-import { Gallery } from "@/components/gallery/Gallery";
-import { Hero } from "@/components/hero/Hero";
-import { Services } from "@/components/services/Services";
-import { Team } from "@/components/team/Team";
-import { Partners } from "@/components/partners/Partners";
-import { Navbar } from "@/components/site/Navbar";
+import { Hero } from "@/components/steep/hero/Hero";
+import { Navbar } from "@/components/steep/Navbar";
 
 /**
- * The home page.
+ * The home page, mid-rebuild.
  *
- * Sections in reading order, all in normal document flow. The FAQ structured
- * data describes the six questions that section renders, and nothing else.
+ * This branch replaces the site section by section on the Steep system, and
+ * only the header and the landing block have been rebuilt so far. The rest of
+ * the page — partners, case studies, services, about, team, gallery, FAQ,
+ * footer — is still in `components/` untouched and simply not mounted: those
+ * sections are written against the previous design system's tokens, which no
+ * longer exist, so rendering them here would show half a page in a palette
+ * that has been deleted.
+ *
+ * Each one goes back into this file as it is rebuilt.
  */
 export default function Home() {
   return (
     <>
-      <FaqJsonLd />
       <Navbar />
       <main>
         <Hero />
-        <Partners />
-        <CaseStudies />
-        <Services />
-        <About />
-        <Team />
-        <Gallery />
-        <Faq />
       </main>
-      <Footer />
     </>
   );
 }

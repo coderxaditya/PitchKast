@@ -1,161 +1,254 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   Flat design system — tokens
+   Steep — serif analytics on warm paper
    ------------------------------------------------------------
-   One palette, light only. The hex values are Tailwind's own
-   Blue 500, Emerald 500, Amber 500, Gray 100/200/900, so the
-   stock utilities and these semantic aliases always agree.
+   The whole system, declared once. Values come from
+   design/DESIGN.md; nothing downstream states a hex.
 
-   Names are by role, not by hue: a section says `bg-action`
-   because it is the call-to-action block, and the day the blue
-   changes there is one line to edit. They deliberately avoid
-   `--color-primary` and friends, which shadcn's stylesheet
-   already owns.
+   Names are the design system's own (Ink Black, Paper White,
+   Blush Peach...) so a line of markup can be checked against the
+   reference document without a translation step.
    ============================================================ */
 
 @theme {
-  /* Outfit carries every weight on the page. Geometric sans, so the
-     letterforms echo the circles and squares the layout is built from. */
-  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  /* ── Type families ────────────────────────────────────────
+     Signifier and Sohne are licensed faces from Klim and are not
+     redistributable, so the site ships the substitutes the
+     reference document itself nominates: Source Serif 4 for the
+     display serif, Inter for the body sans. Both are variable,
+     which is what makes Sohne's half-step weights (430/450/480)
+     reproducible rather than rounded to 400 or 500. */
+  --font-display: var(--font-signifier), "Signifier", "GT Sectra",
+    "Tiempos Headline", ui-serif, Georgia, serif;
+  --font-sans: var(--font-sohne), "Sohne", Inter, ui-sans-serif, system-ui,
+    -apple-system, sans-serif;
 
-  /* ── Ground and ink ─────────────────────────────────────── */
-  --color-canvas: #ffffff;
-  --color-surface: #f3f4f6; /* Gray 100 — the alternate section ground */
-  --color-hairline: #e5e7eb; /* Gray 200 — used sparingly, never as a shadow */
-  --color-ink: #111827; /* Gray 900 — body text, and the dark section ground */
-  --color-ink-soft: #4b5563; /* Gray 600 — secondary copy on light grounds */
+  /* ── Colour ───────────────────────────────────────────────
+     Nine values and no more. The system is deliberately ~97%
+     achromatic: peach and sienna are the only chromatic pair and
+     they only ever appear together. */
+  --color-paper: #ffffff; /* canvas, button text, elevated cards */
+  --color-fog: #fafafb; /* alternating section bands */
+  --color-mist: #f2f2f3; /* nested card surfaces */
+  --color-hairline: #ececec; /* the only border value */
+  --color-ink: #17191c; /* body text, filled buttons — the one dark */
+  --color-slate: #777b86; /* links, muted copy */
+  --color-ash: #979799; /* tertiary labels, category tags */
+  --color-smoke: #a3a6af; /* placeholders, disabled */
+  --color-peach: #fbe1d1; /* the single accent surface */
+  --color-sienna: #5d2a1a; /* ink for peach surfaces only */
 
-  /* ── The three section colours ──────────────────────────── */
-  --color-action: #3b82f6;
-  --color-action-strong: #2563eb; /* hover only */
-  --color-support: #10b981;
-  --color-support-strong: #059669;
-  --color-highlight: #f59e0b;
-  --color-highlight-strong: #d97706;
+  /* ── Type scale ───────────────────────────────────────────
+     The document specifies fixed pixel sizes, which is right for
+     the widths it was measured at and unusable below them: 90px
+     display overflows a 375px phone by a wide margin. Every step
+     from heading-sm up is therefore fluid, clamped so the
+     specified size is exactly what a wide viewport gets. Body
+     sizes are left fixed — they were already readable.
 
-  /* ── Type scale ─────────────────────────────────────────────
-     Fluid across the whole range rather than stepped at
-     breakpoints, so a headline reads at the right size on a
-     phone and on a 27-inch display without a cascade of
-     per-breakpoint overrides. */
-  --text-display-xl: clamp(2.375rem, 1.4rem + 5.1vw, 6rem);
-  --text-display-lg: clamp(2.25rem, 1.5rem + 3.4vw, 4.5rem);
-  --text-display-md: clamp(1.875rem, 1.4rem + 2.1vw, 3rem);
-  --text-display-sm: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
-  /* Raised from 0.8125rem. These labels head every section — "About
-     PitchKast", "Global Reach", "What We Do" — and at 13px with wide tracking
-     they read as fine print above a very large heading rather than as part of
-     it. */
-  --text-eyebrow: 0.9375rem;
+     Tracking rides along with the size (Tailwind v4 reads the
+     `--text-*--letter-spacing` pairs), which is the system's
+     signature: tighter as the type grows. */
+  --text-caption: 15px;
+  --text-caption--line-height: 1.5;
 
-  /* ── Radius ─────────────────────────────────────────────────
-     One value everywhere. Pills are opt-in per element and only
-     for tags and buttons, never for cards. */
-  --radius-flat: 0.5rem;
+  --text-body: 17px;
+  --text-body--line-height: 1.35;
+
+  --text-body-lg: 20px;
+  --text-body-lg--line-height: 1.35;
+
+  --text-subheading: 22px;
+  --text-subheading--line-height: 1.5;
+
+  --text-heading-sm: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem); /* →26px */
+  --text-heading-sm--line-height: 1.18;
+  --text-heading-sm--letter-spacing: -0.009em;
+
+  --text-heading: clamp(1.875rem, 1.4rem + 2vw, 2.75rem); /* →44px */
+  --text-heading--line-height: 1.3;
+  --text-heading--letter-spacing: -0.015em;
+
+  --text-heading-lg: clamp(2.25rem, 1.4rem + 3.6vw, 4rem); /* →64px */
+  --text-heading-lg--line-height: 1.3;
+  --text-heading-lg--letter-spacing: -0.015em;
+
+  --text-display: clamp(2.25rem, 1.05rem + 5.9vw, 5.625rem); /* →90px */
+  --text-display--line-height: 1.3;
+  --text-display--letter-spacing: -0.025em;
+
+  /* ── Radius ───────────────────────────────────────────────
+     Two structural radii — 9999px on every button, 24px on every
+     content card — plus three narrower cases. Nothing in the
+     system is squarer than 12px. */
+  --radius-image: 12px;
+  --radius-input: 16px;
+  --radius-small: 16px;
+  --radius-elevated: 20px;
+  --radius-card: 24px;
+
+  /* ── Elevation ────────────────────────────────────────────
+     Only floating product artifacts earn a shadow. Content cards
+     get none — they separate by surface tone instead. */
+  --shadow-artifact: 0 0 0 1px rgba(4, 23, 43, 0.05),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-overlay: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 8px 40px 0 rgba(0, 0, 0, 0.1);
+  --shadow-popover: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 24px 0 rgba(0, 0, 0, 0.08);
 }
 
-/* Reading measure for every section's inner shell. */
+/* The 1200px measure every section's shell is built on. */
 :root {
-  --shell: 80rem; /* max-w-7xl */
+  --shell: 1200px;
+  --section-gap: 80px;
 }
 
 html {
   scroll-behavior: smooth;
+  /* Nothing on the page is taller than the viewport by accident; the sticky
+     hero stage depends on no ancestor creating a scroll container. */
+  -webkit-text-size-adjust: 100%;
 }
 
 html,
 body {
-  background: var(--color-canvas);
+  background: var(--color-paper);
   color: var(--color-ink);
 }
 
 body {
   margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.35;
 }
 
 /* ============================================================
    Focus
    ------------------------------------------------------------
-   With no shadows in the system, the usual soft focus glow has
-   nothing to sit on. A solid offset ring is the replacement, and
-   it is declared once here rather than per component so nothing
-   can ship without one.
+   Declared once so nothing can ship without one. An offset ink
+   ring rather than a glow — the system has no soft shadows for a
+   glow to sit on.
    ============================================================ */
 
 :where(a, button, [role="button"], input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--color-action);
-  outline-offset: 2px;
-  border-radius: var(--radius-flat);
-}
-
-/* On the blue and dark grounds the blue ring disappears into the
-   background, so those sections invert it to white. */
-.on-dark :where(a, button, [role="button"], summary):focus-visible {
-  outline-color: #ffffff;
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: var(--radius-small);
 }
 
 /* ============================================================
-   Logo marquee
+   Hero assembly
    ------------------------------------------------------------
-   Carried across from the previous build unchanged, because it
-   already works: motion is a keyframed transform handed to the
-   compositor rather than a per-frame loop on the main thread, and
-   the track holds exactly two copies of the sequence so animating
-   to -50% lands copy two where copy one began. Seamless with no
-   measurement needed to make the join.
+   The signature interaction: product fragments scattered around
+   the headline at rest, converging into one dashboard as the
+   page scrolls.
+
+   Everything below is an enhancement. The base layout — declared
+   here, outside every query — is the finished state in normal
+   document flow: headline, then the assembled dashboard beneath
+   it. That is what Firefox gets (no scroll-driven animation
+   yet), what a reduced-motion visitor gets, and what renders
+   before any style has resolved. Nothing is hidden behind the
+   animation; the animation only changes *when* the pieces
+   arrive.
+
+   The motion itself costs no JavaScript and no main-thread work:
+   `scroll(root block)` drives transforms and opacity on the
+   compositor. The previous build shipped 1.2MB of inline SVG
+   generated in the browser for one section, so the bar here is
+   that the interaction adds zero bytes of script.
    ============================================================ */
 
-.marquee {
-  position: relative;
-  overflow: hidden;
+.assembly__stage {
+  display: grid;
+  justify-items: center;
+  gap: 64px;
 }
 
-.marquee__track {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
-  will-change: transform;
-}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+    /* Scroll distance the assembly is spread over. The stage pins for the
+       whole of it, so this is also how long the dashboard holds once
+       assembled. */
+    .assembly {
+      height: 240vh;
+    }
 
-@keyframes marquee-scroll {
-  to {
-    transform: translate3d(-50%, 0, 0);
+    .assembly__stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      /* One cell, both children in it: copy sits over the dashboard rather
+         than above it. */
+      grid-template-areas: "cell";
+      align-items: center;
+      gap: 0;
+    }
+
+    .assembly__copy,
+    .assembly__dashboard {
+      grid-area: cell;
+    }
+
+    /* The copy clears out first, before the fragments have finished
+       converging — so the dashboard is never read through the headline. */
+    .assembly__copy {
+      animation: copy-dismiss linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 60vh;
+    }
+
+    /* The shell — sidebar, chrome, ground — is what turns a scatter of cards
+       into a dashboard, so it arrives last and quickly. */
+    .assembly__shell {
+      animation: shell-arrive linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 55vh 110vh;
+    }
+
+    /* Each fragment carries its own scatter in three custom properties set
+       inline, and animates that displacement away to nothing. The resting
+       position is its natural slot in the dashboard grid, so "assembled"
+       needs no coordinates — it is simply `transform: none`. */
+    .assembly__artifact {
+      animation: artifact-assemble linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 110vh;
+      will-change: transform;
+    }
   }
 }
 
-/* Paused on hover in CSS, gated to real pointers. Doing this in JS
-   stranded the strip on touch: mobile browsers fire an emulated
-   mouseenter and often never send the matching mouseleave, so the
-   paused state latched. A media query cannot latch. */
-@media (hover: hover) and (pointer: fine) {
-  .marquee:hover .marquee__track {
-    animation-play-state: paused;
+@keyframes copy-dismiss {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -3rem, 0);
+    /* Opacity alone leaves the headline's two buttons sitting invisibly over
+       the assembled dashboard, swallowing clicks meant for the card beneath.
+       Visibility is the one property that takes them out of hit-testing, and
+       it flips only at the very end of the range — CSS keeps an element
+       visible for the whole interval if either endpoint is. */
+    visibility: hidden;
   }
 }
 
-/* ============================================================
-   World-map arcs
-   ------------------------------------------------------------
-   The draw-in, as a keyframe rather than a motion library.
-   Every path carries `pathLength="1"`, which normalises its
-   geometry, so one dash length draws arcs of any real length
-   and the stagger is a per-path delay.
-   ============================================================ */
-
-.map-arc {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: map-arc-draw 1s ease-out forwards;
+@keyframes shell-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-@keyframes map-arc-draw {
+@keyframes artifact-assemble {
+  from {
+    transform: translate3d(var(--ax, 0), var(--ay, 0), 0) rotate(var(--ar, 0deg))
+      scale(var(--as, 1));
+  }
   to {
-    stroke-dashoffset: 0;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
 }
 
@@ -171,57 +264,4 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
-  /* The one exception, and a deliberate one.
-
-     Android battery saver and Samsung's "Reduce animations" both set
-     this preference, so honouring it here stopped the strip for a
-     large share of real visitors — reported three separate times as
-     "it's broken on my phone". The strip is the only continuous
-     autoplaying motion on the site and it carries content (seventeen
-     client marks) that a frozen track hides most of. It keeps
-     running, slowed rather than stopped, which is the compromise the
-     previous build's note argued for. */
-  .marquee__track {
-    animation-duration: calc(var(--marquee-duration, 28s) * 2) !important;
-    animation-iteration-count: infinite !important;
-  }
-
-  /* The blanket rule above collapses the arc animation to nothing, which would
-     freeze every path at `stroke-dashoffset: 1` — fully undrawn, so the map
-     would show pins and no connections at all. Drawn is the correct resting
-     state; it simply arrives without the sweep. */
-  .map-arc {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* ============================================================
-   shadcn variables
-   ------------------------------------------------------------
-   Retained because `components/ui/*` reads them. Values are the
-   library's light defaults, with the radius pulled down to match
-   `--radius-flat`.
-   ============================================================ */
-
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --radius: 0.5rem;
 }

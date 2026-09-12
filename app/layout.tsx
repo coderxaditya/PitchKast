@@ -7,25 +7,37 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo";
-import { Outfit } from "next/font/google";
+import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
 /**
- * The one face on the site.
+ * The two faces.
  *
- * The flat system asks for a single geometric sans carrying every level of
- * hierarchy through weight and size alone, so the four-family stack this
- * replaced (a display serif, two Barlows and Geist) is gone rather than
- * reduced. Self-hosted at build time by next/font, so there is no CDN round
- * trip and no layout shift while the face arrives.
+ * The system specifies Signifier (display serif) and Sohne (body sans), both
+ * licensed from Klim and neither redistributable, so the site ships the
+ * substitutes the reference document names itself: Source Serif 4 and Inter.
+ *
+ * Both are loaded as variable fonts rather than as a weight list, and that is
+ * deliberate — Sohne's half-step weights (430, 450, 480) are the system's
+ * stated way of building hierarchy without reaching for bold, and a static
+ * weight list would round every one of them to 400 or 500.
+ *
+ * Self-hosted at build time by next/font, so no CDN round trip and no shift
+ * while the face arrives.
  */
-const outfit = Outfit({
+const signifier = Source_Serif_4({
   subsets: ["latin"],
-  /* 400 body, 500/600 labels and buttons, 700/800 headings. Nothing on the
-     page uses a weight outside this set. */
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-outfit",
+  /* The display face is used at 400 only — the restraint is the signature —
+     but italic is needed: every headline carries one italicised phrase. */
+  style: ["normal", "italic"],
+  variable: "--font-signifier",
+  display: "swap",
+});
+
+const sohne = Inter({
+  subsets: ["latin"],
+  variable: "--font-sohne",
   display: "swap",
 });
 
@@ -119,14 +131,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      /* No `dark` class any more. The flat system is a single light palette,
-         so shadcn's tokens stay on their light values and every surface is
-         declared explicitly rather than inherited from a theme flip. */
-      className={cn(outfit.variable, "font-sans")}
+      /* One palette, light only. Every surface in the system is declared
+         explicitly, so there is no theme class to flip. */
+      className={cn(signifier.variable, sohne.variable, "font-sans")}
     >
-      {/* `is-loading` is gone with the loader it belonged to. It set
-         `overflow: hidden` and was cleared by the scroll stage on mount;
-         with no stage to clear it, leaving it here would lock the page. */}
       <body>
         {/* Ahead of the content so a crawler that only reads the first chunk
             of the document still gets the entity description. */}
