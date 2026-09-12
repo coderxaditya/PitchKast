@@ -135,11 +135,22 @@ function PlatformTag({ on, withName = true }: { on: Platform; withName?: boolean
 
 const count = (s: Status) => POSTS.filter((p) => p.status === s).length;
 
+/** Posts sitting with the client — the greeting and the counters agree. */
+export const WAITING = POSTS.filter(
+  (p) => p.status === "review" || p.status === "changes",
+).length;
+
 const COUNTS: { value: string; label: string; accent?: boolean }[] = [
   { value: String(POSTS.length), label: "Posts" },
   { value: String(count("published")), label: "Published" },
-  /* The one figure the portal colours: what the client owes a decision on. */
-  { value: String(count("review")), label: "Awaiting review", accent: true },
+  /* The one figure the portal colours, and the one the greeting repeats.
+     It is both states that need the client rather than just the unreviewed
+     ones — a post sent back for changes is still sitting with them. */
+  {
+    value: String(count("review") + count("changes")),
+    label: "Waiting on you",
+    accent: true,
+  },
   { value: shortDate(POSTS[0].due).replace(" 2026", ""), label: "Next post" },
 ];
 
@@ -158,12 +169,32 @@ export function PortalCounters() {
           >
             {c.value}
           </p>
-          <p className="mt-1.5 text-[10px] leading-none text-[var(--portal-muted)]">
+          <p className="mt-1.5 text-[10px] leading-none font-medium text-[var(--portal-muted)]">
             {c.label}
           </p>
         </div>
       ))}
     </Panel>
+  );
+}
+
+/* ── The greeting ──────────────────────────────────────────────
+   What the portal opens with, and what the shell carries: the
+   fragments land on a page that already knows whose it is. It
+   sits in the shell rather than in the grid deliberately — it
+   arrives with the ground, so the dashboard resolves under the
+   cards rather than as one more card among them. */
+
+export function PortalGreeting() {
+  return (
+    <div className="font-portal">
+      <p className="font-portal-display text-[17px] leading-none font-extrabold tracking-[-0.02em] text-[var(--portal-ink)]">
+        Hello, Test
+      </p>
+      <p className="mt-1.5 text-[10px] leading-none text-[var(--portal-muted)]">
+        {WAITING} posts are waiting on you.
+      </p>
+    </div>
   );
 }
 
@@ -202,55 +233,62 @@ export function PortalPosts() {
   );
 }
 
-/* ── The post editor ───────────────────────────────────────────
-   The right-hand column of a single post: its state, the date it
-   is due, and the save button. It is the only fragment with form
-   controls, and they are inert — spans styled as fields, not
-   inputs, because a real input in a page decoration is something
-   a visitor can type into and lose what they typed.
+/* ── The approval ──────────────────────────────────────────────
+   What a client actually opens the portal to do. This is the
+   client-side view of a post: what it is, where it is going, and
+   the two buttons that move it — the product's whole promise in
+   one card, which is why it is here rather than the admin-side
+   editor it replaces.
 
-   The purple is the portal's brand, and it is the one place on
-   this page a colour outside the system's palette appears. It
-   earns that by being the product's own. */
+   Nothing in it is a real control. The buttons are spans and the
+   comment box is a styled div: a page decoration that accepts a
+   click, or a textarea that swallows what someone types, is
+   worse than one that plainly does neither.
 
-function Field({ children, muted = false }: { children: React.ReactNode; muted?: boolean }) {
+   The purple is the portal's brand and it is the one colour on
+   this page from outside the system's palette. It earns that by
+   being the product's own. */
+
+export function PortalApproval() {
+  const post = POSTS[1];
+
   return (
-    <span
-      className={`portal-sink block rounded-[12px] px-3 py-[7px] text-[10px] ${
-        muted ? "text-[var(--portal-label)]" : "text-[var(--portal-ink)]"
-      }`}
-    >
-      {children}
-    </span>
-  );
-}
-
-export function PortalEditor() {
-  return (
-    <Panel label="The Growth Bottleneck…">
-      <div className="space-y-2">
+    <Panel label="Awaiting your review">
+      <div className="flex h-full flex-col gap-2.5">
         <div>
-          <p className="pb-1 text-[9.5px] font-medium">Status</p>
-          <Field>Awaiting review</Field>
+          <p className="text-[12px] leading-snug font-semibold">{post.title}</p>
+          <div className="mt-1.5 flex items-center gap-2">
+            <PlatformTag on={post.on} />
+            <StatusPill status={post.status} />
+          </div>
         </div>
 
-        <div>
-          <p className="pb-1 text-[9.5px] font-medium">Expected publish date</p>
-          <Field>01/11/2026</Field>
+        <div className="portal-raise-sm rounded-[14px] bg-[var(--portal-ground)] p-3">
+          <p className="font-portal-display text-[12px] leading-none font-bold tracking-[-0.02em]">
+            Ready to go?
+          </p>
+          <p className="mt-1.5 text-[10px] leading-snug text-[var(--portal-muted)]">
+            Approve it, or tell us what to change.
+          </p>
+
+          <div className="mt-2.5 flex gap-2">
+            <span className="portal-raise-sm rounded-[12px] bg-[var(--portal-brand)] px-3 py-[6px] font-portal-display text-[10px] font-semibold tracking-[-0.02em] text-white">
+              Approve
+            </span>
+            <span className="portal-raise-sm rounded-[12px] bg-[var(--portal-ground)] px-3 py-[6px] font-portal-display text-[10px] font-semibold tracking-[-0.02em]">
+              Request changes
+            </span>
+          </div>
         </div>
 
-        <div>
-          <p className="pb-1 text-[9.5px] font-medium">Actual publish date</p>
-          <Field muted>dd/mm/yyyy</Field>
+        <div className="mt-auto">
+          <p className="pb-1.5 font-portal-display text-[9px] font-bold tracking-[0.13em] text-[var(--portal-muted)] uppercase">
+            Comments
+          </p>
+          <span className="portal-sink block rounded-[12px] px-3 py-[7px] text-[10px] text-[var(--portal-label)]">
+            Add a comment
+          </span>
         </div>
-
-        <p className="pt-0.5 text-[8.5px] text-[var(--portal-label)]">
-          Set automatically when you mark the post published.
-        </p>
-
-        <span className="portal-raise-sm block rounded-[12px] bg-[var(--portal-brand)] py-[8px] text-center text-[10px] font-semibold text-white">
-          Saved
-        </span>
       </div>
     </Panel>
   );

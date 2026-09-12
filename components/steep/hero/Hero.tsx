@@ -3,9 +3,10 @@ import { Container } from "@/components/steep/Container";
 import { ComposerCard, RaisedCard } from "@/components/steep/hero/artifacts";
 import {
   PortalActivity,
+  PortalApproval,
   PortalCalendar,
   PortalCounters,
-  PortalEditor,
+  PortalGreeting,
   PortalPosts,
 } from "@/components/steep/hero/portal";
 import { BOOKING_URL } from "@/lib/site";
@@ -42,7 +43,7 @@ type Scatter = React.CSSProperties & {
 };
 
 const SCATTER: Record<
-  "counters" | "posts" | "editor" | "calendar" | "activity" | "raised" | "composer",
+  "counters" | "posts" | "approval" | "calendar" | "activity" | "raised" | "composer",
   Scatter
 > = {
   /* These are not guesses. The assembled dashboard was measured at 1440×900
@@ -56,7 +57,7 @@ const SCATTER: Record<
      holds at both. */
   counters: { "--ax": "0vw", "--ay": "-17vh", "--ar": "1.5deg", "--as": "1.05" },
   posts: { "--ax": "-27vw", "--ay": "1vh", "--ar": "-3deg", "--as": "1.08" },
-  editor: { "--ax": "21vw", "--ay": "-10vh", "--ar": "3.5deg", "--as": "1.1" },
+  approval: { "--ax": "21vw", "--ay": "-10vh", "--ar": "3.5deg", "--as": "1.1" },
   calendar: { "--ax": "-27vw", "--ay": "14vh", "--ar": "-2deg", "--as": "1.06" },
   activity: { "--ax": "21vw", "--ay": "3vh", "--ar": "4deg", "--as": "1.08" },
   raised: { "--ax": "12vw", "--ay": "9vh", "--ar": "-1.5deg", "--as": "1.05" },
@@ -103,17 +104,26 @@ export function Hero() {
                 portal, and framing them in a second, invented chrome made
                 the whole thing read as a picture of an app rather than as
                 the app. */}
-            <div className="assembly__shell absolute inset-0 rounded-[var(--radius-card)] border border-hairline bg-fog" />
+            <div className="assembly__shell absolute inset-0 rounded-[var(--radius-card)] border border-hairline bg-fog">
+              <div className="px-5 pt-4">
+                <PortalGreeting />
+              </div>
+            </div>
 
             {/* The fragments. They are laid out beside the shell rather than
-                inside it, so the two can be revealed independently. */}
-            <div className="relative grid grid-cols-1 gap-3 p-3 sm:grid-cols-3">
-              {/* Four of the five crops are hidden on a phone, and that is a
-                  legibility decision rather than a performance one: a 1196px
-                  screenshot rendered into a 302px column puts the portal's
-                  body text at seven pixels. What is left — one fragment, the
-                  accent and the call to action — is the same page with the
-                  unreadable parts taken out. */}
+                inside it, so the two can be revealed independently.
+
+                Padding is set per side rather than as `p-3 pt-16`: the
+                shorthand wins over the longhand in the generated stylesheet,
+                so the top padding was silently 12px and the first card sat on
+                top of the greeting. */}
+            <div className="relative grid grid-cols-1 gap-3 px-3 pt-16 pb-3 sm:grid-cols-3">
+              {/* Four of the five portal surfaces are hidden on a phone, and
+                  that is a legibility decision: the post table's four columns
+                  and the calendar's seven do not survive a 300px column at any
+                  type size worth reading. What is left — the greeting, the
+                  approval card, the accent and the call to action — is the
+                  same page with the parts that cannot be read taken out. */}
               <div
                 className="assembly__artifact hidden sm:col-span-3 sm:block"
                 style={SCATTER.counters}
@@ -128,8 +138,8 @@ export function Hero() {
                 <PortalPosts />
               </div>
 
-              <div className="assembly__artifact" style={SCATTER.editor}>
-                <PortalEditor />
+              <div className="assembly__artifact" style={SCATTER.approval}>
+                <PortalApproval />
               </div>
 
               <div
