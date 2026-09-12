@@ -143,6 +143,46 @@ body {
 }
 
 /* ============================================================
+   Logo marquee
+   ------------------------------------------------------------
+   Carried across unchanged, because it already works: motion is
+   a keyframed transform handed to the compositor rather than a
+   per-frame loop on the main thread, and the track holds exactly
+   two copies of the sequence, so animating to -50% lands copy
+   two where copy one began. Seamless with no measurement needed
+   to make the join.
+   ============================================================ */
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Paused on hover in CSS, gated to real pointers. Doing this in
+   JavaScript stranded the strip on touch: mobile browsers fire an
+   emulated mouseenter and often never send the matching
+   mouseleave, so the paused state latched. A media query cannot
+   latch. */
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+}
+
+/* ============================================================
    Portal surfaces
    ------------------------------------------------------------
    The hero's fragments are rebuilt renderings of the PitchKast
@@ -337,5 +377,18 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* One deliberate exception.
+
+     Android battery saver and Samsung's "Reduce animations" both set this
+     preference, so honouring it here stopped the strip for a large share of
+     real visitors — reported three separate times on the previous build as
+     "it's broken on my phone". It is the only continuous motion on the site
+     and it carries content — seventeen client marks — that a frozen track
+     hides most of. It keeps running, slowed rather than stopped. */
+  .marquee__track {
+    animation-duration: calc(var(--marquee-duration, 28s) * 2) !important;
+    animation-iteration-count: infinite !important;
   }
 }
