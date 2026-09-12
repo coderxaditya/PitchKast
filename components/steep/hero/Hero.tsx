@@ -1,13 +1,9 @@
 import { Button } from "@/components/steep/Button";
 import { Container } from "@/components/steep/Container";
 import {
-  ClientsCard,
   ComposerCard,
-  DisciplinesCard,
+  PortalCard,
   RaisedCard,
-  ShellSidebar,
-  TeamCard,
-  TrackRecordCard,
 } from "@/components/steep/hero/artifacts";
 import { BOOKING_URL } from "@/lib/site";
 
@@ -43,15 +39,25 @@ type Scatter = React.CSSProperties & {
 };
 
 const SCATTER: Record<
-  "record" | "clients" | "raised" | "disciplines" | "team" | "composer",
+  "stats" | "queue" | "upcoming" | "calendar" | "feed" | "raised" | "composer",
   Scatter
 > = {
-  record: { "--ax": "-26vw", "--ay": "-20vh", "--ar": "-4deg", "--as": "1.12" },
-  clients: { "--ax": "-9vw", "--ay": "-25vh", "--ar": "2.5deg", "--as": "1.08" },
-  raised: { "--ax": "24vw", "--ay": "-16vh", "--ar": "3.5deg", "--as": "1.1" },
-  disciplines: { "--ax": "-25vw", "--ay": "21vh", "--ar": "-2.5deg", "--as": "1.08" },
-  team: { "--ax": "26vw", "--ay": "23vh", "--ar": "4deg", "--as": "1.06" },
-  composer: { "--ax": "6vw", "--ay": "25vh", "--ar": "-1.5deg", "--as": "1.05" },
+  /* These are not guesses. The assembled dashboard was measured at 1440×900
+     — it lands at x 230–1210, y 96–867 — and each offset below is the
+     difference between a fragment's slot in that grid and where it should sit
+     at rest: hard against a viewport edge, or half out of frame.
+
+     Written in vw/vh so the scatter tracks the viewport rather than the
+     dashboard, which is fixed at 980px. On a wider display the fragments
+     spread further out; on a narrower one they close in, and the composition
+     holds at both. */
+  stats: { "--ax": "0vw", "--ay": "-25vh", "--ar": "1.5deg", "--as": "1.06" },
+  queue: { "--ax": "-24vw", "--ay": "-9vh", "--ar": "-3deg", "--as": "1.08" },
+  upcoming: { "--ax": "19vw", "--ay": "-17vh", "--ar": "3.5deg", "--as": "1.1" },
+  calendar: { "--ax": "-23vw", "--ay": "17vh", "--ar": "-2deg", "--as": "1.06" },
+  feed: { "--ax": "20vw", "--ay": "6vh", "--ar": "4deg", "--as": "1.08" },
+  raised: { "--ax": "10vw", "--ay": "6vh", "--ar": "-1.5deg", "--as": "1.05" },
+  composer: { "--ax": "16vw", "--ay": "5vh", "--ar": "2.5deg", "--as": "1.05" },
 };
 
 export function Hero() {
@@ -87,47 +93,70 @@ export function Hero() {
 
         {/* ── The dashboard ──────────────────────────────────── */}
         <Container className="assembly__dashboard">
-          <div className="relative mx-auto w-full max-w-[1060px]">
-            {/* The shell is the chrome only — ground, edge, sidebar. It sits
+          <div className="relative mx-auto w-full max-w-[980px]">
+            {/* The shell is chrome only — ground, edge, title bar. It sits
                 behind the fragments and arrives last, which is what turns a
                 scatter of cards into one surface. */}
             <div className="assembly__shell absolute inset-0 overflow-hidden rounded-[var(--radius-elevated)] border border-hairline bg-fog shadow-artifact">
-              <div className="absolute inset-y-0 left-0 hidden w-[200px] border-r border-hairline bg-paper sm:block">
-                <ShellSidebar />
+              <div className="flex h-11 items-center gap-1.5 px-4">
+                <span aria-hidden="true" className="size-2.5 rounded-full bg-hairline" />
+                <span aria-hidden="true" className="size-2.5 rounded-full bg-hairline" />
+                <span aria-hidden="true" className="size-2.5 rounded-full bg-hairline" />
+                <span className="ml-3 text-[13px] font-[430] text-ash">
+                  PitchKast client portal
+                </span>
               </div>
             </div>
 
-            {/* The fragments. Left padding clears the sidebar rather than the
-                grid being nested inside the shell, so the two can be
-                revealed independently. */}
-            <div className="relative grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:pl-[216px] lg:grid-cols-3">
-              <div className="assembly__artifact" style={SCATTER.record}>
-                <TrackRecordCard />
-              </div>
-
-              <div className="assembly__artifact" style={SCATTER.clients}>
-                <ClientsCard />
+            {/* The fragments. They are laid out beside the shell rather than
+                inside it, so the two can be revealed independently. */}
+            <div className="relative grid grid-cols-1 gap-3 p-3 pt-14 sm:grid-cols-3">
+              {/* Four of the five crops are hidden on a phone, and that is a
+                  legibility decision rather than a performance one: a 1196px
+                  screenshot rendered into a 302px column puts the portal's
+                  body text at seven pixels. What is left — one fragment, the
+                  accent and the call to action — is the same page with the
+                  unreadable parts taken out. */}
+              <div
+                className="assembly__artifact hidden sm:col-span-3 sm:block"
+                style={SCATTER.stats}
+              >
+                <PortalCard crop="stats" />
               </div>
 
               <div
-                className="assembly__artifact lg:row-span-2"
+                className="assembly__artifact hidden sm:col-span-2 sm:block"
+                style={SCATTER.queue}
+              >
+                <PortalCard crop="queue" />
+              </div>
+
+              <div className="assembly__artifact" style={SCATTER.upcoming}>
+                <PortalCard crop="upcoming" />
+              </div>
+
+              <div
+                className="assembly__artifact hidden sm:col-span-2 sm:block"
+                style={SCATTER.calendar}
+              >
+                <PortalCard crop="calendar" />
+              </div>
+
+              <div
+                className="assembly__artifact hidden sm:block"
+                style={SCATTER.feed}
+              >
+                <PortalCard crop="feed" />
+              </div>
+
+              <div
+                className="assembly__artifact sm:col-span-2"
                 style={SCATTER.raised}
               >
                 <RaisedCard />
               </div>
 
-              <div className="assembly__artifact" style={SCATTER.disciplines}>
-                <DisciplinesCard />
-              </div>
-
-              <div className="assembly__artifact" style={SCATTER.team}>
-                <TeamCard />
-              </div>
-
-              <div
-                className="assembly__artifact sm:col-span-2 lg:col-span-3"
-                style={SCATTER.composer}
-              >
+              <div className="assembly__artifact" style={SCATTER.composer}>
                 <ComposerCard />
               </div>
             </div>
