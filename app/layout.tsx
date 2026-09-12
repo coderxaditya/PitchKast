@@ -7,7 +7,12 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo";
-import { Inter, Source_Serif_4 } from "next/font/google";
+import {
+  DM_Sans,
+  Inter,
+  Plus_Jakarta_Sans,
+  Source_Serif_4,
+} from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +43,30 @@ const signifier = Source_Serif_4({
 const sohne = Inter({
   subsets: ["latin"],
   variable: "--font-sohne",
+  display: "swap",
+});
+
+/**
+ * The portal's two faces.
+ *
+ * The hero's fragments are a rebuild of the PitchKast client portal, and the
+ * portal is built on DM Sans with Plus Jakarta Sans for its figures and
+ * labels. Loading both is what keeps the rebuild honest — in the site's own
+ * Inter the fragments look like a tasteful approximation of the product
+ * rather than the product.
+ *
+ * Both are variable and subset to latin, and they are scoped to those
+ * fragments: nothing else on the page uses them.
+ */
+const portalSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const portalDisplay = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
@@ -133,7 +162,13 @@ export default function RootLayout({
       lang="en"
       /* One palette, light only. Every surface in the system is declared
          explicitly, so there is no theme class to flip. */
-      className={cn(signifier.variable, sohne.variable, "font-sans")}
+      className={cn(
+        signifier.variable,
+        sohne.variable,
+        portalSans.variable,
+        portalDisplay.variable,
+        "font-sans",
+      )}
     >
       <body>
         {/* Ahead of the content so a crawler that only reads the first chunk

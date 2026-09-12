@@ -50,6 +50,11 @@
      Tracking rides along with the size (Tailwind v4 reads the
      `--text-*--letter-spacing` pairs), which is the system's
      signature: tighter as the type grows. */
+  /* The portal's own faces, used only by the hero's fragments. */
+  --font-portal: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-portal-display: var(--font-jakarta), ui-sans-serif, system-ui,
+    sans-serif;
+
   --text-caption: 15px;
   --text-caption--line-height: 1.5;
 
@@ -138,6 +143,68 @@ body {
 }
 
 /* ============================================================
+   Portal surfaces
+   ------------------------------------------------------------
+   The hero's fragments are rebuilt renderings of the PitchKast
+   client portal, not screenshots of it. That is why they are
+   sharp at any size, weigh a few hundred bytes each, and hold
+   real selectable text instead of a JPEG's artefacts.
+
+   Nothing here is estimated. Every value was read off the
+   running portal's own computed styles:
+
+     ground   #e0e5ec     ink      #3d4852
+     line     #d3d8e4     muted    #5c6675
+     brand    #6c63ff     label    #858994
+
+   It is a soft-UI interface: panels are the same colour as the
+   ground and separate from it by a pair of opposed shadows —
+   cool below-right, white above-left, at rgba(163,177,198,.6)
+   and rgba(255,255,255,.5). The portal uses 9px/16px offsets at
+   full size; the fragments render between 300 and 640px wide, so
+   the geometry here is scaled to roughly 60% or the blur reads
+   as fog.
+   ============================================================ */
+
+:root {
+  --portal-ground: #e0e5ec;
+  --portal-line: #d3d8e4;
+  --portal-ink: #3d4852;
+  --portal-muted: #5c6675;
+  --portal-label: #858994;
+  --portal-brand: #6c63ff;
+  --portal-dark: rgba(163, 177, 198, 0.6);
+  --portal-light: rgba(255, 255, 255, 0.5);
+}
+
+/* A panel lifted off the ground. */
+.portal-raise {
+  box-shadow:
+    5px 5px 10px var(--portal-dark),
+    -5px -5px 10px var(--portal-light);
+}
+
+/* A smaller lift, for tiles nested inside a panel. */
+.portal-raise-sm {
+  box-shadow:
+    3px 3px 6px var(--portal-dark),
+    -3px -3px 6px var(--portal-light);
+}
+
+/* A field pressed into it — the same two lights, inverted. */
+.portal-sink {
+  box-shadow:
+    inset 4px 4px 7px var(--portal-dark),
+    inset -4px -4px 7px var(--portal-light);
+}
+
+/* The hairline the portal puts along the top of every list row. */
+.portal-row + .portal-row {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  border-top: 1px solid var(--portal-line);
+}
+
+/* ============================================================
    Hero assembly
    ------------------------------------------------------------
    The signature interaction: product fragments scattered around
@@ -179,6 +246,13 @@ body {
       position: sticky;
       top: 0;
       height: 100svh;
+      /* Tighter than the flow layout's. The assembled dashboard is a little
+         taller than the space a pinned viewport leaves once the page's
+         normal section padding is taken off it, and a grid item that
+         overflows its area is laid out from the start edge rather than
+         centred — so the padding comes straight off the bottom of the
+         dashboard rather than off both ends. */
+      padding-block: 2rem;
       /* One cell, both children in it: copy sits over the dashboard rather
          than above it. */
       grid-template-areas: "cell";

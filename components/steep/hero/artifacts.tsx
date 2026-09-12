@@ -3,88 +3,11 @@ import { ArrowUpRight } from "lucide-react";
 import { BOOKING_URL } from "@/lib/site";
 
 /**
- * The fragments.
+ * The two fragments that are ours rather than the portal's.
  *
- * Five of the seven are real crops of the PitchKast client portal — the
- * approval queue, the content calendar, the activity feed, the schedule and
- * the counters across the top. They are cut at build time by
- * `scripts/build-portal-crops.mjs`; the rectangles live there.
- *
- * That choice is the whole reason there are no charts here. The system asks
- * for "floating product artifacts", and the honest way to show a product is
- * to show the product — a hand-drawn analytics card would have meant
- * inventing numbers this company has not published.
- *
- * The remaining two are ours: the single peach surface the system permits per
- * page, and the composer, which is the one thing on the page a visitor is
- * actually being asked to do.
+ * The portal surfaces live in `portal.tsx`. These are the single peach card
+ * the system permits per page, and the composer.
  */
-
-/* ── Portal crops ──────────────────────────────────────────────
-   Every one is a white artifact card with the screenshot inset at
-   the system's 12px image radius. Intrinsic dimensions are
-   declared so nothing reflows as the images decode — a grid that
-   settles late is exactly what made the previous build's gallery
-   land lopsided. */
-
-type Crop = {
-  /** File in `public/portal/`, without the extension. */
-  name: string;
-  width: number;
-  height: number;
-  /** What the fragment shows. Read aloud, so it says the meaning. */
-  alt: string;
-};
-
-const CROPS = {
-  stats: {
-    name: "stats",
-    width: 1204,
-    height: 122,
-    alt: "Portal counters: 14 posts, 2 published, 7 waiting on you, next post 24 September.",
-  },
-  queue: {
-    name: "queue",
-    width: 1196,
-    height: 252,
-    alt: "The portal's approval queue — five drafts, each tagged with its platform and its review state.",
-  },
-  upcoming: {
-    name: "upcoming",
-    width: 542,
-    height: 298,
-    alt: "The portal's schedule — five approved posts with their publication dates.",
-  },
-  calendar: {
-    name: "calendar",
-    width: 1092,
-    height: 448,
-    alt: "The portal's content calendar — a month of scheduled posts, colour-coded by state.",
-  },
-  feed: {
-    name: "feed",
-    width: 548,
-    height: 420,
-    alt: "The portal's activity feed — every state change on every post, timestamped.",
-  },
-} satisfies Record<string, Crop>;
-
-export type CropName = keyof typeof CROPS;
-
-export function PortalCard({ crop }: { crop: CropName }) {
-  const { name, width, height, alt } = CROPS[crop];
-  return (
-    <div className="rounded-[var(--radius-elevated)] bg-paper p-2 shadow-artifact">
-      <img
-        src={`/portal/${name}.webp`}
-        alt={alt}
-        width={width}
-        height={height}
-        className="block h-auto w-full rounded-[var(--radius-image)]"
-      />
-    </div>
-  );
-}
 
 /* ── The accent ────────────────────────────────────────────────
    The single peach surface on the page. Sienna is its ink and

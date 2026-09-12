@@ -1,10 +1,13 @@
 import { Button } from "@/components/steep/Button";
 import { Container } from "@/components/steep/Container";
+import { ComposerCard, RaisedCard } from "@/components/steep/hero/artifacts";
 import {
-  ComposerCard,
-  PortalCard,
-  RaisedCard,
-} from "@/components/steep/hero/artifacts";
+  PortalActivity,
+  PortalCalendar,
+  PortalCounters,
+  PortalEditor,
+  PortalPosts,
+} from "@/components/steep/hero/portal";
 import { BOOKING_URL } from "@/lib/site";
 
 /**
@@ -39,7 +42,7 @@ type Scatter = React.CSSProperties & {
 };
 
 const SCATTER: Record<
-  "stats" | "queue" | "upcoming" | "calendar" | "feed" | "raised" | "composer",
+  "counters" | "posts" | "editor" | "calendar" | "activity" | "raised" | "composer",
   Scatter
 > = {
   /* These are not guesses. The assembled dashboard was measured at 1440×900
@@ -51,13 +54,13 @@ const SCATTER: Record<
      dashboard, which is fixed at 980px. On a wider display the fragments
      spread further out; on a narrower one they close in, and the composition
      holds at both. */
-  stats: { "--ax": "0vw", "--ay": "-25vh", "--ar": "1.5deg", "--as": "1.06" },
-  queue: { "--ax": "-24vw", "--ay": "-9vh", "--ar": "-3deg", "--as": "1.08" },
-  upcoming: { "--ax": "19vw", "--ay": "-17vh", "--ar": "3.5deg", "--as": "1.1" },
-  calendar: { "--ax": "-23vw", "--ay": "17vh", "--ar": "-2deg", "--as": "1.06" },
-  feed: { "--ax": "20vw", "--ay": "6vh", "--ar": "4deg", "--as": "1.08" },
-  raised: { "--ax": "10vw", "--ay": "6vh", "--ar": "-1.5deg", "--as": "1.05" },
-  composer: { "--ax": "16vw", "--ay": "5vh", "--ar": "2.5deg", "--as": "1.05" },
+  counters: { "--ax": "0vw", "--ay": "-17vh", "--ar": "1.5deg", "--as": "1.05" },
+  posts: { "--ax": "-27vw", "--ay": "1vh", "--ar": "-3deg", "--as": "1.08" },
+  editor: { "--ax": "21vw", "--ay": "-10vh", "--ar": "3.5deg", "--as": "1.1" },
+  calendar: { "--ax": "-27vw", "--ay": "14vh", "--ar": "-2deg", "--as": "1.06" },
+  activity: { "--ax": "21vw", "--ay": "3vh", "--ar": "4deg", "--as": "1.08" },
+  raised: { "--ax": "12vw", "--ay": "9vh", "--ar": "-1.5deg", "--as": "1.05" },
+  composer: { "--ax": "15vw", "--ay": "9vh", "--ar": "2.5deg", "--as": "1.05" },
 };
 
 export function Hero() {
@@ -94,23 +97,17 @@ export function Hero() {
         {/* ── The dashboard ──────────────────────────────────── */}
         <Container className="assembly__dashboard">
           <div className="relative mx-auto w-full max-w-[980px]">
-            {/* The shell is chrome only — ground, edge, title bar. It sits
-                behind the fragments and arrives last, which is what turns a
-                scatter of cards into one surface. */}
-            <div className="assembly__shell absolute inset-0 overflow-hidden rounded-[var(--radius-elevated)] border border-hairline bg-fog shadow-artifact">
-              <div className="flex h-11 items-center gap-1.5 px-4">
-                <span aria-hidden="true" className="size-2.5 rounded-full bg-hairline" />
-                <span aria-hidden="true" className="size-2.5 rounded-full bg-hairline" />
-                <span aria-hidden="true" className="size-2.5 rounded-full bg-hairline" />
-                <span className="ml-3 text-[13px] font-[430] text-ash">
-                  PitchKast client portal
-                </span>
-              </div>
-            </div>
+            {/* The shell is the ground the fragments land on — nothing
+                else. It carried a window title bar and a sidebar copied from
+                the site's navigation; both are gone. The fragments are the
+                portal, and framing them in a second, invented chrome made
+                the whole thing read as a picture of an app rather than as
+                the app. */}
+            <div className="assembly__shell absolute inset-0 rounded-[var(--radius-card)] border border-hairline bg-fog" />
 
             {/* The fragments. They are laid out beside the shell rather than
                 inside it, so the two can be revealed independently. */}
-            <div className="relative grid grid-cols-1 gap-3 p-3 pt-14 sm:grid-cols-3">
+            <div className="relative grid grid-cols-1 gap-3 p-3 sm:grid-cols-3">
               {/* Four of the five crops are hidden on a phone, and that is a
                   legibility decision rather than a performance one: a 1196px
                   screenshot rendered into a 302px column puts the portal's
@@ -119,34 +116,34 @@ export function Hero() {
                   unreadable parts taken out. */}
               <div
                 className="assembly__artifact hidden sm:col-span-3 sm:block"
-                style={SCATTER.stats}
+                style={SCATTER.counters}
               >
-                <PortalCard crop="stats" />
+                <PortalCounters />
               </div>
 
               <div
                 className="assembly__artifact hidden sm:col-span-2 sm:block"
-                style={SCATTER.queue}
+                style={SCATTER.posts}
               >
-                <PortalCard crop="queue" />
+                <PortalPosts />
               </div>
 
-              <div className="assembly__artifact" style={SCATTER.upcoming}>
-                <PortalCard crop="upcoming" />
+              <div className="assembly__artifact" style={SCATTER.editor}>
+                <PortalEditor />
               </div>
 
               <div
                 className="assembly__artifact hidden sm:col-span-2 sm:block"
                 style={SCATTER.calendar}
               >
-                <PortalCard crop="calendar" />
+                <PortalCalendar />
               </div>
 
               <div
                 className="assembly__artifact hidden sm:block"
-                style={SCATTER.feed}
+                style={SCATTER.activity}
               >
-                <PortalCard crop="feed" />
+                <PortalActivity />
               </div>
 
               <div
