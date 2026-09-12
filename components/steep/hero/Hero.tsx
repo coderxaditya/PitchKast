@@ -117,7 +117,7 @@ export function Hero() {
                 shorthand wins over the longhand in the generated stylesheet,
                 so the top padding was silently 12px and the first card sat on
                 top of the greeting. */}
-            <div className="relative grid grid-cols-1 gap-3 px-3 pt-16 pb-3 sm:grid-cols-3">
+            <div className="relative grid grid-cols-1 gap-3 px-3 pt-14 pb-3 sm:grid-cols-3">
               {/* Four of the five portal surfaces are hidden on a phone, and
                   that is a legibility decision: the post table's four columns
                   and the calendar's seven do not survive a 300px column at any

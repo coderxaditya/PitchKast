@@ -15,7 +15,7 @@ import { BOOKING_URL } from "@/lib/site";
    this card on any other ground. */
 export function RaisedCard() {
   return (
-    <div className="flex h-full flex-col justify-center rounded-[var(--radius-card)] bg-peach px-6 py-5 text-sienna">
+    <div className="flex h-full flex-col justify-center rounded-[var(--radius-card)] bg-peach px-6 py-4 text-sienna">
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <p className="font-display text-[40px] leading-none tracking-[-0.015em] tabular-nums">
           $40M+

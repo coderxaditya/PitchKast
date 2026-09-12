@@ -106,6 +106,9 @@
 :root {
   --shell: 1200px;
   --section-gap: 80px;
+  /* The header's own height. The pinned hero reads it to know where the
+     visible part of the viewport actually starts — see the assembly. */
+  --header-h: 72px;
 }
 
 html {
@@ -274,7 +277,16 @@ body {
 }
 
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+  /* Short windows keep the flow layout, and that is the point of the
+     height condition. A dashboard pinned in a space it does not fit
+     is worse than no pinning at all: the visitor gets a surface
+     cropped at both ends that no amount of scrolling will reveal,
+     which is exactly what this section was doing. 50rem is the
+     assembled dashboard (682px) plus the header and its margins,
+     measured rather than guessed. Below it the page falls back to
+     the same layout Firefox gets — headline, then the dashboard
+     underneath in normal flow, whole and scrollable. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) and (min-height: 50rem) {
     /* Scroll distance the assembly is spread over. The stage pins for the
        whole of it, so this is also how long the dashboard holds once
        assembled. */
@@ -284,15 +296,18 @@ body {
 
     .assembly__stage {
       position: sticky;
-      top: 0;
-      height: 100svh;
-      /* Tighter than the flow layout's. The assembled dashboard is a little
-         taller than the space a pinned viewport leaves once the page's
-         normal section padding is taken off it, and a grid item that
-         overflows its area is laid out from the start edge rather than
-         centred — so the padding comes straight off the bottom of the
-         dashboard rather than off both ends. */
-      padding-block: 2rem;
+      /* Pinned below the header, not under it. At `top: 0` the stage filled
+         the whole viewport and the sticky bar then covered its first 72px —
+         which is exactly the height of the dashboard's greeting, so the
+         assembled view opened on a half-cut line. Taking the header off both
+         the offset and the height makes the pinned area the part of the
+         viewport a visitor can actually see. */
+      top: var(--header-h);
+      height: calc(100svh - var(--header-h));
+      /* Small, because every pixel here comes straight off the dashboard: a
+         grid item taller than its area is laid out from the start edge, so
+         this padding is not shared between the two ends. */
+      padding-block: 1rem;
       /* One cell, both children in it: copy sits over the dashboard rather
          than above it. */
       grid-template-areas: "cell";

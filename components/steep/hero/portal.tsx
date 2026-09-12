@@ -160,7 +160,7 @@ export function PortalCounters() {
       {COUNTS.map((c) => (
         <div
           key={c.label}
-          className="portal-raise-sm rounded-[14px] bg-[var(--portal-ground)] px-3 py-2.5"
+          className="portal-raise-sm rounded-[14px] bg-[var(--portal-ground)] px-3 py-2"
         >
           <p
             className={`font-portal-display text-[20px] leading-none font-extrabold tracking-[-0.02em] ${
@@ -199,7 +199,7 @@ export function PortalGreeting() {
 }
 
 /* ── The client's posts ────────────────────────────────────────
-   The table a client's page opens on. Five of the fourteen rows —
+   The table a client's page opens on. Three of the fourteen rows —
    the panel is as tall as the column beside it allows, and a
    table that runs off the bottom of its own card reads as a
    scroll rather than as a crop. */
@@ -215,7 +215,7 @@ export function PortalPosts() {
           <span>Expected</span>
         </div>
 
-        {POSTS.slice(0, 5).map((post) => (
+        {POSTS.slice(0, 3).map((post) => (
           <div
             key={post.title}
             className="portal-row grid grid-cols-[1fr_88px_112px_72px] items-center gap-2 px-3 py-[7px]"
@@ -240,10 +240,11 @@ export function PortalPosts() {
    one card, which is why it is here rather than the admin-side
    editor it replaces.
 
-   Nothing in it is a real control. The buttons are spans and the
-   comment box is a styled div: a page decoration that accepts a
-   click, or a textarea that swallows what someone types, is
-   worse than one that plainly does neither.
+   Neither button is a real control — they are spans. A page
+   decoration that accepts a click is worse than one that plainly
+   does not. The portal's comment box sat under this and has been
+   dropped: the card's job is the decision, and every row here is
+   height the pinned dashboard has to find.
 
    The purple is the portal's brand and it is the one colour on
    this page from outside the system's palette. It earns that by
@@ -280,15 +281,6 @@ export function PortalApproval() {
             </span>
           </div>
         </div>
-
-        <div className="mt-auto">
-          <p className="pb-1.5 font-portal-display text-[9px] font-bold tracking-[0.13em] text-[var(--portal-muted)] uppercase">
-            Comments
-          </p>
-          <span className="portal-sink block rounded-[12px] px-3 py-[7px] text-[10px] text-[var(--portal-label)]">
-            Add a comment
-          </span>
-        </div>
       </div>
     </Panel>
   );
@@ -314,9 +306,9 @@ export function PortalCalendar() {
       day: daysBefore - firstWeekday + 1 + i,
       inMonth: false,
     })),
-    /* Four weeks of November. The month runs to 30; the rest is trimmed so
-       the panel sits level with the one beside it. */
-    ...Array.from({ length: 28 - firstWeekday }, (_, i) => ({
+    /* Three weeks of November. The month runs to 30; the rest is trimmed to
+       keep the assembled dashboard inside a pinned viewport. */
+    ...Array.from({ length: 21 - firstWeekday }, (_, i) => ({
       day: i + 1,
       inMonth: true,
     })),
@@ -338,8 +330,8 @@ export function PortalCalendar() {
       <div className="portal-raise-sm flex-1 overflow-hidden rounded-[14px] bg-[var(--portal-ground)]">
         <div
           className="grid h-full grid-cols-7"
-          /* One auto row for the weekday header, then four equal weeks. */
-          style={{ gridTemplateRows: "auto repeat(4, minmax(42px, 1fr))" }}
+          /* One auto row for the weekday header, then three equal weeks. */
+          style={{ gridTemplateRows: "auto repeat(3, minmax(42px, 1fr))" }}
         >
           {DOW.map((d) => (
             <div
@@ -395,8 +387,6 @@ const ACTIVITY: { move: string; post: string; when: string }[] = [
   { move: "moved a post from approved to published", post: "How to Turn Attention Into a Sales Pipeline", when: "38 minutes ago" },
   { move: "moved a post from awaiting review to approved", post: "How to Turn Attention Into a Sales Pipeline", when: "38 minutes ago" },
   { move: "moved a post from approved to published", post: "Why More Leads Won't Fix a Broken Sales Process", when: "38 minutes ago" },
-  { move: "moved a post from approved to scheduled", post: "What's Actually Holding Your Business Back From Growth", when: "about 1 hour ago" },
-  { move: "moved a post from awaiting review to approved", post: "How to Build a Predictable B2B Growth Pipeline", when: "about 1 hour ago" },
 ];
 
 export function PortalActivity() {
