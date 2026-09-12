@@ -272,6 +272,11 @@ body {
 
 .assembly__stage {
   display: grid;
+  /* One column, pinned to the stage's own width. Without this the column
+     sizes to its widest item, and the dashboard is 980px wide at every
+     viewport — so on a phone the grid grew to 1028px and the headline,
+     centred in that, drifted off the right edge with it. */
+  grid-template-columns: minmax(0, 100%);
   justify-items: center;
   gap: 64px;
 }
@@ -283,10 +288,14 @@ body {
      cropped at both ends that no amount of scrolling will reveal,
      which is exactly what this section was doing. 50rem is the
      assembled dashboard (682px) plus the header and its margins,
-     measured rather than guessed. Below it the page falls back to
-     the same layout Firefox gets — headline, then the dashboard
-     underneath in normal flow, whole and scrollable. */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) and (min-height: 50rem) {
+     measured rather than guessed.
+
+     The width condition is 64rem rather than the tablet breakpoint
+     because the reference does not pin on a tablet either: below
+     desktop it is plain document flow — headline, then the
+     dashboard underneath — which is also what Firefox and
+     reduced-motion get. One fallback, not three. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 64rem) and (min-height: 50rem) {
     /* Scroll distance the assembly is spread over. The stage pins for the
        whole of it, so this is also how long the dashboard holds once
        assembled. */

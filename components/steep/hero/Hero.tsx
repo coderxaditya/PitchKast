@@ -95,9 +95,21 @@ export function Hero() {
           </div>
         </Container>
 
-        {/* ── The dashboard ──────────────────────────────────── */}
+        {/* ── The dashboard ──────────────────────────────────────
+            980px wide at every viewport, and deliberately so. The reference
+            does not reflow this surface on a phone — it shows the real
+            dashboard at its real size and lets it run off the right edge, and
+            that reads as a product far better than the same panels reflowed
+            into one narrow column, where the post table's four columns and
+            the calendar's seven collapse into something nobody can read.
+
+            `mx-auto` still centres it on a wide screen: auto margins that
+            would resolve negative are dropped to zero, so on a narrow one the
+            surface simply starts at the container's left gutter and bleeds
+            past the right. The stage clips it, so the page never scrolls
+            sideways. */}
         <Container className="assembly__dashboard">
-          <div className="relative mx-auto w-full max-w-[980px]">
+          <div className="relative mx-auto w-[980px]">
             {/* The shell is the ground the fragments land on — nothing
                 else. It carried a window title bar and a sidebar copied from
                 the site's navigation; both are gone. The fragments are the
@@ -117,22 +129,16 @@ export function Hero() {
                 shorthand wins over the longhand in the generated stylesheet,
                 so the top padding was silently 12px and the first card sat on
                 top of the greeting. */}
-            <div className="relative grid grid-cols-1 gap-3 px-3 pt-14 pb-3 sm:grid-cols-3">
-              {/* Four of the five portal surfaces are hidden on a phone, and
-                  that is a legibility decision: the post table's four columns
-                  and the calendar's seven do not survive a 300px column at any
-                  type size worth reading. What is left — the greeting, the
-                  approval card, the accent and the call to action — is the
-                  same page with the parts that cannot be read taken out. */}
+            <div className="relative grid grid-cols-3 gap-3 px-3 pt-14 pb-3">
               <div
-                className="assembly__artifact hidden sm:col-span-3 sm:block"
+                className="assembly__artifact col-span-3"
                 style={SCATTER.counters}
               >
                 <PortalCounters />
               </div>
 
               <div
-                className="assembly__artifact hidden sm:col-span-2 sm:block"
+                className="assembly__artifact col-span-2"
                 style={SCATTER.posts}
               >
                 <PortalPosts />
@@ -143,21 +149,18 @@ export function Hero() {
               </div>
 
               <div
-                className="assembly__artifact hidden sm:col-span-2 sm:block"
+                className="assembly__artifact col-span-2"
                 style={SCATTER.calendar}
               >
                 <PortalCalendar />
               </div>
 
-              <div
-                className="assembly__artifact hidden sm:block"
-                style={SCATTER.activity}
-              >
+              <div className="assembly__artifact" style={SCATTER.activity}>
                 <PortalActivity />
               </div>
 
               <div
-                className="assembly__artifact sm:col-span-2"
+                className="assembly__artifact col-span-2"
                 style={SCATTER.raised}
               >
                 <RaisedCard />
