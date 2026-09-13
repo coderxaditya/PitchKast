@@ -1,4 +1,4 @@
-import { faqSelection } from "@/components/faq/selection";
+import { faqSelection } from "@/components/steep/faq/selection";
 import { SITE_URL } from "@/lib/seo";
 
 /**

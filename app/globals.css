@@ -415,6 +415,32 @@ body {
 }
 
 /* ============================================================
+   FAQ
+   ------------------------------------------------------------
+   The answers open with a height animation on the native
+   `<details>`, through its `::details-content` part. Animating to
+   `auto` needs `interpolate-size`, which is new. A browser without
+   either opens the answer instantly, which is simply what
+   `<details>` does, so nothing breaks on the way down.
+   ============================================================ */
+
+.faq-item {
+  interpolate-size: allow-keywords;
+}
+
+.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.4s cubic-bezier(0, 0, 0.2, 1),
+    content-visibility 0.4s allow-discrete;
+}
+
+.faq-item[open]::details-content {
+  block-size: auto;
+}
+
+/* ============================================================
    Portal surfaces
    ------------------------------------------------------------
    The hero's fragments are rebuilt renderings of the PitchKast
