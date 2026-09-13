@@ -25,7 +25,8 @@ import { STORIES } from "./stories";
  * The logos are a real tab list with arrow keys, Home and End. The quote,
  * subhead and photograph cross-fade rather than swap, so nothing reflows as
  * the story changes: all four are laid in one grid cell and only the current
- * one is visible and announced.
+ * one is visible and announced. Logos use transparent black cuts of the client
+ * marks, so nothing behind them shows through as a box.
  *
  * Below `md` it becomes the reference's phone carousel: one card per story
  * with the photograph on top, then the logo, quote and subhead.
@@ -156,10 +157,12 @@ export function CustomerStories() {
                     height={story.client.height}
                     loading="lazy"
                     decoding="async"
-                    /* The marks are black on a white field, not transparent.
-                       Multiply turns the white into the band's own sky, so no
-                       logo shows a pale box. */
-                    className="h-8 w-auto max-w-[min(120px,100%)] object-contain mix-blend-multiply"
+                    /* The transparent, solid-black cuts. The originals carry an
+                       opaque white field, and blending it away did not survive
+                       the 40% opacity on unselected logos: opacity isolates the
+                       image, so it blended against nothing and the white box
+                       came back on every logo except the current one. */
+                    className="h-8 w-auto max-w-[min(120px,100%)] object-contain"
                   />
                 </button>
               ))}
@@ -218,7 +221,7 @@ export function CustomerStories() {
                   height={story.client.height}
                   loading="lazy"
                   decoding="async"
-                  className="mt-6 h-7 w-auto max-w-[120px] object-contain object-left mix-blend-multiply"
+                  className="mt-6 h-7 w-auto max-w-[120px] object-contain object-left"
                 />
                 <p className="mt-4 font-display text-heading-sm text-ink">
                   &ldquo;{story.quote}&rdquo;

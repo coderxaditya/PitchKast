@@ -12,7 +12,8 @@
  * companies' mouths, so every quote and subhead is a bracketed placeholder
  * until the real ones arrive.
  *
- * The four logos are the first four wide marks from the client strip, and the
+ * The four logos are the first four wide marks from the client strip, in their
+ * transparent solid-black cuts from `scripts/build-logo-ink.mjs`, and the
  * four photographs are from the gallery. Both are stand-ins, chosen for fit
  * rather than because these clients gave stories. Replace each entry's fields
  * with the client who actually said it.
@@ -32,25 +33,25 @@ export const STORIES: Story[] = [
   {
     quote: "[Client quote, in their words. One or two lines.]",
     subhead: "[What changed for them, in one line]",
-    client: { name: "PlayBox TV", logo: "/logos/logo-01.png", width: 1008, height: 300 },
+    client: { name: "PlayBox TV", logo: "/logos/ink/logo-01.png", width: 1008, height: 300 },
     photo: { src: "/gallery/gallery-01.jpeg", width: 2048, height: 959, alt: "PitchKast gallery photograph 1" },
   },
   {
     quote: "[Client quote, in their words. One or two lines.]",
     subhead: "[What changed for them, in one line]",
-    client: { name: "Cotton Culture", logo: "/logos/logo-02.png", width: 809, height: 300 },
+    client: { name: "Cotton Culture", logo: "/logos/ink/logo-02.png", width: 809, height: 300 },
     photo: { src: "/gallery/gallery-03.jpeg", width: 1280, height: 963, alt: "PitchKast gallery photograph 3" },
   },
   {
     quote: "[Client quote, in their words. One or two lines.]",
     subhead: "[What changed for them, in one line]",
-    client: { name: "DBMCI One", logo: "/logos/logo-03.png", width: 735, height: 300 },
+    client: { name: "DBMCI One", logo: "/logos/ink/logo-03.png", width: 735, height: 300 },
     photo: { src: "/gallery/gallery-06.jpeg", width: 1280, height: 719, alt: "PitchKast gallery photograph 6" },
   },
   {
     quote: "[Client quote, in their words. One or two lines.]",
     subhead: "[What changed for them, in one line]",
-    client: { name: "Ice Global", logo: "/logos/logo-05.png", width: 697, height: 300 },
+    client: { name: "Ice Global", logo: "/logos/ink/logo-05.png", width: 697, height: 300 },
     photo: { src: "/gallery/gallery-10.jpeg", width: 1280, height: 960, alt: "PitchKast gallery photograph 10" },
   },
 ];
