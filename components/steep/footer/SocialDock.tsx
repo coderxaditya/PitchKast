@@ -85,16 +85,24 @@ const DATA = {
   navbar: [{ href: "#home", icon: HomeIcon, label: "Home" }],
 }
 
+/**
+ * The social dock, restyled for a light footer.
+ *
+ * The component is the previous build's, kept as you asked: the same icons in
+ * the same order (Home, then LinkedIn, Instagram, X, email and WhatsApp), the
+ * same tooltips and the same magnification. What changed is only colour. It
+ * ships with shadcn's frosted look, which reads theme variables this page no
+ * longer defines, so every surface is stated here: a white bar with the
+ * system's hairline, ink icons, and a Mist wash on hover. No blur, because
+ * the system has none.
+ */
 export function SocialDock() {
   return (
     <div className="flex flex-col items-start justify-start">
       <TooltipProvider>
-        {/* Left-aligned in the footer rather than centred, and coloured for
-            this ground: the dock ships with shadcn's light tokens, which on a
-            near-black footer would paint dark icons on a dark bar. */}
         <Dock
           direction="middle"
-          className="ml-0 mt-0 border-white/20 bg-white/[0.04] text-white"
+          className="mt-0 ml-0 rounded-full border-hairline bg-paper text-ink backdrop-blur-none supports-backdrop-blur:bg-paper"
         >
           {DATA.navbar.map((item) => (
             <DockIcon key={item.label}>
@@ -105,7 +113,7 @@ export function SocialDock() {
                     aria-label={item.label}
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full text-white hover:bg-white/10 hover:text-white"
+                      "size-12 rounded-full text-ink hover:bg-mist hover:text-ink",
                     )}
                   >
                     <item.icon className="size-4" />
@@ -117,7 +125,7 @@ export function SocialDock() {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical" className="h-full bg-white/20" />
+          <Separator orientation="vertical" className="h-full bg-hairline" />
           {SOCIALS.map((social) => (
             <DockIcon key={social.name}>
               <Tooltip>
@@ -126,16 +134,14 @@ export function SocialDock() {
                     href={social.url}
                     aria-label={social.name}
                     /* Real destinations open in a new tab, matching the text
-                       links in the footer. A "#" placeholder opened in a new
-                       tab would spawn a blank copy of the page, and a mailto
-                       has no business opening one either. */
+                       links. A "#" placeholder opened in a new tab would spawn
+                       a blank copy of the page, and a mailto has no business
+                       opening one either. */
                     target={isExternal(social.url) ? "_blank" : undefined}
-                    rel={
-                      isExternal(social.url) ? "noopener noreferrer" : undefined
-                    }
+                    rel={isExternal(social.url) ? "noopener noreferrer" : undefined}
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full text-white hover:bg-white/10 hover:text-white"
+                      "size-12 rounded-full text-ink hover:bg-mist hover:text-ink",
                     )}
                   >
                     <social.icon className="size-4" />

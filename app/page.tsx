@@ -1,6 +1,7 @@
 import { About } from "@/components/steep/about/About";
 import { CaseStudies } from "@/components/steep/case-studies/CaseStudies";
 import { Faq } from "@/components/steep/faq/Faq";
+import Footer from "@/components/steep/footer/Footer";
 import { Gallery } from "@/components/steep/gallery/Gallery";
 import { Hero } from "@/components/steep/hero/Hero";
 import { Partners } from "@/components/steep/partners/Partners";
@@ -10,16 +11,10 @@ import { Team } from "@/components/steep/team/Team";
 import { Navbar } from "@/components/steep/Navbar";
 
 /**
- * The home page, mid-rebuild.
+ * The home page.
  *
- * This branch replaces the site section by section on the Steep system, and
- * the header, the landing block, the client strip, the case studies,
- * services, about, team, gallery and the FAQ have been rebuilt so far. The
- * footer is still in `components/` untouched and not mounted: it is written
- * against the previous design system's tokens, which no longer exist, so
- * rendering it here would show a band in a palette that has been deleted.
- *
- * It goes back into this file once it is rebuilt.
+ * Every section in reading order, all in normal document flow, rebuilt on the
+ * Steep system (`design/DESIGN.md`) with steep.app as the reference.
  */
 export default function Home() {
   return (
@@ -39,6 +34,7 @@ export default function Home() {
         <Gallery />
         <Faq />
       </main>
+      <Footer />
     </>
   );
 }
