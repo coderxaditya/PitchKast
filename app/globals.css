@@ -130,8 +130,10 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-html,
-body {
+/* The page ground lives on `html` alone. If `body` painted white as well, it
+   would sit above the hero's fixed wash, which is layered behind all content
+   at a negative z-index, and hide it. */
+html {
   background: var(--color-paper);
   color: var(--color-ink);
 }
@@ -514,6 +516,71 @@ body {
 .portal-row + .portal-row {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
   border-top: 1px solid var(--portal-line);
+}
+
+/* ============================================================
+   Hero wash
+   ------------------------------------------------------------
+   The soft colour behind the landing block, built as the
+   reference builds it: a fixed layer at the top of the viewport
+   that stays put while the page scrolls, so the pinned dashboard
+   assembles over a still wash. Every section after the hero has
+   its own ground and covers it as it scrolls up.
+
+   The reference paints the colour with a blurred photograph. This
+   recreates that photograph's colours rather than copying it:
+   large radial gradients are already soft-edged, so no blur filter
+   is needed. There is a peach glow right of centre below the headline,
+   rose through the middle, lavender to the left and a warm hint low on
+   the right, all over the reference's #F7F7F8-to-white base. The layer
+   fades out at the bottom into the page's own white.
+
+   The grain is the reference's too: fractal noise, desaturated and
+   hard-thresholded, overlay-blended at 60%. Without it a gradient
+   this soft bands visibly on 8-bit displays.
+   ============================================================ */
+
+.hero-wash {
+  background:
+    /* Positions are measured against the reference at 1440x900: the peach
+       peaks about 540px down, just under the subhead, which is 37% of this
+       1480px layer. */
+    radial-gradient(34% 30% at 61% 37%, rgba(249, 186, 164, 0.8), transparent 72%),
+    radial-gradient(28% 24% at 45% 26%, rgba(244, 200, 218, 0.55), transparent 72%),
+    radial-gradient(30% 32% at 10% 33%, rgba(212, 211, 244, 0.65), transparent 74%),
+    radial-gradient(26% 22% at 76% 52%, rgba(252, 222, 190, 0.55), transparent 72%),
+    linear-gradient(to bottom, #f7f7f8, #ffffff);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.hero-wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.91' numOctaves='2' seed='10' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The header is see-through over the wash at the top of the page, as the
+   reference's is, and fills with paper within the first 120px of scroll, so
+   by the time anything moves under it it has a ground again. Without scroll
+   timelines it simply stays paper. */
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: header-fill linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 120px;
+  }
+}
+
+@keyframes header-fill {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--color-paper);
+  }
 }
 
 /* ============================================================

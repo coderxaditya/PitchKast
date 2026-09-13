@@ -67,6 +67,15 @@ const SCATTER: Record<
 export function Hero() {
   return (
     <section id="home" aria-label="PitchKast" className="assembly relative">
+      {/* The colour wash, fixed behind everything. See "Hero wash" in
+          `globals.css`. Its height scales with the width below 987px, because
+          the glows are sized as percentages of the layer: at a fixed 1480px
+          on a 390px phone they stretched into tall, narrow streaks. */}
+      <div
+        aria-hidden="true"
+        className="hero-wash pointer-events-none fixed inset-x-0 top-0 -z-10 h-[min(1480px,150vw)]"
+      />
+
       <div className="assembly__stage overflow-hidden py-20 sm:py-24">
         {/* ── Copy ───────────────────────────────────────────── */}
         <Container className="assembly__copy relative z-10 text-center">

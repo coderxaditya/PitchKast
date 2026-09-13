@@ -13,10 +13,10 @@ import { BOOKING_URL, NAV_LINKS } from "@/lib/site";
  * Whisper-quiet, as the system asks: no shadow, no separator, no blur —
  * logo left, links centred, a text link and a filled pill on the right.
  *
- * It is sticky and therefore needs *some* ground to sit on, so it carries the
- * page's own paper rather than the transparency the reference describes. A
- * transparent bar over the hero's floating fragments would have the cards
- * sliding visibly under the navigation as they assemble.
+ * It is see-through at the very top, over the hero's colour wash, as the
+ * reference's is, and fills with paper within the first 120px of scroll (see
+ * "Hero wash" in `globals.css`). By the time the hero's fragments start moving
+ * the bar has its ground back, so nothing slides visibly beneath it.
  *
  * Navigation is plain anchors. `scroll-behavior: smooth` on the document does
  * the travelling, and a real href keeps middle-click, "open in new tab" and
@@ -42,7 +42,7 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 bg-paper">
+    <header className="site-header sticky top-0 z-50 bg-paper">
       <Container>
         <div className="flex h-[72px] items-center justify-between gap-6">
           {/* ── Lockup ── */}
