@@ -71,7 +71,7 @@ export const SERVICES: Service[] = [
       "Positioning and messaging shaped per market, from one core story.",
       "Sales material that matches how the conversation actually goes.",
       "Channels and partnerships opened where they make sense.",
-      "Work across time zones — around half our clients are outside India.",
+      "Work across time zones: around half our clients are outside India.",
       "A plan you can run with, not a deck you file away.",
     ],
   },
@@ -96,5 +96,5 @@ export const SERVICES_INTRO = {
   titleLead: "Everything Your Brand Needs, Under",
   titleAccent: "One Team",
   description:
-    "Each service stands on its own. Together they cover the whole path — building the product, telling the story, and putting it in front of the people who decide.",
+    "Each service stands on its own. Together they cover the whole path: building the product, telling the story, and putting it in front of the people who decide.",
 };

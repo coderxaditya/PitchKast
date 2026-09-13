@@ -338,6 +338,53 @@ body {
 }
 
 /* ============================================================
+   Service tabs
+   ------------------------------------------------------------
+   The reference's feature tabs: each tab carries a hairline, and
+   the open tab's hairline fills with a 2px ink bar. When the bar
+   finishes, the next tab opens.
+
+   The bar is the timer. Its `animationend` is what advances the
+   tabs, so there is no interval in JavaScript to keep in step with
+   what is drawn — and anything that pauses the bar pauses the
+   rotation with it, exactly in step:
+
+     · hovering the tabs or the panel, so nothing moves while
+       someone is reading it;
+     · the section being off screen (`data-running` is set by an
+       IntersectionObserver), so a visitor does not arrive at
+       tab four having never seen tab one;
+     · reduced motion, where the bar never runs at all and the
+       tabs change only when clicked.
+   ============================================================ */
+
+.svc-bar {
+  width: 0;
+}
+
+.svc[data-running="true"] .svc-bar {
+  animation: svc-progress var(--svc-dwell, 7s) linear forwards;
+}
+
+@media (hover: hover) {
+  .svc:has(.svc-tabs:hover, .svc-panels:hover) .svc-bar {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes svc-progress {
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc[data-running="true"] .svc-bar {
+    animation: none;
+  }
+}
+
+/* ============================================================
    Portal surfaces
    ------------------------------------------------------------
    The hero's fragments are rebuilt renderings of the PitchKast
