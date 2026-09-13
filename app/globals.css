@@ -39,6 +39,18 @@
   --color-peach: #fbe1d1; /* the single accent surface */
   --color-sienna: #5d2a1a; /* ink for peach surfaces only */
 
+  /* The feature-card set. The reference document calls the system
+     peach-and-brown only, but the live site's feature cards use two more
+     tint/ink pairs, and it is the live site this page follows. Every value
+     was read off steep.app's computed styles, not picked by eye. Each tint
+     is only ever paired with its own ink. */
+  --color-card: #f7f7f8; /* resting feature card — a step off Mist */
+  --color-card-ink: #4c4c4c;
+  --color-sky: #d3e3fc;
+  --color-sky-ink: #194168;
+  --color-sage: #d8efdf;
+  --color-sage-ink: #1f4720;
+
   /* ── Type scale ───────────────────────────────────────────
      The document specifies fixed pixel sizes, which is right for
      the widths it was measured at and unusable below them: 90px
