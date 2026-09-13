@@ -1,5 +1,6 @@
 import { About } from "@/components/steep/about/About";
 import { CaseStudies } from "@/components/steep/case-studies/CaseStudies";
+import { Gallery } from "@/components/steep/gallery/Gallery";
 import { Hero } from "@/components/steep/hero/Hero";
 import { Partners } from "@/components/steep/partners/Partners";
 import { Services } from "@/components/steep/services/Services";
@@ -11,9 +12,9 @@ import { Navbar } from "@/components/steep/Navbar";
  *
  * This branch replaces the site section by section on the Steep system, and
  * the header, the landing block, the client strip, the case studies,
- * services, about and team have been rebuilt so far. The rest of the page —
- * gallery, FAQ, footer — is still in `components/` untouched and not mounted:
- * those
+ * services, about, team and gallery have been rebuilt so far. The rest of the
+ * page, the FAQ and the footer, is still in `components/` untouched and not
+ * mounted: those
  * sections are written against the previous design system's tokens, which no
  * longer exist, so rendering them here would show half a page in a palette
  * that has been deleted.
@@ -31,6 +32,7 @@ export default function Home() {
         <Services />
         <About />
         <Team />
+        <Gallery />
       </main>
     </>
   );
