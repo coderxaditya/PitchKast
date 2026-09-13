@@ -21,9 +21,10 @@ import {
  * About has four different jobs and the reference already has a well-made
  * shape for each:
  *
- *  1. Who we are, on the reference's customer-story band: sky ground, a 44px
+ *  1. Who we are, laid out like the reference's customer-story band (a 44px
  *     serif statement, a black-and-white photograph beside it, and a bottom
- *     row where the reference lists customer logos and this lists the numbers.
+ *     row of numbers where the reference lists logos), on Paper White,
+ *     because the real customer-story band now sits directly above it.
  *  2. How we work and where, on the reference's dark band: the three stages
  *     as its closing column row, then the world map and the countries.
  *  3. What we hold to, on the reference's three-column feature row.
@@ -44,7 +45,10 @@ if (ARC_POINTS.length !== ARCS.length) {
 /* ── 1 · Who we are ─────────────────────────────────────────── */
 function Intro() {
   return (
-    <div className="bg-sky py-24 lg:py-32">
+    /* Paper, not sky. This band took the reference's customer-story ground
+       while there was no customer-story section; now there is one directly
+       above it, and two sky bands in a row read as one long band. */
+    <div className="bg-paper py-24 lg:py-32">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_380px] lg:gap-20">
           <div className="max-w-[640px]">

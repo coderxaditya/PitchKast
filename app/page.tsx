@@ -7,6 +7,7 @@ import { Hero } from "@/components/steep/hero/Hero";
 import { Partners } from "@/components/steep/partners/Partners";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { Services } from "@/components/steep/services/Services";
+import { CustomerStories } from "@/components/steep/stories/CustomerStories";
 import { Team } from "@/components/steep/team/Team";
 import { Navbar } from "@/components/steep/Navbar";
 
@@ -29,6 +30,7 @@ export default function Home() {
         <Partners />
         <CaseStudies />
         <Services />
+        <CustomerStories />
         <About />
         <Team />
         <Gallery />
