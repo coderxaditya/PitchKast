@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     default: SITE_TITLE,
     /* Child pages set only their own name; the brand is appended here so it
        can never be forgotten on a new page. */
-    template: `%s — ${SITE_NAME}`,
+    template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,

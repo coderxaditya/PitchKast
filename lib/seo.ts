@@ -34,7 +34,7 @@ export const SITE_NAME = "PitchKast";
  * 54 characters, inside the ~60 Google renders before truncating.
  */
 export const SITE_TITLE =
-  "PitchKast — Founder Branding & LinkedIn Lead Gen";
+  "PitchKast | Founder Branding & LinkedIn Lead Gen";
 
 /**
  * 155 characters, the practical ceiling before a snippet is cut.
@@ -44,7 +44,7 @@ export const SITE_TITLE =
  * way to have yours replaced with an arbitrary sentence from the page.
  */
 export const SITE_DESCRIPTION =
-  "PitchKast is an end-to-end growth partner for early-stage founders — founder branding, LinkedIn lead generation, product build, and fundraising decks.";
+  "PitchKast is an end-to-end growth partner for early-stage founders: founder branding, LinkedIn lead generation, product build, and fundraising decks.";
 
 /** Used as the OpenGraph/Twitter card image alt, and by the image route. */
 export const SITE_TAGLINE = "Strategic Growth Partners";
