@@ -22,8 +22,11 @@ import { BOOKING_URL, NAV_LINKS } from "@/lib/site";
  * the travelling, and a real href keeps middle-click, "open in new tab" and
  * the link semantics a scripted handler throws away.
  */
+/* `py-1 -my-1` takes each link's hittable box from 18px to 26px without
+   moving anything: the padding grows the target and the negative margin gives
+   the space back to the layout. */
 const NAV_LINK =
-  "text-[15px] font-[430] text-slate transition-colors duration-200 hover:text-ink";
+  "inline-block -my-1 py-1 text-[15px] font-[430] text-slate transition-colors duration-200 hover:text-ink";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -84,9 +87,14 @@ export function Navbar() {
               The system's pairing rule, in its lowest-emphasis form: a plain
               text link beside the filled pill. */}
           <div className="flex shrink-0 items-center gap-4">
+            {/* Hidden from 1024px to 1279px. The centred links appear at
+                1024px, and at that width they ended 7px short of this group;
+                this link is also the same destination as the nav's own "Case
+                Studies", so it is the one to drop while space is tight. On a
+                tablet there are no centred links, so it stays. */}
             <a
               href="#case-studies"
-              className={`${NAV_LINK} hidden sm:inline-block`}
+              className={`${NAV_LINK} hidden sm:inline-block lg:hidden xl:inline-block`}
             >
               Case studies
             </a>

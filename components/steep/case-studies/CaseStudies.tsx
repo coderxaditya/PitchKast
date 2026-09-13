@@ -142,7 +142,7 @@ function StudyCard({
             popoverTarget={`story-${study.id}`}
             /* Transparent while the card is closed but still in the tab
                order: tabbing to it is what opens the card for a keyboard. */
-            className="mt-4 inline-flex items-center gap-1.5 rounded-full text-[16px] font-[450] underline-offset-4 hover:underline"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-full py-1 text-[16px] font-[450] underline-offset-4 hover:underline"
           >
             Read the story
             <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />

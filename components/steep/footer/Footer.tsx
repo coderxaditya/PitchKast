@@ -18,7 +18,8 @@ import { SocialDock } from "./SocialDock";
  * floor while the negative margin gives the space straight back to the layout.
  */
 const LINK =
-  "inline-block -my-1 py-1 text-[16px] text-slate transition-colors duration-200 hover:text-ink";
+  /* `min-w-6` for the one-letter "X", which was an 11px-wide target. */
+  "inline-block -my-1 min-w-6 py-1 text-[16px] text-slate transition-colors duration-200 hover:text-ink";
 
 function Column({ title, children }: { title: string; children: React.ReactNode }) {
   return (
