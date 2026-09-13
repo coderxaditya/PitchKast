@@ -385,6 +385,36 @@ body {
 }
 
 /* ============================================================
+   World-map arcs
+   ------------------------------------------------------------
+   The draw-in, as a keyframe rather than a motion library. Every
+   arc carries `pathLength="1"`, which normalises its geometry, so
+   one dash length draws arcs of any real length and the stagger is
+   a per-path delay.
+   ============================================================ */
+
+.map-arc {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: map-arc-draw 1s ease-out forwards;
+}
+
+@keyframes map-arc-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The blanket reduced-motion rule collapses this animation to nothing, which
+   would leave every arc at `stroke-dashoffset: 1` (fully undrawn), so the map
+   would show pins and no connections. Drawn is the right resting state. */
+@media (prefers-reduced-motion: reduce) {
+  .map-arc {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================================
    Portal surfaces
    ------------------------------------------------------------
    The hero's fragments are rebuilt renderings of the PitchKast
