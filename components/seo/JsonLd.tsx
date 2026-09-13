@@ -1,4 +1,4 @@
-import { TEAM } from "@/components/team/people";
+import { TEAM } from "@/components/steep/team/people";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
