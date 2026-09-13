@@ -25,7 +25,7 @@ export function RaisedCard() {
         </p>
       </div>
       <p className="mt-2 text-[15px] font-[430] leading-snug opacity-80">
-        Decks, models and investor strategy — from the first conversation to the
+        Decks, models and investor strategy, from the first conversation to the
         close.
       </p>
     </div>

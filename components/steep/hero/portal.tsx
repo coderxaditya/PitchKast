@@ -397,7 +397,7 @@ export function PortalActivity() {
           <div key={i} className="portal-row px-2.5 py-[7px]">
             <p className="text-[9px] leading-[1.5] text-[var(--portal-muted)]">
               <span className="font-semibold text-[var(--portal-ink)]">Aditya</span>{" "}
-              {entry.move} —{" "}
+              {entry.move}:{" "}
               <span className="font-medium text-[var(--portal-brand)]">{entry.post}</span>
             </p>
             <p className="mt-0.5 text-[8px] text-[var(--portal-label)]">

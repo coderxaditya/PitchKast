@@ -78,7 +78,7 @@ export function Hero() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-[54ch] text-body font-[430] text-slate">
-            PitchKast is an end-to-end growth partner for early-stage founders —
+            PitchKast is an end-to-end growth partner for early-stage founders:
             founder branding, product build, LinkedIn lead generation, and the
             deck that raises the round.
           </p>

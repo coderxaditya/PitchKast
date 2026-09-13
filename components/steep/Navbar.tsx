@@ -46,7 +46,7 @@ export function Navbar() {
           <a
             href="#home"
             className="flex shrink-0 items-center gap-2"
-            aria-label="PitchKast — back to top"
+            aria-label="PitchKast, back to top"
             onClick={() => setOpen(false)}
           >
             <img
