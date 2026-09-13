@@ -13,8 +13,9 @@ import {
  * Case studies, as the reference's feature row.
  *
  * steep.app sets three cards side by side. One is open — wider, taller,
- * tinted, its closing sentence faded in — and clicking another opens that one
- * instead. Hover does nothing; it is a click. The geometry here is theirs,
+ * tinted, its closing sentence faded in. On their page a click opens it; here
+ * it is hover, and only ever one card across the whole section. The geometry
+ * is theirs,
  * measured off the live page at 1440px: open 422×528, closed 346×432, 32px
  * apart, bottom edges aligned, 24px radius, 32px padding, a 0.5s
  * cubic-bezier(0,0,0.2,1) on the change and a 0.1s delay on the text.
@@ -22,7 +23,7 @@ import {
  * Two things differ, both because of what is being shown:
  *
  *  · Six studies, not three. They sit as two rows of the reference's row, and
- *    each row keeps its own open card.
+ *    one card opens at a time across both.
  *
  *  · The reference's cards carry one sentence. A study carries up to five
  *    paragraphs, which no card of this size can hold. So a card shows the
@@ -31,37 +32,20 @@ import {
  *    the revenue note — in an overlay. Nothing has been cut; it has moved one
  *    click further in.
  *
- * No JavaScript. Which card is open is a native radio per row, styled through
- * `:has(:checked)`, so the choice survives without state, arrow keys move
- * between cards the way they move between any radios, and the component
- * stays a server component. The story overlay is the Popover API — light
- * dismiss and Escape for free.
+ * No JavaScript. Opening is `:hover` and `:focus-within`, and the rules that
+ * keep it to one card and stop the rows jumping are in `globals.css` under
+ * "Case study cards". The story overlay is the Popover API — light dismiss
+ * and Escape for free.
  *
  * Below `lg` it is one horizontal row you swipe, every card open, which is
  * what the reference does on a phone.
  */
 
 /* ── Tones ─────────────────────────────────────────────────────
-   One per column, in the reference's order. Whole class strings,
-   because Tailwind scans source text: a class assembled from a
-   tone name is never generated and ships as no style at all.
-
-   Below `lg` every card wears its tint. From `lg` a card is neutral
-   until its radio is checked. */
-const TONES = [
-  {
-    card: "bg-peach lg:bg-card lg:has-[:checked]:bg-peach",
-    ink: "text-sienna lg:text-card-ink lg:group-has-[:checked]:text-sienna",
-  },
-  {
-    card: "bg-sky lg:bg-card lg:has-[:checked]:bg-sky",
-    ink: "text-sky-ink lg:text-card-ink lg:group-has-[:checked]:text-sky-ink",
-  },
-  {
-    card: "bg-sage lg:bg-card lg:has-[:checked]:bg-sage",
-    ink: "text-sage-ink lg:text-card-ink lg:group-has-[:checked]:text-sage-ink",
-  },
-] as const;
+   One per column, in the reference's order. Each sets a tint and
+   its ink as custom properties; the card rules in `globals.css`
+   decide when they show. */
+const TONES = ["tone-peach", "tone-sky", "tone-sage"] as const;
 
 /** Split "6,300+ Organic Followers" into its figure and what it counts. */
 function figure(metric: string) {
@@ -102,78 +86,54 @@ function Results({ study }: { study: CaseStudy }) {
 }
 
 /* ── One card ──────────────────────────────────────────────────
-   The whole card is the label for its radio: the heading's label
-   is stretched over it with `::after`, so a click anywhere opens
-   the card, while the story button sits above that layer and
-   stays a button of its own. A label that *wrapped* the button
-   would be invalid markup, and a click on the button would be
-   read as a click on the label. */
+   The slot is the flex item and the hover target; it carries the
+   gutter as padding, so there is no dead gap between cards for the
+   cursor to fall into. `tabIndex={-1}` makes the card focusable by a
+   tap without adding it to the tab order — which is how a touch
+   screen at desktop width, with no hover, opens one. */
 function StudyCard({
   study,
   tone,
-  group,
-  defaultOpen,
 }: {
   study: CaseStudy;
   tone: (typeof TONES)[number];
-  group: string;
-  defaultOpen: boolean;
 }) {
-  const inputId = `study-${study.id}`;
-
   return (
-    <article
-      className={`group relative flex w-[84%] shrink-0 snap-start flex-col rounded-[var(--radius-card)] p-8 transition-[flex-grow,background-color] duration-500 ease-[cubic-bezier(0,0,0.2,1)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-ink sm:w-[46%] lg:aspect-[4/5] lg:w-auto lg:shrink lg:basis-0 lg:grow-[346] lg:overflow-hidden lg:has-[:checked]:grow-[422] ${tone.card}`}
-    >
-      <input
-        type="radio"
-        name={group}
-        id={inputId}
-        defaultChecked={defaultOpen}
-        className="sr-only"
-      />
-
-      <div
-        className={`transition-colors duration-500 ease-[cubic-bezier(0,0,0.2,1)] ${tone.ink}`}
+    <div className="cs-slot w-[84%] shrink-0 snap-start sm:w-[46%] lg:w-auto lg:shrink">
+      <article
+        tabIndex={-1}
+        className={`cs-card ${tone} flex h-full flex-col rounded-[var(--radius-card)] p-8 outline-none`}
       >
-        <p className="text-[14px] font-[430] opacity-70">
-          {study.category} · {study.location}
-        </p>
+        <div className="cs-ink">
+          <p className="text-[14px] font-[430] opacity-70">
+            {study.category} · {study.location}
+          </p>
 
-        <h3 className="mt-2.5 text-heading-sm font-[450]">
-          <label
-            htmlFor={inputId}
-            className="cursor-pointer after:absolute after:inset-0 after:content-['']"
-          >
-            {study.goal}
-          </label>
-        </h3>
+          <h3 className="mt-2.5 text-heading-sm font-[450]">{study.goal}</h3>
 
-        <div className="mt-6">
-          <Results study={study} />
+          <div className="mt-6">
+            <Results study={study} />
+          </div>
         </div>
-      </div>
 
-      {/* The part that fades in. Kept in layout rather than removed, so the
-          card does not jump when it opens — the reference does the same. */}
-      <div
-        className={`mt-auto pt-6 transition-opacity delay-100 duration-500 ease-[cubic-bezier(0,0,0.2,1)] lg:opacity-0 lg:group-has-[:checked]:opacity-100 ${tone.ink}`}
-      >
-        <p className="text-body leading-[1.35]">{study.paragraphs[0]}</p>
+        {/* The part that fades in. Kept in layout rather than removed, so the
+            card does not jump when it opens — the reference does the same. */}
+        <div className="cs-ink cs-reveal mt-auto pt-6">
+          <p className="text-body leading-[1.35]">{study.paragraphs[0]}</p>
 
-        <button
-          type="button"
-          popoverTarget={`story-${study.id}`}
-          /* Above the stretched label, so it is its own target. Hidden from
-             pointer and tab order while the card is closed on desktop —
-             `invisible`, not `hidden`, so it can fade with the text. */
-          className="relative z-10 mt-4 inline-flex items-center gap-1.5 text-[16px] font-[450] underline-offset-4 hover:underline lg:invisible lg:group-has-[:checked]:visible"
-        >
-          Read the story
-          <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
-        </button>
-      </div>
-    </article>
+          <button
+            type="button"
+            popoverTarget={`story-${study.id}`}
+            /* Transparent while the card is closed but still in the tab
+               order: tabbing to it is what opens the card for a keyboard. */
+            className="mt-4 inline-flex items-center gap-1.5 rounded-full text-[16px] font-[450] underline-offset-4 hover:underline"
+          >
+            Read the story
+            <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </div>
+      </article>
+    </div>
   );
 }
 
@@ -247,12 +207,7 @@ function Story({ study }: { study: CaseStudy }) {
 }
 
 export function CaseStudies() {
-  /* Two rows of three. Each row opens a different column by default, so the
-     section shows two tints rather than the same one twice. */
-  const rows = [
-    { studies: CASE_STUDIES.slice(0, 3), open: 0 },
-    { studies: CASE_STUDIES.slice(3, 6), open: 1 },
-  ];
+  const rows = [CASE_STUDIES.slice(0, 3), CASE_STUDIES.slice(3, 6)];
 
   return (
     <section
@@ -278,17 +233,11 @@ export function CaseStudies() {
             scroller. From `lg`, two rows of the reference's row. The scroller
             bleeds to the screen edges and keeps its snap points inside the
             gutter. */}
-        <div className="-mx-6 mt-16 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-4 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:mt-20 lg:block lg:space-y-8 lg:overflow-visible lg:px-0 lg:pb-0">
+        <div className="cs-rows -mx-6 mt-16 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-4 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:mt-20 lg:block lg:overflow-visible lg:px-0 lg:pb-0">
           {rows.map((row, r) => (
-            <div key={r} className="contents lg:flex lg:items-end lg:gap-8">
-              {row.studies.map((study, i) => (
-                <StudyCard
-                  key={study.id}
-                  study={study}
-                  tone={TONES[i]}
-                  group={`case-studies-row-${r}`}
-                  defaultOpen={i === row.open}
-                />
+            <div key={r} className="cs-row contents">
+              {row.map((study, i) => (
+                <StudyCard key={study.id} study={study} tone={TONES[i]} />
               ))}
             </div>
           ))}
