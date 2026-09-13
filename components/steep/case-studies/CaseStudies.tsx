@@ -1,6 +1,7 @@
 import { ArrowRight, X } from "lucide-react";
 
 import { Button } from "@/components/steep/Button";
+import { Carousel } from "@/components/steep/Carousel";
 import { Container } from "@/components/steep/Container";
 import { BOOKING_URL } from "@/lib/site";
 import {
@@ -37,8 +38,9 @@ import {
  * "Case study cards". The story overlay is the Popover API — light dismiss
  * and Escape for free.
  *
- * Below `lg` it is one horizontal row you swipe, every card open, which is
- * what the reference does on a phone.
+ * Below `lg` it is the reference's phone carousel (`Carousel`): one card at
+ * a time with its neighbours peeking in, only the card in view tinted, and
+ * previous/next buttons underneath.
  */
 
 /* ── Tones ─────────────────────────────────────────────────────
@@ -94,12 +96,26 @@ function Results({ study }: { study: CaseStudy }) {
 function StudyCard({
   study,
   tone,
+  position,
 }: {
   study: CaseStudy;
   tone: (typeof TONES)[number];
+  /** Where the card sits in the phone carousel, for its snap alignment. */
+  position: "first" | "middle" | "last";
 }) {
+  /* The reference's snapping: the first card rests against the left gutter,
+     the last against the right, and every card between centres with both
+     neighbours peeking in. */
+  const snap =
+    position === "first" ? "snap-start" : position === "last" ? "snap-end" : "snap-center";
+
   return (
-    <div className="cs-slot w-[84%] shrink-0 snap-start sm:w-[46%] lg:w-auto lg:shrink">
+    <div
+      /* Marked current before the carousel's script runs, so the first paint
+         already shows the first card tinted rather than a row of grey. */
+      data-active={position === "first" ? "" : undefined}
+      className={`cs-slot w-[84%] shrink-0 sm:w-[60%] lg:w-auto lg:shrink ${snap}`}
+    >
       <article
         tabIndex={-1}
         className={`cs-card ${tone} flex h-full flex-col rounded-[var(--radius-card)] p-8 outline-none`}
@@ -228,20 +244,34 @@ export function CaseStudies() {
           </p>
         </div>
 
-        {/* Below `lg`, one swipeable row: the rows dissolve with
-            `display: contents`, so all six cards become children of the
-            scroller. From `lg`, two rows of the reference's row. The scroller
+        {/* Below `lg`, the reference's phone carousel: the rows dissolve with
+            `display: contents`, so all six cards become slides of one row,
+            with the previous/next buttons underneath. From `lg`, two rows of
+            the reference's desktop row, and the buttons are hidden. The row
             bleeds to the screen edges and keeps its snap points inside the
             gutter. */}
-        <div className="cs-rows -mx-6 mt-16 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-4 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:mt-20 lg:block lg:overflow-visible lg:px-0 lg:pb-0">
+        <Carousel
+          label="Case studies"
+          slideSelector=".cs-slot"
+          className="cs-rows -mx-6 mt-16 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:mt-20 lg:block lg:overflow-visible lg:px-0"
+          controlsClassName="mt-6 flex gap-4 lg:hidden"
+        >
           {rows.map((row, r) => (
             <div key={r} className="cs-row contents">
-              {row.map((study, i) => (
-                <StudyCard key={study.id} study={study} tone={TONES[i]} />
-              ))}
+              {row.map((study, i) => {
+                const n = r * 3 + i;
+                return (
+                  <StudyCard
+                    key={study.id}
+                    study={study}
+                    tone={TONES[i]}
+                    position={n === 0 ? "first" : n === CASE_STUDIES.length - 1 ? "last" : "middle"}
+                  />
+                );
+              })}
             </div>
           ))}
-        </div>
+        </Carousel>
       </Container>
 
       {CASE_STUDIES.map((study) => (

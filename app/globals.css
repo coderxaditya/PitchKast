@@ -208,16 +208,30 @@ body {
    keeps its height whatever is open" — and those read far better
    as selectors than as a wall of arbitrary variants.
 
-   Below 64rem every card is simply open, in a swipeable row.
+   Below 64rem it is the reference's phone carousel instead: one
+   card at a time, every card's text showing, and only the card in
+   view wearing its tint while the neighbours peeking in stay grey.
+   Which card is in view comes from `Carousel`, as `data-active`.
    ============================================================ */
 
 .cs-card {
   --ease: cubic-bezier(0, 0, 0.2, 1);
-  background: var(--tint);
+  background: var(--color-card);
+  transition: background-color 0.5s var(--ease);
 }
 
 .cs-ink {
-  color: var(--ink);
+  color: var(--color-card-ink);
+  transition: color 0.5s var(--ease);
+}
+
+@media (max-width: 63.999rem) {
+  .cs-slot[data-active] .cs-card {
+    background: var(--tint);
+  }
+  .cs-slot[data-active] .cs-ink {
+    color: var(--ink);
+  }
 }
 
 .tone-peach { --tint: var(--color-peach); --ink: var(--color-sienna); }

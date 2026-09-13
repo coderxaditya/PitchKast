@@ -68,7 +68,10 @@ export function ServiceTabs({ services }: { services: Service[] }) {
     <div
       ref={rootRef}
       data-running={running}
-      className="svc mt-14 flex flex-col gap-10 lg:mt-20 lg:flex-row lg:items-center lg:gap-12"
+      /* Desktop only. Below `lg` the reference drops its tabs for a carousel,
+         which `Services` renders instead; with this element not displayed the
+         observer never sees it intersect, so the rotation never runs there. */
+      className="svc mt-20 hidden lg:flex lg:flex-row lg:items-center lg:gap-12"
     >
       {/* ── Tabs ─────────────────────────────────────────────── */}
       <div
