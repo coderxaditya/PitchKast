@@ -119,8 +119,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
 /** Section header copy, kept beside the studies it introduces. */
 export const CASE_STUDIES_INTRO = {
-  eyebrow: "Track Record",
-  title: "Proven Growth",
-  description:
-    "See how we help founders turn ideas into credibility. We don't just build profiles, we build positioning that scales.",
+  eyebrow: "Case Studies",
+  titleLead: "Results that",
+  titleAccent: "speak for themselves",
 };

@@ -20,12 +20,16 @@ export type Service = {
       eight words, which is a paragraph in a menu. */
   menuName: string;
   points: string[];
+  /** A result shown beside the item in the navbar dropdown. Only set where a
+      real figure backs it: the case studies or the hero's raise total. */
+  badge?: string;
 };
 
 export const SERVICES: Service[] = [
   {
     name: "Founder & Company Branding Across Social Media Platforms",
     menuName: "Founder & Company Branding",
+    badge: "6,300+ Followers",
     lead: "Your founders and your company, visible to the people who matter.",
     short: "Presence your buyers actually find.",
     points: [
@@ -65,6 +69,7 @@ export const SERVICES: Service[] = [
   {
     name: "Sales & Market Expansion",
     menuName: "Sales & Market Expansion",
+    badge: "33% Revenue Uplift",
     lead: "One product, positioned for every market you want to be in.",
     short: "One product, every market you want.",
     points: [
@@ -78,6 +83,7 @@ export const SERVICES: Service[] = [
   {
     name: "Fundraising & Strategic Growth Decks",
     menuName: "Fundraising & Growth Decks",
+    badge: "$40M+ Raised",
     lead: "The story investors need, told in the order they need it.",
     short: "The story investors need to hear.",
     points: [

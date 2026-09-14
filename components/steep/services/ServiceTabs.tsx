@@ -43,6 +43,13 @@ export function ServiceTabs({ services }: { services: Service[] }) {
     return () => io.disconnect();
   }, []);
 
+  /* The navbar's services dropdown names a service; open its tab. */
+  useEffect(() => {
+    const onPick = (e: Event) => setOpen((e as CustomEvent<number>).detail);
+    window.addEventListener("pitchkast:service", onPick);
+    return () => window.removeEventListener("pitchkast:service", onPick);
+  }, []);
+
   const select = (i: number, focus = false) => {
     const next = (i + services.length) % services.length;
     setOpen(next);

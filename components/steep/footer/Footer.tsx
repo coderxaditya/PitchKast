@@ -50,7 +50,7 @@ function Column({ title, children }: { title: string; children: React.ReactNode 
  */
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-hairline bg-paper pt-20 lg:pt-24">
+    <footer id="contact" className="scroll-mt-24 relative overflow-hidden border-t border-hairline bg-paper pt-20 lg:pt-24">
       <Container>
         <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-20">
           {/* ── Identity ── */}
