@@ -151,6 +151,7 @@ export function CustomerStories() {
                   }`}
                 >
                   <img
+                    draggable={false}
                     src={story.client.logo}
                     alt={story.client.name}
                     width={story.client.width}
@@ -162,7 +163,7 @@ export function CustomerStories() {
                        the 40% opacity on unselected logos: opacity isolates the
                        image, so it blended against nothing and the white box
                        came back on every logo except the current one. */
-                    className="h-8 w-auto max-w-[min(120px,100%)] object-contain"
+                    className="select-none [-webkit-user-drag:none] h-8 w-auto max-w-[min(120px,100%)] object-contain"
                   />
                 </button>
               ))}
@@ -172,6 +173,7 @@ export function CustomerStories() {
           <div className="grid shrink-0">
             {STORIES.map((story, i) => (
               <img
+                draggable={false}
                 key={story.photo.src}
                 src={story.photo.src}
                 alt={i === current ? story.photo.alt : ""}
@@ -180,7 +182,7 @@ export function CustomerStories() {
                 height={story.photo.height}
                 loading="lazy"
                 decoding="async"
-                className={`col-start-1 row-start-1 aspect-square w-[300px] rounded-[var(--radius-card)] object-cover grayscale transition-opacity duration-300 lg:w-[384px] ${EASE} ${
+                className={`select-none [-webkit-user-drag:none] col-start-1 row-start-1 aspect-square w-[300px] rounded-[var(--radius-card)] object-cover grayscale transition-opacity duration-300 lg:w-[384px] ${EASE} ${
                   i === current ? "opacity-100" : "opacity-0"
                 }`}
               />
@@ -206,22 +208,24 @@ export function CustomerStories() {
                 }`}
               >
                 <img
+                  draggable={false}
                   src={story.photo.src}
                   alt={story.photo.alt}
                   width={story.photo.width}
                   height={story.photo.height}
                   loading="lazy"
                   decoding="async"
-                  className="aspect-square w-full rounded-[var(--radius-card)] object-cover grayscale"
+                  className="select-none [-webkit-user-drag:none] aspect-square w-full rounded-[var(--radius-card)] object-cover grayscale"
                 />
                 <img
+                  draggable={false}
                   src={story.client.logo}
                   alt={story.client.name}
                   width={story.client.width}
                   height={story.client.height}
                   loading="lazy"
                   decoding="async"
-                  className="mt-6 h-7 w-auto max-w-[120px] object-contain object-left"
+                  className="select-none [-webkit-user-drag:none] mt-6 h-7 w-auto max-w-[120px] object-contain object-left"
                 />
                 <p className="mt-4 font-display text-heading-sm text-ink">
                   &ldquo;{story.quote}&rdquo;

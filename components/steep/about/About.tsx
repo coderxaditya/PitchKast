@@ -92,13 +92,14 @@ function Intro() {
               and it keeps a warm indoor shot from fighting the sky ground.
               Cropped low: the top third of the frame is ceiling. */}
           <img
+            draggable={false}
             src="/gallery/gallery-05.jpeg"
             alt="Four members of the PitchKast team standing together"
             width={1200}
             height={1600}
             loading="lazy"
             decoding="async"
-            className="aspect-[4/5] w-full max-w-[380px] rounded-[var(--radius-small)] object-cover object-[center_78%] grayscale"
+            className="select-none [-webkit-user-drag:none] aspect-[4/5] w-full max-w-[380px] rounded-[var(--radius-small)] object-cover object-[center_78%] grayscale"
           />
         </div>
 
@@ -186,6 +187,7 @@ function SystemAndReach() {
                 className="rounded-[var(--radius-small)] bg-paper/[0.06] p-5 transition-colors duration-200 hover:bg-paper/[0.1]"
               >
                 <img
+                  draggable={false}
                   src={`/flags/${country.code.toLowerCase()}.png`}
                   alt={country.name}
                   width={120}
@@ -194,7 +196,7 @@ function SystemAndReach() {
                   decoding="async"
                   /* A fixed box: flags run from 1:1 to 2:1, and letting each
                      keep its own ratio left the row visibly ragged. */
-                  className="h-6 w-9 rounded-[3px] object-cover"
+                  className="select-none [-webkit-user-drag:none] h-6 w-9 rounded-[3px] object-cover"
                 />
                 <p className="mt-3.5 text-[16px] font-[450] text-paper">{country.short}</p>
                 <p className="mt-1 text-[14px] text-paper/60">
