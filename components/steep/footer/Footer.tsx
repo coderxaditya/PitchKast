@@ -19,12 +19,12 @@ import { SocialDock } from "./SocialDock";
  */
 const LINK =
   /* `min-w-6` for the one-letter "X", which was an 11px-wide target. */
-  "inline-block -my-1 min-w-6 py-1 text-[16px] text-slate transition-colors duration-200 hover:text-ink";
+  "inline-block -my-1 min-w-6 py-1 text-[16px] text-white/60 transition-colors duration-200 hover:text-paper";
 
 function Column({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-[16px] font-[480] text-ink">{title}</h3>
+      <h3 className="text-[16px] font-[480] text-paper">{title}</h3>
       {/* The reference sets its footer links on a 40px pitch. */}
       <ul className="mt-5 flex flex-col gap-4">{children}</ul>
     </div>
@@ -34,9 +34,10 @@ function Column({ title, children }: { title: string; children: React.ReactNode 
 /**
  * Site footer, on the reference's footer.
  *
- * steep.app ends on a quiet white footer: the identity on the left, link
- * columns on the right with 16px/480 ink headings over 16px Slate Gray links,
- * and a bottom row in 15px Slate Gray. This is that arrangement.
+ * steep.app's arrangement: the identity on the left, link columns on the
+ * right with 16px/480 headings over 16px links, and a bottom row in 15px. It
+ * is set dark, on ink, with paper headings and links at 60% white, so the page
+ * closes on the same ground as the testimonials band.
  *
  * Everything you asked for on the previous footer is still here: the orange
  * tile beside the name, the social dock with its tooltips (LinkedIn first),
@@ -50,7 +51,7 @@ function Column({ title, children }: { title: string; children: React.ReactNode 
  */
 export default function Footer() {
   return (
-    <footer id="contact" className="scroll-mt-24 relative overflow-hidden border-t border-hairline bg-paper pt-20 lg:pt-24">
+    <footer id="contact" className="scroll-mt-24 relative overflow-hidden bg-ink pt-20 lg:pt-24">
       <Container>
         <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-20">
           {/* ── Identity ── */}
@@ -66,7 +67,7 @@ export default function Footer() {
                 height={256}
                 className="size-9 rounded-[10px]"
               />
-              <span className="text-[19px] font-[500] tracking-[-0.009em] text-ink">
+              <span className="text-[19px] font-[500] tracking-[-0.009em] text-paper">
                 PitchKast
               </span>
             </a>
@@ -76,14 +77,14 @@ export default function Footer() {
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-6">
-              <Button asChild size="md">
+              <Button asChild size="md" className="bg-paper text-ink">
                 <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
                   Book a discovery call
                 </a>
               </Button>
               <a
                 href="#case-studies"
-                className="inline-flex items-center gap-1.5 py-1 text-[17px] font-[430] text-ink underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1.5 py-1 text-[17px] font-[430] text-paper underline-offset-4 hover:underline"
               >
                 View case studies
                 <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
@@ -134,11 +135,11 @@ export default function Footer() {
         </div>
 
         {/* ── Bottom row ── */}
-        <div className="mt-16 flex flex-col gap-3 border-t border-hairline pt-8 text-[15px] text-slate lg:mt-20 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+        <div className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-8 text-[15px] text-white/60 lg:mt-20 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
           <div className="space-y-1.5">
             <p>&copy; copyright PitchKast 2026. All rights reserved.</p>
             {/* Legal provenance, a step quieter than the copyright. */}
-            <p className="max-w-[60ch] text-[14px] text-ash">
+            <p className="max-w-[60ch] text-[14px] text-white/40">
               PitchKast, a service brand operating under its parent company,
               Himadri Infrabuild Private Limited.
             </p>
@@ -168,7 +169,7 @@ export default function Footer() {
         aria-hidden="true"
         className="pointer-events-none mt-10 flex h-28 justify-center overflow-hidden select-none sm:h-40 lg:mt-14 lg:h-52"
       >
-        <span className="translate-y-[4%] font-display text-[22vw] leading-none font-normal tracking-[-0.01em] text-ink/[0.05] lg:text-[19vw]">
+        <span className="translate-y-[4%] font-display text-[22vw] leading-none font-normal tracking-[-0.01em] text-paper/[0.06] lg:text-[19vw]">
           PitchKast
         </span>
       </div>

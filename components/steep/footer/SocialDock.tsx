@@ -102,7 +102,7 @@ export function SocialDock() {
       <TooltipProvider>
         <Dock
           direction="middle"
-          className="mt-0 ml-0 rounded-full border-hairline bg-paper text-ink backdrop-blur-none supports-backdrop-blur:bg-paper"
+          className="mt-0 ml-0 rounded-full border-white/10 bg-white/[0.04] text-paper backdrop-blur-none supports-backdrop-blur:bg-white/[0.04]"
         >
           {DATA.navbar.map((item) => (
             <DockIcon key={item.label}>
@@ -113,7 +113,7 @@ export function SocialDock() {
                     aria-label={item.label}
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full text-ink hover:bg-mist hover:text-ink",
+                      "size-12 rounded-full text-paper hover:bg-white/10 hover:text-paper",
                     )}
                   >
                     <item.icon className="size-4" />
@@ -125,7 +125,7 @@ export function SocialDock() {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical" className="h-full bg-hairline" />
+          <Separator orientation="vertical" className="h-full bg-white/10" />
           {SOCIALS.map((social) => (
             <DockIcon key={social.name}>
               <Tooltip>
@@ -141,7 +141,7 @@ export function SocialDock() {
                     rel={isExternal(social.url) ? "noopener noreferrer" : undefined}
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full text-ink hover:bg-mist hover:text-ink",
+                      "size-12 rounded-full text-paper hover:bg-white/10 hover:text-paper",
                     )}
                   >
                     <social.icon className="size-4" />
