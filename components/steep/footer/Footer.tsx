@@ -10,6 +10,7 @@ import {
   WHATSAPP,
   isExternal,
 } from "@/lib/site";
+import { ServiceLinks } from "./ServiceLinks";
 import { SocialDock } from "./SocialDock";
 
 /**
@@ -21,9 +22,17 @@ const LINK =
   /* `min-w-6` for the one-letter "X", which was an 11px-wide target. */
   "inline-block -my-1 min-w-6 py-1 text-[16px] text-white/60 transition-colors duration-200 hover:text-paper";
 
-function Column({ title, children }: { title: string; children: React.ReactNode }) {
+function Column({
+  title,
+  className,
+  children,
+}: {
+  title: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div>
+    <div className={className}>
       <h3 className="text-[16px] font-[480] text-paper">{title}</h3>
       {/* The reference sets its footer links on a 40px pitch. */}
       <ul className="mt-5 flex flex-col gap-4">{children}</ul>
@@ -45,7 +54,9 @@ function Column({ title, children }: { title: string; children: React.ReactNode 
  * the booking call to action, the parent-company disclosure, and the large
  * wordmark bleeding off the bottom edge. The one new column is Contact,
  * holding the email address and WhatsApp number the dock already links to,
- * written out for anyone who wants to copy them.
+ * written out for anyone who wants to copy them. A Services column leads the
+ * links, as on iniziomedia.com; each item opens that service in the services
+ * section.
  *
  * Instagram and X are still `#` placeholders in `lib/site.ts`.
  */
@@ -53,7 +64,7 @@ export default function Footer() {
   return (
     <footer id="contact" className="scroll-mt-24 relative overflow-hidden bg-ink pt-20 lg:pt-24">
       <Container>
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-20">
+        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-12">
           {/* ── Identity ── */}
           <div>
             <a href="#home" className="inline-flex items-center gap-2.5" aria-label="PitchKast, back to top">
@@ -93,7 +104,11 @@ export default function Footer() {
           </div>
 
           {/* ── Links ── */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-[repeat(3,200px)]">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-[repeat(4,auto)] sm:justify-between lg:gap-x-8">
+            <Column title="Services">
+              <ServiceLinks className={LINK} />
+            </Column>
+
             <Column title="Pages">
               {HEADER_LINKS.map((link) => (
                 <li key={link.href}>
@@ -119,7 +134,8 @@ export default function Footer() {
               ))}
             </Column>
 
-            <Column title="Contact">
+            {/* Full width on a phone: the email address is wider than half the row. */}
+            <Column title="Contact" className="col-span-2 sm:col-span-1">
               <li>
                 <a href={`mailto:${EMAIL}`} className={LINK}>
                   {EMAIL}

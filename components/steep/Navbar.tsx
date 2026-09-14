@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/steep/Button";
 import { Container } from "@/components/steep/Container";
 import { SERVICES } from "@/components/steep/services/offerings";
+import { pickService } from "@/components/steep/services/pick";
 import { BOOKING_URL, HEADER_LINKS } from "@/lib/site";
 
 /**
@@ -38,10 +39,6 @@ const NAV_LINK =
   "inline-flex items-center gap-1 -my-1 py-1 text-[16px] transition-colors duration-150 hover:text-ink";
 
 const ICONS = [UserRound, CodeXml, TrendingUp, Globe, Presentation];
-
-/** Open a service's tab in the services section. */
-const pickService = (i: number) =>
-  window.dispatchEvent(new CustomEvent("pitchkast:service", { detail: i }));
 
 /**
  * Which header link the reader is currently in.
