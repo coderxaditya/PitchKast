@@ -1,5 +1,3 @@
-import { ArrowRight } from "lucide-react";
-
 import { Button } from "@/components/steep/Button";
 import { Container } from "@/components/steep/Container";
 import {
@@ -93,18 +91,11 @@ export default function Footer() {
                   Book a discovery call
                 </a>
               </Button>
-              <a
-                href="#case-studies"
-                className="inline-flex items-center gap-1.5 py-1 text-[17px] font-[430] text-paper underline-offset-4 hover:underline"
-              >
-                View case studies
-                <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
-              </a>
             </div>
           </div>
 
           {/* ── Links ── */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-[repeat(4,auto)] sm:justify-between lg:gap-x-8">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-[repeat(4,auto)] sm:justify-between lg:gap-x-10 xl:gap-x-16">
             <Column title="Services">
               <ServiceLinks className={LINK} />
             </Column>
