@@ -5,7 +5,7 @@ import { Container } from "@/components/steep/Container";
 import {
   BOOKING_URL,
   EMAIL,
-  NAV_LINKS,
+  HEADER_LINKS,
   SOCIAL_LINKS,
   WHATSAPP,
   isExternal,
@@ -95,7 +95,7 @@ export default function Footer() {
           {/* ── Links ── */}
           <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-[repeat(3,200px)]">
             <Column title="Pages">
-              {NAV_LINKS.map((link) => (
+              {HEADER_LINKS.map((link) => (
                 <li key={link.href}>
                   <a href={link.href} className={LINK}>
                     {link.label}

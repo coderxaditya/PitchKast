@@ -9,7 +9,8 @@ export const BOOKING_URL =
   "https://calendly.com/goelsoham/founder-growth-strategy-call";
 
 /**
- * The header's links, in the reference's order. "Services" also opens the
+ * The header's links, in the reference's order. The footer's "Pages" column
+ * reads the same list, so the two always match. "Services" also opens the
  * dropdown of the five services. There is no blog, so the reference's "Blog"
  * item has no counterpart here.
  */
@@ -20,18 +21,6 @@ export const HEADER_LINKS = [
   { label: "Testimonials", href: "#testimonials" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
-] as const;
-
-/** The footer's "Pages" column: every section, in page order. */
-export const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "Case Studies", href: "#case-studies" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "About", href: "#about" },
-  { label: "Team", href: "#team" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "FAQ", href: "#faq" },
 ] as const;
 
 /**
