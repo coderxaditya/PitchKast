@@ -25,9 +25,9 @@ export const HEADER_LINKS = [
 /** The footer's "Pages" column: every section, in page order. */
 export const NAV_LINKS = [
   { label: "Home", href: "#home" },
+  { label: "Services", href: "#services" },
   { label: "Case Studies", href: "#case-studies" },
   { label: "Testimonials", href: "#testimonials" },
-  { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Team", href: "#team" },
   { label: "Gallery", href: "#gallery" },
