@@ -3,14 +3,13 @@ import { ArrowUpRight, ChartNoAxesColumnIncreasing, X } from "lucide-react";
 import { Button } from "@/components/steep/Button";
 import { Container } from "@/components/steep/Container";
 import { BOOKING_URL } from "@/lib/site";
-import { MoreStudies } from "./MoreStudies";
 import { CASE_STUDIES, CASE_STUDIES_INTRO, type CaseStudy } from "./studies";
 import { StudyVisual } from "./StudyVisual";
 
 /**
  * Case studies, on the reference's (iniziomedia.com) bento.
  *
- * A pill eyebrow, the heading on the left and a "View all" pill on the right,
+ * A pill eyebrow, the heading on the left,
  * then one tall featured card beside two stacked ones. Measured off their
  * page: 568px tall, 24px between cards, a 24px radius, 32px padding, the
  * picture fading to black toward the bottom, a "Read Full Story" pill pinned
@@ -21,8 +20,8 @@ import { StudyVisual } from "./StudyVisual";
  * study's own result (`StudyVisual`), so nothing on a card is a stock image
  * standing in for a client.
  *
- * Three studies show; "View all case studies" reveals the other three as a
- * second bento, mirrored. Every card opens the full study in an overlay.
+ * All six studies show: the first three in one bento, the other three in a
+ * second, mirrored. Every card opens the full study in an overlay.
  */
 
 /** The bento order: which study sits where. */
@@ -51,6 +50,17 @@ function StudyCard({ study, featured }: { study: CaseStudy; featured?: boolean }
         className="absolute inset-0 bg-gradient-to-b from-transparent from-35% via-black/80 via-70% to-black"
       />
 
+      {/* The whole card is the button, the pill included. It sits over
+          everything as a direct child of the card: nested inside the text
+          block, its box only covered that block, so the pill and the picture
+          did nothing when clicked. */}
+      <button
+        type="button"
+        popoverTarget={id}
+        aria-label={`Read the full story: ${study.goal}`}
+        className="absolute inset-0 z-30 cursor-pointer rounded-[24px] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-peach"
+      />
+
       <span
         aria-hidden="true"
         className="absolute top-5 right-5 z-20 flex items-center gap-1 rounded-full bg-paper px-5 py-2.5 text-[14px] font-semibold text-ink transition-transform duration-300 group-hover:scale-[1.03] sm:top-8 sm:right-8"
@@ -72,15 +82,7 @@ function StudyCard({ study, featured }: { study: CaseStudy; featured?: boolean }
                 featured ? "text-[24px] leading-[1.5] sm:text-[28px]" : "text-[20px] leading-[1.33] sm:text-[24px]"
               }`}
             >
-              {/* The whole card is the button: its box stretches over the
-                  card, so the title is what a screen reader announces. */}
-              <button
-                type="button"
-                popoverTarget={id}
-                className="text-left after:absolute after:inset-0 after:z-30 after:rounded-[24px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-[-4px] focus-visible:after:outline-peach"
-              >
-                {study.goal}
-              </button>
+              {study.goal}
             </h3>
             <p className="text-[14px] text-white/70">
               {study.category}, {study.location}
@@ -211,7 +213,6 @@ export function CaseStudies() {
               {CASE_STUDIES_INTRO.titleLead}{" "}
               <em className="italic">{CASE_STUDIES_INTRO.titleAccent}</em>
             </h2>
-            <MoreStudies />
           </div>
         </div>
 
@@ -219,8 +220,7 @@ export function CaseStudies() {
           <Bento studies={byId(FIRST)} />
         </div>
 
-        {/* Revealed by "View all case studies". */}
-        <div id="more-studies" hidden className="mt-6">
+        <div className="mt-6">
           <Bento studies={byId(MORE)} mirrored />
         </div>
       </Container>
