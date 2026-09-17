@@ -43,7 +43,7 @@ const ICONS = [UserRound, CodeXml, TrendingUp, Globe, Presentation];
 /**
  * Which header link the reader is currently in.
  *
- * Sections not in the header (the customer stories, team, gallery, FAQ)
+ * Sections not in the header (team, gallery, FAQ)
  * count as part of the last header section above them, so the highlight
  * never goes blank mid-page.
  */
