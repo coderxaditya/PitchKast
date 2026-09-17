@@ -7,66 +7,41 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo";
-import {
-  DM_Sans,
-  Inter,
-  Plus_Jakarta_Sans,
-  Source_Serif_4,
-} from "next/font/google";
+import { IBM_Plex_Mono, Inter, Newsreader } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
 /**
- * The two faces.
+ * The three faces.
  *
- * The system specifies Signifier (display serif) and Sohne (body sans), both
- * licensed from Klim and neither redistributable, so the site ships the
- * substitutes the reference document names itself: Source Serif 4 and Inter.
- *
- * Both are loaded as variable fonts rather than as a weight list, and that is
- * deliberate — Sohne's half-step weights (430, 450, 480) are the system's
- * stated way of building hierarchy without reaching for bold, and a static
- * weight list would round every one of them to 400 or 500.
+ * The system is Untitled Serif for headings, ABC Diatype Mono for every
+ * functional string, and Untitled Sans for a few card paragraphs. All three
+ * are licensed and not redistributable, so the site ships open substitutes:
+ * Newsreader, IBM Plex Mono (the reference names it as a stand-in) and Inter.
  *
  * Self-hosted at build time by next/font, so no CDN round trip and no shift
- * while the face arrives.
+ * while the faces arrive.
  */
-const signifier = Source_Serif_4({
+const serif = Newsreader({
   subsets: ["latin"],
-  /* The display face is used at 400 only — the restraint is the signature —
-     but italic is needed: every headline carries one italicised phrase. */
+  /* Headings are locked at 400; italic is loaded for the one emphasised
+     phrase a headline may carry. */
+  weight: ["400"],
   style: ["normal", "italic"],
-  variable: "--font-signifier",
+  variable: "--font-newsreader",
   display: "swap",
 });
 
-const sohne = Inter({
+const mono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-sohne",
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
-/**
- * The portal's two faces.
- *
- * The hero's fragments are a rebuild of the PitchKast client portal, and the
- * portal is built on DM Sans with Plus Jakarta Sans for its figures and
- * labels. Loading both is what keeps the rebuild honest — in the site's own
- * Inter the fragments look like a tasteful approximation of the product
- * rather than the product.
- *
- * Both are variable and subset to latin, and they are scoped to those
- * fragments: nothing else on the page uses them.
- */
-const portalSans = DM_Sans({
+const sans = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
-
-const portalDisplay = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -147,7 +122,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#f6f3f1",
   width: "device-width",
   initialScale: 1,
 };
@@ -160,15 +135,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      /* One palette, light only. Every surface in the system is declared
-         explicitly, so there is no theme class to flip. */
-      className={cn(
-        signifier.variable,
-        sohne.variable,
-        portalSans.variable,
-        portalDisplay.variable,
-        "font-sans",
-      )}
+      /* One palette, light only: parchment is the canvas everywhere. */
+      className={cn(serif.variable, mono.variable, sans.variable, "font-mono")}
     >
       <body>
         {/* Ahead of the content so a crawler that only reads the first chunk

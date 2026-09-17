@@ -1,623 +1,277 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Steep — serif analytics on warm paper
+   Monad: an editorial tech journal on warm parchment
    ------------------------------------------------------------
-   The whole system, declared once. Values come from
-   design/DESIGN.md; nothing downstream states a hex.
+   The whole system, declared once, from newLanding/DESIGN.md and
+   the values read off monad.com. Nothing downstream states a hex.
 
-   Names are the design system's own (Ink Black, Paper White,
-   Blush Peach...) so a line of markup can be checked against the
-   reference document without a translation step.
+   The pairing is the identity: a serif at weight 400 announces,
+   a monospace instructs. Lake Blue is spent on one action per
+   screen; the pastels only ever appear as blurred washes.
    ============================================================ */
 
 @theme {
   /* ── Type families ────────────────────────────────────────
-     Signifier and Sohne are licensed faces from Klim and are not
-     redistributable, so the site ships the substitutes the
-     reference document itself nominates: Source Serif 4 for the
-     display serif, Inter for the body sans. Both are variable,
-     which is what makes Sohne's half-step weights (430/450/480)
-     reproducible rather than rounded to 400 or 500. */
-  --font-display: var(--font-signifier), "Signifier", "GT Sectra",
-    "Tiempos Headline", ui-serif, Georgia, serif;
-  --font-sans: var(--font-sohne), "Sohne", Inter, ui-sans-serif, system-ui,
-    -apple-system, sans-serif;
+     Untitled Serif, Untitled Sans and ABC Diatype Mono are licensed
+     and not redistributable. The site ships open substitutes chosen
+     for the same texture: Newsreader (an editorial serif with real
+     stroke contrast), Inter for the few card paragraphs Monad sets
+     in Untitled Sans, and IBM Plex Mono, which the reference itself
+     names as a stand-in for Diatype Mono. */
+  --font-serif: var(--font-newsreader), "Untitled Serif", ui-serif, Georgia,
+    "Times New Roman", serif;
+  --font-sans: var(--font-inter), "Untitled Sans", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono: var(--font-plex-mono), "ABC Diatype Mono", ui-monospace,
+    SFMono-Regular, Menlo, monospace;
 
-  /* ── Colour ───────────────────────────────────────────────
-     Nine values and no more. The system is deliberately ~97%
-     achromatic: peach and sienna are the only chromatic pair and
-     they only ever appear together. */
-  --color-paper: #ffffff; /* canvas, button text, elevated cards */
-  --color-fog: #fafafb; /* alternating section bands */
-  --color-mist: #f2f2f3; /* nested card surfaces */
-  --color-hairline: #ececec; /* the only border value */
-  --color-ink: #17191c; /* body text, filled buttons — the one dark */
-  --color-slate: #777b86; /* links, muted copy */
-  --color-ash: #979799; /* tertiary labels, category tags */
-  --color-smoke: #a3a6af; /* placeholders, disabled */
-  --color-peach: #fbe1d1; /* the single accent surface */
-  --color-sienna: #5d2a1a; /* ink for peach surfaces only */
-
-  /* The feature-card set. The reference document calls the system
-     peach-and-brown only, but the live site's feature cards use two more
-     tint/ink pairs, and it is the live site this page follows. Every value
-     was read off steep.app's computed styles, not picked by eye. Each tint
-     is only ever paired with its own ink. */
-  --color-card: #f7f7f8; /* resting feature card — a step off Mist */
-  --color-card-ink: #4c4c4c;
-  --color-sky: #d3e3fc;
-  --color-sky-ink: #194168;
-  --color-sage: #d8efdf;
-  --color-sage-ink: #1f4720;
+  /* ── Colour ─────────────────────────────────────────────── */
+  --color-parchment: #f6f3f1; /* the canvas, and nearly every surface */
+  --color-periwinkle: #cfdaf5; /* the one coloured surface */
+  --color-lake: #2b59d1; /* the single primary action per screen */
+  --color-sky: #a0b5eb; /* decorative washes and flow lines only */
+  --color-mint: #a7fccd;
+  --color-coral: #ff9473;
+  --color-gold: #ecda98;
+  --color-crimson: #f37a0a;
+  --color-off-black: #242424; /* text and dark buttons */
+  --color-ink: #000000; /* the announcement bar */
+  --color-graphite: #4e4d4d; /* secondary text */
+  --color-smoke: #797776; /* helper text */
+  --color-ash: #cecac8; /* every hairline */
 
   /* ── Type scale ───────────────────────────────────────────
-     The document specifies fixed pixel sizes, which is right for
-     the widths it was measured at and unusable below them: 90px
-     display overflows a 375px phone by a wide margin. Every step
-     from heading-sm up is therefore fluid, clamped so the
-     specified size is exactly what a wide viewport gets. Body
-     sizes are left fixed — they were already readable.
-
-     Tracking rides along with the size (Tailwind v4 reads the
-     `--text-*--letter-spacing` pairs), which is the system's
-     signature: tighter as the type grows. */
-  /* The portal's own faces, used only by the hero's fragments. */
-  --font-portal: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-portal-display: var(--font-jakarta), ui-sans-serif, system-ui,
-    sans-serif;
-
-  --text-caption: 15px;
-  --text-caption--line-height: 1.5;
-
-  --text-body: 17px;
+     The reference's sizes are what a wide screen gets; each heading
+     step is clamped down so 80px never meets a 375px phone. Every
+     step carries its own tracking: -0.02em throughout. */
+  --text-caption: 12px;
+  --text-caption--line-height: 1.2;
+  --text-caption--letter-spacing: -0.02em;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.35;
+  --text-body-sm--letter-spacing: -0.02em;
+  --text-body: 16px;
   --text-body--line-height: 1.35;
-
-  --text-body-lg: 20px;
+  --text-body--letter-spacing: -0.025em;
+  --text-label: 18px;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: -0.022em;
+  --text-body-lg: clamp(1.0625rem, 0.95rem + 0.45vw, 1.25rem); /* →20px */
   --text-body-lg--line-height: 1.35;
-
-  --text-subheading: 22px;
-  --text-subheading--line-height: 1.5;
-
-  --text-heading-sm: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem); /* →26px */
-  --text-heading-sm--line-height: 1.18;
-  --text-heading-sm--letter-spacing: -0.009em;
-
-  --text-heading: clamp(1.875rem, 1.4rem + 2vw, 2.75rem); /* →44px */
-  --text-heading--line-height: 1.3;
-  --text-heading--letter-spacing: -0.015em;
-
-  --text-heading-lg: clamp(2.25rem, 1.4rem + 3.6vw, 4rem); /* →64px */
-  --text-heading-lg--line-height: 1.3;
-  --text-heading-lg--letter-spacing: -0.015em;
-
-  --text-display: clamp(2.25rem, 1.05rem + 5.9vw, 5.625rem); /* →90px */
-  --text-display--line-height: 1.3;
-  --text-display--letter-spacing: -0.025em;
+  --text-body-lg--letter-spacing: -0.02em;
+  --text-subheading: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); /* →24px */
+  --text-subheading--line-height: 1.2;
+  --text-subheading--letter-spacing: -0.02em;
+  --text-heading-sm: clamp(1.5rem, 1.2rem + 1vw, 2rem); /* →32px */
+  --text-heading-sm--line-height: 1.2;
+  --text-heading-sm--letter-spacing: -0.02em;
+  --text-heading: clamp(1.875rem, 1.45rem + 1.4vw, 2.5rem); /* →40px */
+  --text-heading--line-height: 1.2;
+  --text-heading--letter-spacing: -0.02em;
+  --text-heading-lg: clamp(2.125rem, 1.6rem + 1.9vw, 3rem); /* →48px */
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-lg--letter-spacing: -0.02em;
+  --text-display: clamp(2.625rem, 1.5rem + 4.6vw, 5rem); /* →80px */
+  --text-display--line-height: 1.2;
+  --text-display--letter-spacing: -0.02em;
 
   /* ── Radius ───────────────────────────────────────────────
-     Two structural radii — 9999px on every button, 24px on every
-     content card — plus three narrower cases. Nothing in the
-     system is squarer than 12px. */
-  --radius-image: 12px;
-  --radius-input: 16px;
-  --radius-small: 16px;
-  --radius-elevated: 20px;
-  --radius-card: 24px;
+     Pill and soft rectangle, never sharp. Monad's grid cards measure
+     16px; the large bands and the closing card are 40px. */
+  --radius-card: 16px;
+  --radius-band: 40px;
+  --radius-pill: 100px;
 
-  /* ── Elevation ────────────────────────────────────────────
-     Only floating product artifacts earn a shadow. Content cards
-     get none — they separate by surface tone instead. */
-  --shadow-artifact: 0 0 0 1px rgba(4, 23, 43, 0.05),
-    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-overlay: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 8px 40px 0 rgba(0, 0, 0, 0.1);
-  --shadow-popover: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 24px 0 rgba(0, 0, 0, 0.08);
+  /* The only shadow in the system, for floating overlays. Cards get none. */
+  --shadow-md: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px;
+
+  --animate-marquee: marquee 40s linear infinite;
 }
 
-/* The 1200px measure every section's shell is built on. */
 :root {
-  --shell: 1200px;
-  --section-gap: 80px;
-  /* The header's own height. The pinned hero reads it to know where the
-     visible part of the viewport actually starts — see the assembly. */
-  --header-h: 72px;
+  /* 1432px measure with 40px gutters: a 1352px column at 1440. */
+  --shell: 89.5rem;
+  --header-h: 88px;
 }
 
 html {
   scroll-behavior: smooth;
-  /* Nothing on the page is taller than the viewport by accident; the sticky
-     hero stage depends on no ancestor creating a scroll container. */
   -webkit-text-size-adjust: 100%;
-}
-
-/* The page ground lives on `html` alone. If `body` painted white as well, it
-   would sit above the hero's fixed wash, which is layered behind all content
-   at a negative z-index, and hide it. */
-html {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-parchment);
+  color: var(--color-off-black);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: var(--text-body);
-  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--color-periwinkle);
+  color: var(--color-off-black);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lake);
+  outline-offset: 3px;
 }
 
 /* ============================================================
-   Focus
+   Blurred washes
    ------------------------------------------------------------
-   Declared once so nothing can ship without one. An offset ink
-   ring rather than a glow — the system has no soft shadows for a
-   glow to sit on.
+   Monad's illustrations are gradient shapes with a 50-75px blur,
+   clipped by their card. Each wash is a positioned element; the
+   `.wash` rule only supplies the blur and the soft shape.
    ============================================================ */
 
-:where(a, button, [role="button"], input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 3px;
-  border-radius: var(--radius-small);
+.wash {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* ============================================================
+   The pipeline
+   ------------------------------------------------------------
+   Lines are drawn once in SVG; the "data" moving along them is a
+   dash pattern whose offset animates, so the motion runs on the
+   compositor-friendly stroke pipeline and costs no JavaScript.
+   ============================================================ */
+
+.flow {
+  stroke-dasharray: 6 18;
+  animation: flow 1.6s linear infinite;
+}
+
+.flow--out {
+  animation-duration: 1.2s;
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.hub-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hub-spin 18s linear infinite;
+}
+
+@keyframes hub-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hub-pulse {
+  animation: hub-pulse 4.8s ease-in-out infinite;
+}
+
+@keyframes hub-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+/* A node lights up as its line carries something, staggered by
+   `--d` so the sources fire in turn rather than all at once. */
+.node-tick {
+  animation: node-tick 4.2s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes node-tick {
+  0%,
+  70%,
+  100% {
+    border-color: var(--color-ash);
+  }
+  80% {
+    border-color: var(--color-off-black);
+  }
 }
 
 /* ============================================================
    Logo marquee
    ------------------------------------------------------------
-   Carried across unchanged, because it already works: motion is
-   a keyframed transform handed to the compositor rather than a
-   per-frame loop on the main thread, and the track holds exactly
-   two copies of the sequence, so animating to -50% lands copy
-   two where copy one began. Seamless with no measurement needed
-   to make the join.
+   Two copies of the row, translated by half: the join is exact
+   with no measurement. Paused under a real pointer only, so a
+   touch device never latches it.
    ============================================================ */
 
-.marquee {
-  position: relative;
-  overflow: hidden;
-}
-
-.marquee__track {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
-  will-change: transform;
-}
-
-@keyframes marquee-scroll {
+@keyframes marquee {
   to {
     transform: translate3d(-50%, 0, 0);
   }
 }
 
-/* Paused on hover in CSS, gated to real pointers. Doing this in
-   JavaScript stranded the strip on touch: mobile browsers fire an
-   emulated mouseenter and often never send the matching
-   mouseleave, so the paused state latched. A media query cannot
-   latch. */
 @media (hover: hover) and (pointer: fine) {
-  .marquee:hover .marquee__track {
+  .marquee:hover .animate-marquee {
     animation-play-state: paused;
-  }
-}
-
-/* ============================================================
-   Service tabs
-   ------------------------------------------------------------
-   The reference's feature tabs: each tab carries a hairline, and
-   the open tab's hairline fills with a 2px ink bar. When the bar
-   finishes, the next tab opens.
-
-   The bar is the timer. Its `animationend` is what advances the
-   tabs, so there is no interval in JavaScript to keep in step with
-   what is drawn — and anything that pauses the bar pauses the
-   rotation with it, exactly in step:
-
-     · hovering the tabs or the panel, so nothing moves while
-       someone is reading it;
-     · the section being off screen (`data-running` is set by an
-       IntersectionObserver), so a visitor does not arrive at
-       tab four having never seen tab one;
-     · reduced motion, where the bar never runs at all and the
-       tabs change only when clicked.
-   ============================================================ */
-
-.svc-bar {
-  width: 0;
-}
-
-.svc[data-running="true"] .svc-bar {
-  animation: svc-progress var(--svc-dwell, 7s) linear forwards;
-}
-
-@media (hover: hover) {
-  .svc:has(.svc-tabs:hover, .svc-panels:hover) .svc-bar {
-    animation-play-state: paused;
-  }
-}
-
-@keyframes svc-progress {
-  to {
-    width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .svc[data-running="true"] .svc-bar {
-    animation: none;
-  }
-}
-
-/* ============================================================
-   World-map arcs
-   ------------------------------------------------------------
-   The draw-in, as a keyframe rather than a motion library. Every
-   arc carries `pathLength="1"`, which normalises its geometry, so
-   one dash length draws arcs of any real length and the stagger is
-   a per-path delay.
-   ============================================================ */
-
-.map-arc {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: map-arc-draw 1s ease-out forwards;
-}
-
-@keyframes map-arc-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* The blanket reduced-motion rule collapses this animation to nothing, which
-   would leave every arc at `stroke-dashoffset: 1` (fully undrawn), so the map
-   would show pins and no connections. Drawn is the right resting state. */
-@media (prefers-reduced-motion: reduce) {
-  .map-arc {
-    stroke-dashoffset: 0;
   }
 }
 
 /* ============================================================
    FAQ
    ------------------------------------------------------------
-   The answers open with a height animation on the native
-   `<details>`, through its `::details-content` part. Animating to
-   `auto` needs `interpolate-size`, which is new. A browser without
-   either opens the answer instantly, which is simply what
-   `<details>` does, so nothing breaks on the way down.
+   Native <details>. `::details-content` with `interpolate-size`
+   animates the height where supported; elsewhere it simply opens.
    ============================================================ */
 
-.faq-item {
+.faq {
   interpolate-size: allow-keywords;
 }
 
-.faq-item::details-content {
+.faq::details-content {
   block-size: 0;
   overflow: hidden;
   transition:
-    block-size 0.4s cubic-bezier(0, 0, 0.2, 1),
-    content-visibility 0.4s allow-discrete;
+    block-size 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    content-visibility 0.35s allow-discrete;
 }
 
-.faq-item[open]::details-content {
+.faq[open]::details-content {
   block-size: auto;
 }
 
-/* ============================================================
-   Portal surfaces
-   ------------------------------------------------------------
-   The hero's fragments are rebuilt renderings of the PitchKast
-   client portal, not screenshots of it. That is why they are
-   sharp at any size, weigh a few hundred bytes each, and hold
-   real selectable text instead of a JPEG's artefacts.
-
-   Nothing here is estimated. Every value was read off the
-   running portal's own computed styles:
-
-     ground   #e0e5ec     ink      #3d4852
-     line     #d3d8e4     muted    #5c6675
-     brand    #6c63ff     label    #858994
-
-   It is a soft-UI interface: panels are the same colour as the
-   ground and separate from it by a pair of opposed shadows —
-   cool below-right, white above-left, at rgba(163,177,198,.6)
-   and rgba(255,255,255,.5). The portal uses 9px/16px offsets at
-   full size; the fragments render between 300 and 640px wide, so
-   the geometry here is scaled to roughly 60% or the blur reads
-   as fog.
-   ============================================================ */
-
-:root {
-  --portal-ground: #e0e5ec;
-  --portal-line: #d3d8e4;
-  --portal-ink: #3d4852;
-  --portal-muted: #5c6675;
-  --portal-label: #858994;
-  --portal-brand: #6c63ff;
-  --portal-dark: rgba(163, 177, 198, 0.6);
-  --portal-light: rgba(255, 255, 255, 0.5);
+.faq summary::-webkit-details-marker {
+  display: none;
 }
 
-/* A panel lifted off the ground. */
-.portal-raise {
-  box-shadow:
-    5px 5px 10px var(--portal-dark),
-    -5px -5px 10px var(--portal-light);
-}
-
-/* A smaller lift, for tiles nested inside a panel. */
-.portal-raise-sm {
-  box-shadow:
-    3px 3px 6px var(--portal-dark),
-    -3px -3px 6px var(--portal-light);
-}
-
-/* A field pressed into it — the same two lights, inverted. */
-.portal-sink {
-  box-shadow:
-    inset 4px 4px 7px var(--portal-dark),
-    inset -4px -4px 7px var(--portal-light);
-}
-
-/* The hairline the portal puts along the top of every list row. */
-.portal-row + .portal-row {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
-  border-top: 1px solid var(--portal-line);
+.faq[open] .faq-chevron {
+  transform: rotate(180deg);
 }
 
 /* ============================================================
-   Hero wash
-   ------------------------------------------------------------
-   The soft colour behind the landing block, built as the
-   reference builds it: a fixed layer at the top of the viewport
-   that stays put while the page scrolls, so the pinned dashboard
-   assembles over a still wash. Every section after the hero has
-   its own ground and covers it as it scrolls up.
-
-   The reference paints the colour with a blurred photograph,
-   mirrored horizontally on desktop. This does not copy that file.
-   The photograph was sampled on a 16x16 grid, and these gradients
-   were fitted to the samples: an offline render of this exact
-   geometry sits within about 3/255 per channel of the sampled field
-   across the viewport. Large radial gradients are already
-   soft-edged, so no blur filter is needed.
-
-   Layers, top to bottom of the list = front to back:
-     · the wide peach body, right of centre;
-     · its bright core, a little higher;
-     · a lower lobe, because the reference's glow is a diagonal
-       shape that one ellipse cannot hold;
-     · rose toward the middle;
-     · cream along the lower middle;
-     · dusty mauve in the upper right;
-     · warm beige down the right edge;
-   all over a base running cool grey at the top to near-white.
-
-   The grain is the reference's exactly: fractal noise,
-   desaturated and hard-thresholded, overlay-blended at 60%, tiled
-   at 180px. Left untiled, the SVG stretched to the whole layer and
-   the grain became visible blotches rather than texture.
+   Motion off
    ============================================================ */
-
-.hero-wash {
-  background:
-    radial-gradient(50% 40% at 66% 42%, rgba(248, 204, 192, 0.8), rgba(248, 204, 192, 0) 100%),
-    radial-gradient(24% 22% at 72% 36%, rgba(252, 189, 174, 1), rgba(252, 189, 174, 0) 100%),
-    radial-gradient(20% 20% at 68% 50%, rgba(250, 196, 182, 0.6), rgba(250, 196, 182, 0) 100%),
-    radial-gradient(26% 22% at 58% 30%, rgba(242, 204, 206, 0.5), rgba(242, 204, 206, 0) 100%),
-    radial-gradient(40% 14% at 50% 62%, rgba(249, 239, 220, 0.8), rgba(249, 239, 220, 0) 100%),
-    radial-gradient(28% 26% at 92% 26%, rgba(236, 200, 194, 0.85), rgba(236, 200, 194, 0) 100%),
-    radial-gradient(14% 26% at 100% 46%, rgba(226, 212, 206, 0.7), rgba(226, 212, 206, 0) 100%),
-    linear-gradient(to bottom, #efeef0 0%, #f1f2f4 30%, #f6f6f7 60%, #fcfcfc 100%);
-  mask-image: linear-gradient(to bottom, #000 72%, transparent);
-}
-
-/* The reference mirrors its photograph on desktop only; on a phone the peach
-   sits on the left. The layers above are fitted to the desktop, mirrored
-   orientation, so on a phone the whole wash is flipped back. */
-@media (max-width: 47.999rem) {
-  .hero-wash {
-    transform: scaleX(-1);
-  }
-}
-
-.hero-wash::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.6;
-  mix-blend-mode: overlay;
-  background-size: 180px 180px;
-  background-repeat: repeat;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.91' numOctaves='2' seed='10' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* The header is see-through over the wash at the top of the page, as the
-   reference's is, and fills with paper within the first 120px of scroll, so
-   by the time anything moves under it it has a ground again. Without scroll
-   timelines it simply stays paper. */
-@supports (animation-timeline: scroll()) {
-  .site-header {
-    animation: header-fill linear both;
-    animation-timeline: scroll(root block);
-    animation-range: 0 120px;
-  }
-}
-
-@keyframes header-fill {
-  from {
-    background-color: transparent;
-  }
-  to {
-    background-color: var(--color-paper);
-  }
-}
-
-/* ============================================================
-   Hero assembly
-   ------------------------------------------------------------
-   The signature interaction: product fragments scattered around
-   the headline at rest, converging into one dashboard as the
-   page scrolls.
-
-   Everything below is an enhancement. The base layout — declared
-   here, outside every query — is the finished state in normal
-   document flow: headline, then the assembled dashboard beneath
-   it. That is what Firefox gets (no scroll-driven animation
-   yet), what a reduced-motion visitor gets, and what renders
-   before any style has resolved. Nothing is hidden behind the
-   animation; the animation only changes *when* the pieces
-   arrive.
-
-   The motion itself costs no JavaScript and no main-thread work:
-   `scroll(root block)` drives transforms and opacity on the
-   compositor. The previous build shipped 1.2MB of inline SVG
-   generated in the browser for one section, so the bar here is
-   that the interaction adds zero bytes of script.
-   ============================================================ */
-
-.assembly__stage {
-  display: grid;
-  /* One column, pinned to the stage's own width. Without this the column
-     sizes to its widest item, and the dashboard is 980px wide at every
-     viewport — so on a phone the grid grew to 1028px and the headline,
-     centred in that, drifted off the right edge with it. */
-  grid-template-columns: minmax(0, 100%);
-  justify-items: center;
-  gap: 64px;
-}
-
-@supports (animation-timeline: scroll()) {
-  /* Short windows keep the flow layout, and that is the point of the
-     height condition. A dashboard pinned in a space it does not fit
-     is worse than no pinning at all: the visitor gets a surface
-     cropped at both ends that no amount of scrolling will reveal,
-     which is exactly what this section was doing. 50rem is the
-     assembled dashboard (682px) plus the header and its margins,
-     measured rather than guessed.
-
-     The width condition is 64rem rather than the tablet breakpoint
-     because the reference does not pin on a tablet either: below
-     desktop it is plain document flow — headline, then the
-     dashboard underneath — which is also what Firefox and
-     reduced-motion get. One fallback, not three. */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 64rem) and (min-height: 50rem) {
-    /* Scroll distance the assembly is spread over. The stage pins for the
-       whole of it, so this is also how long the dashboard holds once
-       assembled. */
-    .assembly {
-      height: 240vh;
-    }
-
-    .assembly__stage {
-      position: sticky;
-      /* Pinned below the header, not under it. At `top: 0` the stage filled
-         the whole viewport and the sticky bar then covered its first 72px —
-         which is exactly the height of the dashboard's greeting, so the
-         assembled view opened on a half-cut line. Taking the header off both
-         the offset and the height makes the pinned area the part of the
-         viewport a visitor can actually see. */
-      top: var(--header-h);
-      height: calc(100svh - var(--header-h));
-      /* Small, because every pixel here comes straight off the dashboard: a
-         grid item taller than its area is laid out from the start edge, so
-         this padding is not shared between the two ends. */
-      padding-block: 1rem;
-      /* One cell, both children in it: copy sits over the dashboard rather
-         than above it. */
-      grid-template-areas: "cell";
-      align-items: center;
-      gap: 0;
-    }
-
-    .assembly__copy,
-    .assembly__dashboard {
-      grid-area: cell;
-    }
-
-    /* The copy clears out first, before the fragments have finished
-       converging — so the dashboard is never read through the headline. */
-    .assembly__copy {
-      animation: copy-dismiss linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 60vh;
-    }
-
-    /* The shell — sidebar, chrome, ground — is what turns a scatter of cards
-       into a dashboard, so it arrives last and quickly. */
-    .assembly__shell {
-      animation: shell-arrive linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 55vh 110vh;
-    }
-
-    /* Each fragment carries its own scatter in three custom properties set
-       inline, and animates that displacement away to nothing. The resting
-       position is its natural slot in the dashboard grid, so "assembled"
-       needs no coordinates — it is simply `transform: none`. */
-    .assembly__artifact {
-      animation: artifact-assemble linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 110vh;
-      will-change: transform;
-    }
-  }
-}
-
-@keyframes copy-dismiss {
-  to {
-    opacity: 0;
-    transform: translate3d(0, -3rem, 0);
-    /* Opacity alone leaves the headline's two buttons sitting invisibly over
-       the assembled dashboard, swallowing clicks meant for the card beneath.
-       Visibility is the one property that takes them out of hit-testing, and
-       it flips only at the very end of the range — CSS keeps an element
-       visible for the whole interval if either endpoint is. */
-    visibility: hidden;
-  }
-}
-
-@keyframes shell-arrive {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes artifact-assemble {
-  from {
-    transform: translate3d(var(--ax, 0), var(--ay, 0), 0) rotate(var(--ar, 0deg))
-      scale(var(--as, 1));
-  }
-  to {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
+  /* The diagram's moving parts are decoration; the lines stay. */
+  .motion {
+    display: none;
+  }
   html {
     scroll-behavior: auto;
   }
-
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  /* One deliberate exception.
-
-     Android battery saver and Samsung's "Reduce animations" both set this
-     preference, so honouring it here stopped the strip for a large share of
-     real visitors — reported three separate times on the previous build as
-     "it's broken on my phone". It is the only continuous motion on the site
-     and it carries content — seventeen client marks — that a frozen track
-     hides most of. It keeps running, slowed rather than stopped. */
-  .marquee__track {
-    animation-duration: calc(var(--marquee-duration, 28s) * 2) !important;
-    animation-iteration-count: infinite !important;
   }
 }

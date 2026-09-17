@@ -18,20 +18,16 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="grid min-h-[100svh] place-items-center bg-surface px-6 text-center">
+    <main className="grid min-h-[100svh] place-items-center bg-parchment px-6 text-center">
       <div>
-        <p className="text-eyebrow font-bold tracking-[0.12em] text-action-strong uppercase">
-          404
-        </p>
-        <h1 className="mt-5 text-display-lg leading-[0.95] font-extrabold tracking-[-0.03em] text-ink">
-          Nothing here.
-        </h1>
-        <p className="mx-auto mt-5 max-w-[42ch] text-lg text-ink-soft">
+        <p className="text-body-sm tracking-[0.05em] text-smoke uppercase">404</p>
+        <h1 className="mt-5 font-serif text-display font-normal text-ink">Nothing here.</h1>
+        <p className="mx-auto mt-5 max-w-[42ch] text-body-lg text-graphite">
           That page has moved or never existed.
         </p>
         <Link
           href="/"
-          className="mt-9 inline-flex items-center rounded-flat bg-action px-7 py-4 font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-action-strong"
+          className="mt-9 inline-flex h-12 items-center rounded-pill bg-off-black px-8 text-[18px] tracking-[0.05em] text-parchment uppercase transition-colors hover:bg-ink"
         >
           Back to PitchKast
         </Link>

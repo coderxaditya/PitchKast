@@ -1,40 +1,42 @@
-import { About } from "@/components/steep/about/About";
-import { CaseStudies } from "@/components/steep/case-studies/CaseStudies";
-import { Faq } from "@/components/steep/faq/Faq";
-import Footer from "@/components/steep/footer/Footer";
-import { Gallery } from "@/components/steep/gallery/Gallery";
-import { Hero } from "@/components/steep/hero/Hero";
-import { Partners } from "@/components/steep/partners/Partners";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
-import { Services } from "@/components/steep/services/Services";
-import { Team } from "@/components/steep/team/Team";
-import { Testimonials } from "@/components/steep/testimonials/Testimonials";
-import { Navbar } from "@/components/steep/Navbar";
+import { About } from "@/components/monad/about/About";
+import { Announcement } from "@/components/monad/Announcement";
+import { CaseStudies } from "@/components/monad/case-studies/CaseStudies";
+import { Closing } from "@/components/monad/Closing";
+import { Faq } from "@/components/monad/faq/Faq";
+import { Footer } from "@/components/monad/footer/Footer";
+import { Gallery } from "@/components/monad/gallery/Gallery";
+import { Hero } from "@/components/monad/hero/Hero";
+import { LogoStrip } from "@/components/monad/LogoStrip";
+import { Navbar } from "@/components/monad/Navbar";
+import { Reach } from "@/components/monad/reach/Reach";
+import { Services } from "@/components/monad/services/Services";
+import { Team } from "@/components/monad/team/Team";
+import { Testimonials } from "@/components/monad/testimonials/Testimonials";
 
 /**
- * The home page.
- *
- * Every section in reading order, all in normal document flow, rebuilt on the
- * Steep system (`design/DESIGN.md`) with steep.app as the reference.
+ * The home page, rebuilt on the Monad system (`newLanding/DESIGN.md`) with
+ * monad.com as the reference. Every section in reading order, in the order
+ * the navbar lists them.
  */
 export default function Home() {
   return (
     <>
-      {/* The FAQ structured data, describing only the six questions the FAQ
-          section shows. It went missing when this page was rebuilt and comes
-          back with the section it describes. */}
       <FaqJsonLd />
+      <Announcement />
       <Navbar />
       <main>
         <Hero />
-        <Partners />
+        <LogoStrip />
         <Services />
+        <Reach />
         <CaseStudies />
         <Testimonials />
         <About />
         <Team />
         <Gallery />
         <Faq />
+        <Closing />
       </main>
       <Footer />
     </>
