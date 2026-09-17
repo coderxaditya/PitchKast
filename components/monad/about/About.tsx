@@ -12,15 +12,20 @@ import {
  *
  * Set in the system's editorial register rather than as marketing blocks. The
  * intro is a two-column spread, serif title against mono body. The figures sit
- * in a hairline table, serif numerals over mono labels. The stages are three
+ * in a hairline table, serif numerals over mono labels, each cell with a
+ * blurred wash in its corner. The stages are three
  * hairline cards with blurred washes, like Monad's feature cards. The
  * principles run as a ruled list, a number in mono, a serif title, a sans
  * paragraph, the way a journal sets a numbered essay.
  */
-const STAGE_WASHES = [
+/* Monad's four card gradients: coral into sky, sky into mint, gold into
+   crimson, and mint into gold. The stages take the first three; the figures
+   cycle through all four. */
+const WASHES = [
   "linear-gradient(rgba(255,148,115,0.8), rgba(160,181,235,0.8))",
   "linear-gradient(rgb(160,181,235), rgb(167,252,205))",
   "linear-gradient(270deg, rgba(226,193,97,0.8), rgba(243,122,10,0.7))",
+  "radial-gradient(60% 60% at 30% 40%, rgb(167,252,205), rgb(226,193,97))",
 ];
 
 export function About() {
@@ -45,10 +50,15 @@ export function About() {
 
         {/* ── Figures ── */}
         <dl className="mt-16 grid grid-cols-2 border-t border-l border-ash lg:mt-24 lg:grid-cols-4">
-          {ABOUT_STATS.map((stat) => (
-            <div key={stat.label} className="flex flex-col-reverse border-r border-b border-ash p-6 sm:p-10">
-              <dt className="mt-3 min-h-[2.7em] text-body-sm tracking-[0.03em] text-graphite uppercase">{stat.label}</dt>
-              <dd className="font-serif text-heading-lg text-ink">{stat.value}</dd>
+          {ABOUT_STATS.map((stat, i) => (
+            <div key={stat.label} className="relative flex flex-col-reverse overflow-hidden border-r border-b border-ash p-6 sm:p-10">
+              <div
+                aria-hidden="true"
+                className="wash right-[-25%] bottom-[-40%] h-[95%] w-[80%] opacity-85"
+                style={{ background: WASHES[i % WASHES.length] }}
+              />
+              <dt className="relative mt-3 min-h-[2.7em] text-body-sm tracking-[0.03em] text-graphite uppercase">{stat.label}</dt>
+              <dd className="relative font-serif text-heading-lg text-ink">{stat.value}</dd>
             </div>
           ))}
         </dl>
@@ -62,7 +72,7 @@ export function About() {
                 <div
                   aria-hidden="true"
                   className="wash right-[-25%] bottom-[-35%] h-[70%] w-[70%] opacity-70"
-                  style={{ background: STAGE_WASHES[i] }}
+                  style={{ background: WASHES[i] }}
                 />
                 <div className="relative">
                   <p className="text-body-sm text-smoke">{stage.index}</p>

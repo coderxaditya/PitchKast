@@ -22,7 +22,7 @@ import { BOOKING_URL, HEADER_LINKS } from "@/lib/site";
  * Smoke.
  */
 const LINK =
-  "inline-flex items-center gap-1.5 py-2 text-[15px] tracking-[0.05em] uppercase transition-colors duration-150 hover:text-off-black xl:text-body";
+  "inline-flex items-center gap-1.5 whitespace-nowrap py-2 text-[15px] tracking-[0.05em] uppercase transition-colors duration-150 hover:text-off-black xl:text-body";
 
 /** Which header link the reader is in; sections not in the header count as
     part of the last one above them. */
