@@ -4,7 +4,6 @@ import { Button } from "@/components/steep/Button";
 import { Container } from "@/components/steep/Container";
 import { BOOKING_URL } from "@/lib/site";
 import { CASE_STUDIES, CASE_STUDIES_INTRO, type CaseStudy } from "./studies";
-import { StudyVisual } from "./StudyVisual";
 
 /**
  * Case studies, on the reference's (iniziomedia.com) bento.
@@ -16,9 +15,10 @@ import { StudyVisual } from "./StudyVisual";
  * top right, and on hover the picture scales to 1.05 over 0.5s and the pill
  * to 1.03.
  *
- * Their cards carry photographs. Here the picture is drawn in code from each
- * study's own result (`StudyVisual`), so nothing on a card is a stock image
- * standing in for a client.
+ * Their cards carry photographs. Here each card carries a dashboard scene
+ * rendered from that study's own result (`scripts/build-case-study-art.mjs`,
+ * styled on the boards in `public/caseStudies/`), so no figure on a picture
+ * is invented.
  *
  * All six studies show: the first three in one bento, the other three in a
  * second, mirrored. Every card opens the full study in an overlay.
@@ -43,7 +43,23 @@ function StudyCard({ study, featured }: { study: CaseStudy; featured?: boolean }
         aria-hidden="true"
         className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
       >
-        <StudyVisual study={study} featured={featured} />
+        {/* Rendered by `scripts/build-case-study-art.mjs`. A featured card is
+            near square at every width, so it always takes the square crop. A
+            stacked card is 2:1 from 640px up and near square on a phone, so
+            it switches crops there. */}
+        <picture>
+          {featured ? null : (
+            <source media="(min-width: 640px)" srcSet={`/case-studies/study-${study.id}-wide.webp`} />
+          )}
+          <img
+            src={`/case-studies/study-${study.id}-square.webp`}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className="size-full object-cover select-none [-webkit-user-drag:none]"
+          />
+        </picture>
       </div>
       <div
         aria-hidden="true"
