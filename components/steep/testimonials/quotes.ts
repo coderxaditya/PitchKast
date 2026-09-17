@@ -1,11 +1,8 @@
 /**
- * The testimonials.
+ * The testimonials, word for word as the clients gave them.
  *
- * ⚠️ PLACEHOLDERS. Every name, role, company and quote below is a bracketed
- * stand-in so the cards have their shape. Replace each entry with a real
- * testimonial, word for word as the client gave it, before this ships. Add
- * `photo` (a path under `public/`) to show a face; without one the card shows
- * the person's initials.
+ * Add `photo` (a path under `public/`) to show a face; without one the card
+ * shows the person's initials.
  */
 export type Testimonial = {
   name: string;
@@ -16,38 +13,40 @@ export type Testimonial = {
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    name: "[Client name]",
-    role: "[Role @ Company]",
+    name: "Rightlin",
+    role: "Founder & CEO, Luxury Viva, Dubai",
     quote:
-      "[Testimonial 1. What the client says about working with PitchKast, in their own words. Longer quotes are cut to three lines on the card and open in full with Read more.]",
+      "We were struggling to create a compelling pitch deck and financial model that effectively conveyed our unique business concept. Their expertise in storytelling and data visualization truly brought our pitch deck to life and helped us secure substantial investment meetings for our ambitious project.",
   },
   {
-    name: "[Client name]",
-    role: "[Role @ Company]",
-    quote: "[Testimonial 2. A short quote fits on the card without a Read more link.]",
-  },
-  {
-    name: "[Client name]",
-    role: "[Role @ Company]",
+    name: "Saumya Alagh",
+    role: "Co-Founder & CBO, NYMN Organics",
     quote:
-      "[Testimonial 3. What changed for the founder or the business after the engagement: the conversations, the pipeline, the raise, the reach.]",
+      "What sets team Pitchkast apart is their dedication to client satisfaction. They maintained open lines of communication, promptly addressing any concerns or questions we had. Their responsiveness and willingness to go the extra mile ensured a smooth and collaborative working relationship.",
   },
   {
-    name: "[Client name]",
-    role: "[Role @ Company]",
-    quote: "[Testimonial 4. A short quote from a client.]",
-  },
-  {
-    name: "[Client name]",
-    role: "[Role @ Company]",
+    name: "Amir Mulani",
+    role: "Founder & CEO, Playbox TV (Featured on Shark Tank)",
     quote:
-      "[Testimonial 5. What the client says about working with PitchKast, in their own words. Longer quotes are cut to three lines on the card and open in full with Read more.]",
+      "One of the standout qualities of Pitchkast is their ability to understand my unique business needs. They took the time to listen attentively, asking insightful questions to gain a deep understanding of my goals and objectives. This personalized approach allowed them to tailor their services to suit my specific requirements perfectly.",
   },
   {
-    name: "[Client name]",
-    role: "[Role @ Company]",
+    name: "Maaz Ansari",
+    role: "Co-Founder, Ori.",
     quote:
-      "[Testimonial 6. What changed for the founder or the business after the engagement, told by the client.]",
+      "As a startup, we needed to attract investors and make a strong impression. Pitchkast team helped us create a compelling pitch deck that effectively communicated our vision, market potential, and growth strategy. Their attention to detail and creative approach truly set us apart.",
+  },
+  {
+    name: "Dr. Nachiket Bhatia",
+    role: "CEO, DBMCI",
+    quote:
+      "From the initial consultation to the final product launch, Pitchkast project manager displayed a high level of professionalism and expertise. They meticulously understood our brand and delivered a visually stunning Investors deck that perfectly captures our organisation essence.",
+  },
+  {
+    name: "Kannan Gopinathan",
+    role: "Founder & CEO, What China Reads",
+    quote:
+      "Pitchkast for our Pitchdeck partner was the best decision we made. Their expertise in understanding the business model and vision have been instrumental in building our presentation. The entire team consistently demonstrated their commitment to quality and exceeded our expectations at every stage with timely delivery.",
   },
 ];
 

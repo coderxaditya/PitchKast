@@ -24,7 +24,7 @@ const LONG = 150;
 
 const initials = (name: string) =>
   name
-    .replace(/[[\]]/g, "")
+    .replace(/^(Dr|Mr|Ms|Mrs)\.\s+/, "")
     .split(/\s+/)
     .map((w) => w[0])
     .join("")
@@ -35,7 +35,7 @@ function Card({ t, index, copy }: { t: Testimonial; index: number; copy: number 
   const id = `testimonial-${index}`;
   return (
     <article className="flex h-[300px] w-[320px] shrink-0 flex-col gap-6 rounded-[24px] border border-peach/20 bg-white/[0.04] p-6 shadow-[0_0_45px_-10px_rgba(251,225,209,0.35)] transition-shadow duration-300 hover:shadow-[0_0_55px_-6px_rgba(251,225,209,0.5)] sm:w-[460px]">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-4">
           {t.photo ? (
             <img
@@ -52,11 +52,13 @@ function Card({ t, index, copy }: { t: Testimonial; index: number; copy: number 
             </span>
           )}
           <div className="min-w-0">
-            <p className="truncate text-[16px] leading-6 font-semibold text-paper">{t.name}</p>
-            <p className="truncate text-[12px] leading-4 text-white/60">{t.role}</p>
+            <p className="text-[16px] leading-6 font-semibold text-paper">{t.name}</p>
+            <p className="text-[12px] leading-4 text-white/60">{t.role}</p>
           </div>
         </div>
-        <span className="shrink-0 rounded-full border border-peach/20 bg-peach/12 px-3 py-[5px] text-[12px] font-semibold tracking-[0.6px] text-peach uppercase sm:text-[14px]">
+        {/* Hidden on a phone, where the card is 320px and the pill would leave
+            the client's name and role too little room. */}
+        <span className="hidden shrink-0 rounded-full border border-peach/20 bg-peach/12 px-3 py-[5px] text-[14px] font-semibold tracking-[0.6px] text-peach uppercase sm:inline-block">
           Best Service
         </span>
       </div>
