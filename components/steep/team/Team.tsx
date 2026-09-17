@@ -34,7 +34,7 @@ export function Team() {
     <section
       id="team"
       aria-labelledby="team-title"
-      className="scroll-mt-24 bg-paper py-24 lg:py-32"
+      className="scroll-mt-24 bg-sky py-24 lg:py-32"
     >
       <Container>
         <h2
