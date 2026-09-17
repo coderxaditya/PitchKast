@@ -35,7 +35,7 @@ export function About() {
         {/* ── Intro ── */}
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
           <div>
-            <p className="text-body-sm tracking-[0.05em] text-smoke uppercase">{ABOUT_INTRO.eyebrow}</p>
+            <p className="text-label tracking-[0.05em] text-off-black uppercase sm:text-subheading">{ABOUT_INTRO.eyebrow}</p>
             <h2 id="about-title" className="mt-4 font-serif text-heading-lg font-normal text-ink">
               {ABOUT_INTRO.titleLead} {ABOUT_INTRO.titleAccent}
             </h2>
