@@ -31,7 +31,7 @@ export function LogoStrip() {
   return (
     <section aria-label="Clients" className="py-10 lg:py-14">
       <Container>
-        <p className="text-caption tracking-[0.05em] text-smoke uppercase sm:text-body-sm">
+        <p className="text-label tracking-[0.05em] text-off-black uppercase sm:text-subheading">
           Trusted by founders at
         </p>
       </Container>
