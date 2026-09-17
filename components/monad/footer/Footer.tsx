@@ -3,12 +3,12 @@ import { InstagramIcon, LinkedInIcon, WhatsAppIcon, XIcon } from "@/components/m
 import { Logo } from "@/components/monad/Navbar";
 import { SERVICES, serviceAnchor } from "@/content/services";
 import { EMAIL, HEADER_LINKS, SOCIAL_LINKS, WHATSAPP, isExternal } from "@/lib/site";
-import { LocalTime } from "./LocalTime";
 
 /**
  * Site footer, on monad.com's: the logo and "Follow us on" with round icon
  * links on the left; small uppercase column headings in Smoke over mono links
- * on the right; the reader's local time; and a hairline above the legal row.
+ * on the right; and a hairline above the legal row, where one blank line
+ * separates the copyright from the parent-company disclosure.
  */
 const ICON_FOR: Record<string, (p: React.SVGProps<SVGSVGElement>) => React.ReactElement> = {
   LinkedIn: LinkedInIcon,
@@ -116,12 +116,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex justify-end lg:mt-16">
-          <LocalTime />
-        </div>
-
-        <div className="mt-4 flex flex-col gap-4 border-t border-ash pt-6 text-caption text-smoke sm:text-body-sm lg:flex-row lg:items-start lg:justify-between">
-          <div className="space-y-1">
+        <div className="mt-12 flex flex-col gap-4 border-t border-ash pt-6 text-caption text-smoke sm:text-body-sm lg:flex-row lg:items-start lg:justify-between">
+          <div className="space-y-[1.35em]">
             <p>&copy; copyright PitchKast 2026. All rights reserved.</p>
             <p className="max-w-[64ch]">
               PitchKast, a service brand operating under its parent company, Himadri Infrabuild Private Limited.
