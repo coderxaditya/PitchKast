@@ -1,3 +1,5 @@
+import { ArrowRight, FolderKanban, Globe2, Sparkles, TrendingUp } from "lucide-react";
+
 import { Container } from "@/components/monad/Container";
 import { CountUp } from "@/components/monad/CountUp";
 import { SectionHeading } from "@/components/monad/SectionHeading";
@@ -11,21 +13,27 @@ import {
 /**
  * About: who PitchKast is, the numbers, the three stages, and the principles.
  *
- * Set in the system's editorial register rather than as marketing blocks. The
- * intro is a two-column spread, serif title against mono body. The figures sit
- * in a hairline table, serif numerals over mono labels, each cell with a
- * blurred wash in its corner. The stages are three
- * hairline cards with blurred washes, like Monad's feature cards. The
- * principles sit on their own Lake Blue band (see `Principles`).
+ * The intro is a two-column spread: a Lake pill eyebrow, the serif title with
+ * "build to raise" in a Lake-to-Coral italic, and the body set off by a
+ * gradient rule. The figures are four solid pastel cards, one per Monad
+ * accent (Coral, Sky, Gold, Mint), each with a small icon, lifting on hover.
+ * The stages read as a sequence: each card carries its own tint, a colour bar
+ * along its top, a solid numbered badge and matching chips, with an arrow
+ * between one stage and the next on wider screens. The principles sit on
+ * their own Sky band (see `Principles`).
  */
-/* Monad's four card gradients: coral into sky, sky into mint, gold into
-   crimson, and mint into gold. The stages take the first three; the figures
-   cycle through all four. */
-const WASHES = [
-  "linear-gradient(rgba(255,148,115,0.8), rgba(160,181,235,0.8))",
-  "linear-gradient(rgb(160,181,235), rgb(167,252,205))",
-  "linear-gradient(270deg, rgba(226,193,97,0.8), rgba(243,122,10,0.7))",
-  "radial-gradient(60% 60% at 30% 40%, rgb(167,252,205), rgb(226,193,97))",
+const STAT_STYLE = [
+  { bg: "bg-coral", Icon: FolderKanban },
+  { bg: "bg-sky", Icon: TrendingUp },
+  { bg: "bg-gold", Icon: Globe2 },
+  { bg: "bg-mint", Icon: Sparkles },
+];
+
+/* Build, Grow, Raise: tint, top bar, badge and chip colours. */
+const STAGE_STYLE = [
+  { tint: "bg-[#fff1ea]", bar: "bg-coral", badge: "bg-coral text-ink", chip: "border-coral/50 bg-coral/15" },
+  { tint: "bg-[#ecfdf3]", bar: "bg-mint", badge: "bg-mint text-ink", chip: "border-[#5bd99a]/50 bg-mint/30" },
+  { tint: "bg-[#fbf5e0]", bar: "bg-gold", badge: "bg-gold text-ink", chip: "border-[#d9bf5c]/60 bg-gold/35" },
 ];
 
 export function About() {
@@ -35,13 +43,20 @@ export function About() {
         {/* ── Intro ── */}
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
           <div>
-            <p className="text-label tracking-[0.05em] text-off-black uppercase sm:text-subheading">{ABOUT_INTRO.eyebrow}</p>
-            <h2 id="about-title" className="mt-4 font-serif text-heading-lg font-normal text-ink">
-              {ABOUT_INTRO.titleLead} {ABOUT_INTRO.titleAccent}
+            <p className="inline-flex items-center gap-2 rounded-pill bg-lake/10 px-4 py-1.5 text-body-sm tracking-[0.08em] text-lake uppercase">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-lake" />
+              {ABOUT_INTRO.eyebrow}
+            </p>
+            <h2 id="about-title" className="mt-5 font-serif text-heading-lg font-normal text-ink">
+              {ABOUT_INTRO.titleLead}{" "}
+              <em className="bg-gradient-to-r from-lake to-coral bg-clip-text pr-1 text-transparent italic">
+                {ABOUT_INTRO.titleAccent}
+              </em>
             </h2>
             <p className="mt-6 font-serif text-subheading text-graphite">{ABOUT_INTRO.lead}</p>
           </div>
-          <div data-reveal className="space-y-5 text-body-lg text-off-black/80 lg:pt-10">
+          <div data-reveal className="relative space-y-5 pl-6 text-body-lg text-off-black/80 lg:mt-10">
+            <span aria-hidden="true" className="absolute inset-y-1 left-0 w-[3px] rounded-full bg-gradient-to-b from-lake via-sky to-coral" />
             {ABOUT_INTRO.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
@@ -49,45 +64,82 @@ export function About() {
         </div>
 
         {/* ── Figures ── */}
-        <dl className="mt-16 grid grid-cols-2 border-t border-l border-ash lg:mt-24 lg:grid-cols-4">
-          {ABOUT_STATS.map((stat, i) => (
-            <div key={stat.label} data-reveal data-spotlight className="relative flex flex-col-reverse overflow-hidden border-r border-b border-ash p-6 sm:p-10">
+        <dl className="mt-16 grid grid-cols-2 gap-3 lg:mt-24 lg:grid-cols-4">
+          {ABOUT_STATS.map((stat, i) => {
+            const { bg, Icon } = STAT_STYLE[i % STAT_STYLE.length];
+            return (
               <div
-                aria-hidden="true"
-                className="wash right-[-25%] bottom-[-40%] h-[95%] w-[80%] opacity-85"
-                style={{ background: WASHES[i % WASHES.length] }}
-              />
-              <dt className="relative mt-3 min-h-[2.7em] text-body-sm tracking-[0.03em] text-graphite uppercase">{stat.label}</dt>
-              <dd className="relative font-serif text-heading-lg text-ink"><CountUp value={stat.value} /></dd>
-            </div>
-          ))}
+                key={stat.label}
+                data-reveal
+                data-spotlight
+                className={`group flex flex-col-reverse justify-end rounded-card p-5 transition-transform duration-300 hover:-translate-y-1 sm:p-8 ${bg}`}
+              >
+                <dt className="mt-2 min-h-[2.7em] text-caption tracking-[0.03em] text-ink/75 uppercase sm:text-body-sm">
+                  {stat.label}
+                </dt>
+                <dd className="font-serif text-heading-lg text-ink">
+                  <CountUp value={stat.value} />
+                </dd>
+                <span
+                  aria-hidden="true"
+                  className="mb-6 flex size-10 items-center justify-center rounded-pill bg-white/55 text-ink transition-transform duration-300 group-hover:rotate-[-8deg] sm:mb-10"
+                >
+                  <Icon className="size-[18px]" strokeWidth={1.6} />
+                </span>
+              </div>
+            );
+          })}
         </dl>
 
         {/* ── Stages ── */}
         <div className="mt-24 lg:mt-[120px]">
           <SectionHeading id="about-system-title" title={ABOUT_SYSTEM.title} lead={ABOUT_SYSTEM.lead} />
-          <ol className="mt-12 grid gap-3 md:grid-cols-3">
-            {ABOUT_SYSTEM.stages.map((stage, i) => (
-              <li key={stage.label} data-reveal data-spotlight className="relative overflow-hidden rounded-card border border-off-black/20 p-6 sm:p-10">
-                <div
-                  aria-hidden="true"
-                  className="wash right-[-25%] bottom-[-35%] h-[70%] w-[70%] opacity-70"
-                  style={{ background: WASHES[i] }}
-                />
-                <div className="relative">
-                  <p className="text-body-sm text-smoke">{stage.index}</p>
-                  <h3 className="mt-6 font-serif text-heading font-normal text-ink">{stage.label}</h3>
-                  <p className="mt-4 font-sans text-body leading-[1.4] text-off-black/80">{stage.body}</p>
-                  <ul className="mt-8 flex flex-wrap gap-2">
-                    {stage.services.map((service) => (
-                      <li key={service} className="rounded-pill border border-ash bg-parchment/80 px-3 py-1.5 text-caption tracking-[0.05em] uppercase sm:text-body-sm">
-                        {service}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ))}
+          <ol className="mt-12 grid gap-3 md:grid-cols-3 md:gap-6">
+            {ABOUT_SYSTEM.stages.map((stage, i) => {
+              const st = STAGE_STYLE[i % STAGE_STYLE.length];
+              const last = i === ABOUT_SYSTEM.stages.length - 1;
+              return (
+                <li key={stage.label} data-reveal className="relative">
+                  <div
+                    data-spotlight
+                    className={`relative h-full overflow-hidden rounded-card border border-off-black/10 p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-10 ${st.tint}`}
+                  >
+                    <span aria-hidden="true" className={`absolute inset-x-0 top-0 h-1.5 ${st.bar}`} />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -right-2 -bottom-10 font-serif text-[160px] leading-none text-ink/[0.05] select-none"
+                    >
+                      {stage.index}
+                    </span>
+                    <div className="relative">
+                      <p className={`inline-flex size-11 items-center justify-center rounded-pill text-body-sm font-medium ${st.badge}`}>
+                        {stage.index}
+                      </p>
+                      <h3 className="mt-6 font-serif text-heading font-normal text-ink">{stage.label}</h3>
+                      <p className="mt-4 font-sans text-body leading-[1.45] text-off-black/85">{stage.body}</p>
+                      <ul className="mt-8 flex flex-wrap gap-2">
+                        {stage.services.map((service) => (
+                          <li
+                            key={service}
+                            className={`rounded-pill border px-3 py-1.5 text-caption tracking-[0.05em] text-ink uppercase sm:text-body-sm ${st.chip}`}
+                          >
+                            {service}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                  {!last ? (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-1/2 -right-[22px] z-10 hidden size-10 -translate-y-1/2 items-center justify-center rounded-pill border border-off-black/10 bg-parchment text-ink shadow-sm md:flex"
+                    >
+                      <ArrowRight className="size-4" strokeWidth={1.6} />
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
           </ol>
         </div>
 
