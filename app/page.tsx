@@ -11,6 +11,7 @@ import { Interactions } from "@/components/monad/Interactions";
 import { Hero } from "@/components/monad/hero/Hero";
 import { LogoStrip } from "@/components/monad/LogoStrip";
 import { Navbar } from "@/components/monad/Navbar";
+import { Ribbons } from "@/components/monad/Ribbons";
 import { Reach } from "@/components/monad/reach/Reach";
 import { Services } from "@/components/monad/services/Services";
 import { Team } from "@/components/monad/team/Team";
@@ -31,6 +32,7 @@ export default function Home() {
         <Hero />
         <LogoStrip />
         <Services />
+        <Ribbons />
         <Reach />
         <ClientCircle />
         <CaseStudies />
