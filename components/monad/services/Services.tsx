@@ -195,6 +195,8 @@ export function Services() {
         <div className="mt-12 grid gap-3 lg:mt-16 lg:grid-cols-[443fr_897fr]">
           {/* ── The tall card ── */}
           <article
+            data-reveal
+            data-spotlight
             id="service-1"
             className="flex scroll-mt-[calc(var(--header-h)+16px)] flex-col rounded-card border border-off-black/20 p-6 sm:p-10"
           >
@@ -208,6 +210,8 @@ export function Services() {
               const Illustration = ART[i + 1];
               return (
                 <article
+                  data-reveal
+                  data-spotlight
                   key={service.name}
                   id={`service-${i + 2}`}
                   className="grid scroll-mt-[calc(var(--header-h)+16px)] gap-6 rounded-card border border-off-black/20 p-6 sm:p-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-10"

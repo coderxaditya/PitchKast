@@ -19,7 +19,7 @@ export function SectionHeading({
   className?: string;
 }) {
   return (
-    <div className={cn(center && "mx-auto text-center", className)}>
+    <div data-reveal className={cn(center && "mx-auto text-center", className)}>
       <h2 id={id} className="font-serif text-heading-lg font-normal text-off-black">
         {title}
       </h2>

@@ -141,7 +141,7 @@ export function Testimonials() {
       className="scroll-mt-[var(--header-h)] overflow-hidden bg-[#17191c] py-24 lg:py-32"
     >
       <Container>
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-4">
+        <div data-reveal className="mx-auto flex max-w-3xl flex-col items-center gap-4">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[#fbe1d1]/25 bg-[#fbe1d1]/12 px-[15px] py-[7.5px]">
             <Star className="size-3.5 text-[#fbe1d1]" strokeWidth={2} aria-hidden="true" />
             <span className="font-sans text-[12px] font-semibold text-[#fbe1d1] uppercase sm:text-[14px]">

@@ -20,7 +20,7 @@ import { BOOKING_URL } from "@/lib/site";
 function StudyCard({ study }: { study: CaseStudy }) {
   const id = `story-${study.id}`;
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-card border border-off-black bg-[#0c0e13] text-white">
+    <article data-reveal data-tilt data-spotlight="light" className="group relative flex flex-col overflow-hidden rounded-card border border-off-black bg-[#0c0e13] text-white">
       {/* The picture: rendered by `scripts/build-case-study-art.mjs` from the
           study's own results, with its dashboard against the right edge. It
           runs across the top of the card and fades into the card's dark

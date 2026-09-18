@@ -29,14 +29,14 @@ export function Hero() {
           {/* Hyper Text labels and Monad's mint hover glow, as on the
               header's two buttons. */}
           <Button asChild variant="dark" className="btn-glow">
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" aria-label="Book a discovery call">
+            <a data-magnetic href={BOOKING_URL} target="_blank" rel="noopener noreferrer" aria-label="Book a discovery call">
               <HyperText as="span" aria-hidden="true" className={HYPER}>
                 Book a discovery call
               </HyperText>
             </a>
           </Button>
           <Button asChild variant="ghost" className="btn-glow">
-            <a href="#case-studies" aria-label="View case studies">
+            <a data-magnetic href="#case-studies" aria-label="View case studies">
               <HyperText as="span" aria-hidden="true" className={HYPER}>
                 View case studies
               </HyperText>

@@ -15,7 +15,7 @@ export function Closing() {
   return (
     <section aria-labelledby="closing-title" className="py-16 lg:py-[120px]">
       <Container>
-        <div className="relative overflow-hidden rounded-band border border-off-black px-5 py-16 text-center sm:px-10 lg:py-20">
+        <div data-reveal className="relative overflow-hidden rounded-band border border-off-black px-5 py-16 text-center sm:px-10 lg:py-20">
           <div
             aria-hidden="true"
             className="wash top-[-70%] left-[-5%] h-full w-[110%] opacity-60"
@@ -37,13 +37,13 @@ export function Closing() {
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Button asChild variant="lake">
-                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                <a data-magnetic href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
                   Book a discovery call
                   <Caret />
                 </a>
               </Button>
               <Button asChild variant="ghost">
-                <a href={WHATSAPP.href} target="_blank" rel="noopener noreferrer">
+                <a data-magnetic href={WHATSAPP.href} target="_blank" rel="noopener noreferrer">
                   WhatsApp us
                 </a>
               </Button>

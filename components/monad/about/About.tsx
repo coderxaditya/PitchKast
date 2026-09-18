@@ -1,4 +1,5 @@
 import { Container } from "@/components/monad/Container";
+import { CountUp } from "@/components/monad/CountUp";
 import { SectionHeading } from "@/components/monad/SectionHeading";
 import {
   ABOUT_INTRO,
@@ -40,7 +41,7 @@ export function About() {
             </h2>
             <p className="mt-6 font-serif text-subheading text-graphite">{ABOUT_INTRO.lead}</p>
           </div>
-          <div className="space-y-5 text-body-lg text-off-black/80 lg:pt-10">
+          <div data-reveal className="space-y-5 text-body-lg text-off-black/80 lg:pt-10">
             {ABOUT_INTRO.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
@@ -50,14 +51,14 @@ export function About() {
         {/* ── Figures ── */}
         <dl className="mt-16 grid grid-cols-2 border-t border-l border-ash lg:mt-24 lg:grid-cols-4">
           {ABOUT_STATS.map((stat, i) => (
-            <div key={stat.label} className="relative flex flex-col-reverse overflow-hidden border-r border-b border-ash p-6 sm:p-10">
+            <div key={stat.label} data-reveal data-spotlight className="relative flex flex-col-reverse overflow-hidden border-r border-b border-ash p-6 sm:p-10">
               <div
                 aria-hidden="true"
                 className="wash right-[-25%] bottom-[-40%] h-[95%] w-[80%] opacity-85"
                 style={{ background: WASHES[i % WASHES.length] }}
               />
               <dt className="relative mt-3 min-h-[2.7em] text-body-sm tracking-[0.03em] text-graphite uppercase">{stat.label}</dt>
-              <dd className="relative font-serif text-heading-lg text-ink">{stat.value}</dd>
+              <dd className="relative font-serif text-heading-lg text-ink"><CountUp value={stat.value} /></dd>
             </div>
           ))}
         </dl>
@@ -67,7 +68,7 @@ export function About() {
           <SectionHeading id="about-system-title" title={ABOUT_SYSTEM.title} lead={ABOUT_SYSTEM.lead} />
           <ol className="mt-12 grid gap-3 md:grid-cols-3">
             {ABOUT_SYSTEM.stages.map((stage, i) => (
-              <li key={stage.label} className="relative overflow-hidden rounded-card border border-off-black/20 p-6 sm:p-10">
+              <li key={stage.label} data-reveal data-spotlight className="relative overflow-hidden rounded-card border border-off-black/20 p-6 sm:p-10">
                 <div
                   aria-hidden="true"
                   className="wash right-[-25%] bottom-[-35%] h-[70%] w-[70%] opacity-70"
@@ -132,6 +133,8 @@ function Principles() {
             {ABOUT_PRINCIPLES.map((principle) => (
               <li
                 key={principle.title}
+                data-reveal
+                data-spotlight
                 className="group relative overflow-hidden rounded-card border border-parchment bg-parchment/90 p-6 shadow-[0_8px_30px_rgba(43,89,209,0.10)] transition-colors duration-300 hover:bg-parchment sm:p-8"
               >
                 <span

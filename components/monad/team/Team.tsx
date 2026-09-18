@@ -33,6 +33,7 @@ export function Team() {
           {TEAM.map((person, i) => (
             <li
               key={person.name}
+              data-reveal
               className="group relative flex w-[220px] shrink-0 snap-start flex-col overflow-hidden rounded-card border border-off-black/20 p-2 xl:w-auto"
             >
               <div

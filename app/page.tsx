@@ -7,6 +7,7 @@ import { Closing } from "@/components/monad/Closing";
 import { Faq } from "@/components/monad/faq/Faq";
 import { Footer } from "@/components/monad/footer/Footer";
 import { Gallery } from "@/components/monad/gallery/Gallery";
+import { Interactions } from "@/components/monad/Interactions";
 import { Hero } from "@/components/monad/hero/Hero";
 import { LogoStrip } from "@/components/monad/LogoStrip";
 import { Navbar } from "@/components/monad/Navbar";
@@ -41,6 +42,7 @@ export default function Home() {
         <Closing />
       </main>
       <Footer />
+      <Interactions />
     </>
   );
 }

@@ -22,7 +22,7 @@ export function Reach() {
           style={{ background: "linear-gradient(270deg, rgba(160,181,235,0.6) 16%, rgba(255,148,115,0.6) 93%)", filter: "blur(75px)" }}
         />
         <div className="relative mx-auto grid max-w-[var(--shell)] items-center gap-6 px-5 py-16 sm:px-10 md:grid-cols-2 lg:py-[120px]">
-          <div className="relative z-10">
+          <div data-reveal className="relative z-10">
             <h2 id="reach-title" className="max-w-[14ch] font-serif text-heading-lg font-normal text-ink">
               Growth, wherever your buyers are
             </h2>
@@ -32,7 +32,7 @@ export function Reach() {
               business rather than to a package.
             </p>
             <Button asChild variant="dark" className="mt-8">
-              <a href="#case-studies">Explore case studies</a>
+              <a data-magnetic href="#case-studies">Explore case studies</a>
             </Button>
           </div>
           <ArcList />

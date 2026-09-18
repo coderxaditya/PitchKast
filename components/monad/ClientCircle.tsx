@@ -29,7 +29,7 @@ export function ClientCircle() {
     <section aria-labelledby="client-circle-title" className="px-1 py-6 lg:py-10">
       <div className="relative overflow-hidden rounded-band bg-coral/15" style={GRID}>
         <Container className="relative py-16 lg:py-[120px]">
-          <div className="mx-auto max-w-[52ch] text-center">
+          <div data-reveal className="mx-auto max-w-[52ch] text-center">
             <p className="text-body-sm font-medium tracking-[0.1em] text-crimson uppercase">
               Faces behind the partnerships
             </p>
@@ -48,7 +48,7 @@ export function ClientCircle() {
             className="mx-auto mt-10 grid max-w-[1000px] grid-cols-3 gap-4 sm:gap-6 md:grid-cols-5 lg:mt-14 lg:gap-8"
           >
             {PORTRAITS.map((src) => (
-              <li key={src} className="group">
+              <li key={src} data-reveal className="group">
                 <div className="aspect-square overflow-hidden rounded-full border-2 border-crimson/70 bg-parchment shadow-[0_6px_20px_rgba(243,122,10,0.12)] transition-transform duration-300 ease-out group-hover:-translate-y-1">
                   <img
                     src={src}

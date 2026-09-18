@@ -16,7 +16,7 @@ export function Faq() {
         <SectionHeading id="faq-title" title="Frequently Asked Questions" />
         <div className="mt-8 lg:mt-12">
           {faqSelection.map((item) => (
-            <details key={item.question} className="faq border-b border-ash">
+            <details key={item.question} data-reveal className="faq border-b border-ash">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-7 lg:py-10">
                 <h3 className="font-serif text-subheading font-normal text-off-black/85 lg:text-heading-sm">
                   {item.question}
