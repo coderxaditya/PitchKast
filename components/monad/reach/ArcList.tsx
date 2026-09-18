@@ -14,7 +14,7 @@ import { COUNTRIES } from "@/content/countries";
  * `prefers-reduced-motion` the rows are laid out once and left still.
  */
 const GAP = 88; // px between rows
-const SPEED = 34; // px per second
+const SPEED = 45; // px per second
 const SLANT = 0.42; // how far a row moves right per px from the middle
 
 export function ArcList() {
