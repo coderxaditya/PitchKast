@@ -1,8 +1,8 @@
 import { Container } from "@/components/monad/Container";
-import { InstagramIcon, LinkedInIcon, WhatsAppIcon, XIcon } from "@/components/monad/footer-icons";
+import { InstagramIcon, LinkedInIcon, XIcon } from "@/components/monad/footer-icons";
 import { Logo } from "@/components/monad/Navbar";
 import { SERVICES, serviceAnchor } from "@/content/services";
-import { EMAIL, FOUNDER_EMAIL, HEADER_LINKS, SOCIAL_LINKS, WHATSAPP, isExternal } from "@/lib/site";
+import { EMAIL, FOUNDER_EMAIL, HEADER_LINKS, SOCIAL_LINKS, isExternal } from "@/lib/site";
 
 /**
  * Site footer, on monad.com's: the logo and "Follow us on" with round icon
@@ -62,17 +62,6 @@ export function Footer() {
                   </li>
                 );
               })}
-              <li>
-                <a
-                  href={WHATSAPP.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="WhatsApp"
-                  className="flex size-10 items-center justify-center rounded-pill bg-off-black text-parchment transition-colors hover:bg-lake"
-                >
-                  <WhatsAppIcon className="size-4" />
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -119,11 +108,6 @@ export function Footer() {
               <li>
                 <a href={`mailto:${FOUNDER_EMAIL}`} className={LINK}>
                   {FOUNDER_EMAIL}
-                </a>
-              </li>
-              <li>
-                <a href={WHATSAPP.href} target="_blank" rel="noopener noreferrer" className={LINK}>
-                  {WHATSAPP.display}
                 </a>
               </li>
             </Column>

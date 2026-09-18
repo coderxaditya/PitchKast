@@ -10,8 +10,7 @@ import { TEAM } from "@/content/team";
  * sideways with each card snapping into place, rather than stacking into a
  * tall column. Each card is a 16px-radius hairline frame: the photograph in
  * full colour, as supplied, with a round LinkedIn button pinned to its corner;
- * then the name in the serif, the role in small uppercase mono, and the
- * one-line descriptor in the sans. On hover the photo eases in slightly and a
+ * then the name in the serif and the role in small uppercase mono. On hover the photo eases in slightly and a
  * pastel wash (one of Monad's four gradients per card) rises behind the text.
  */
 const WASHES = [
@@ -69,7 +68,6 @@ export function Team() {
                 <p className="mt-1.5 text-caption leading-[1.35] tracking-[0.03em] text-graphite uppercase">
                   {person.role}
                 </p>
-                <p className="mt-3 font-sans text-body-sm leading-[1.4] text-off-black/75">{person.line}</p>
               </div>
             </li>
           ))}

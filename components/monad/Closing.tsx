@@ -1,6 +1,6 @@
 import { Button, Caret } from "@/components/monad/Button";
 import { Container } from "@/components/monad/Container";
-import { BOOKING_URL, WHATSAPP } from "@/lib/site";
+import { BOOKING_URL } from "@/lib/site";
 
 /**
  * The closing call, on monad.com's last card: a 40px-radius card with a solid
@@ -40,11 +40,6 @@ export function Closing() {
                 <a data-magnetic href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
                   Book a discovery call
                   <Caret />
-                </a>
-              </Button>
-              <Button asChild variant="ghost">
-                <a data-magnetic href={WHATSAPP.href} target="_blank" rel="noopener noreferrer">
-                  WhatsApp us
                 </a>
               </Button>
             </div>

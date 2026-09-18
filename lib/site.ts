@@ -37,18 +37,6 @@ export const EMAIL = "contact@pitchkast.com";
 /** Soham Goel, founder: listed under Contact in the footer. */
 export const FOUNDER_EMAIL = "sohamgoel@pitchkast.com";
 
-/**
- * The WhatsApp number, in the two forms it is needed in.
- *
- * `wa.me` takes digits only — no plus, no spaces, country code included — and
- * silently fails to resolve a chat if any of that is wrong. The readable form
- * keeps its spacing.
- */
-export const WHATSAPP = {
-  display: "+91 98919 48444",
-  href: "https://wa.me/919891948444",
-};
-
 export const SOCIAL_LINKS = [
   /* LinkedIn leads: it is the only live profile, and the platform the company
      actually sells on. Order here drives both the footer column and the icon
