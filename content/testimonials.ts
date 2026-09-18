@@ -3,9 +3,6 @@
  *
  * `photo` is a square avatar cut by `scripts/build-client-avatars.mjs` from the
  * files in `public/clientImages/`; without one the card shows the initials.
- *
- * ⚠️ The last entry is a PLACEHOLDER: the photo is real, but the name, role
- * and quote are bracketed stand-ins until they are supplied.
  */
 export type Testimonial = {
   name: string;
