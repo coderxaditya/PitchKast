@@ -9,40 +9,44 @@ import { BOOKING_URL } from "@/lib/site";
 /**
  * Case studies, on monad.com's "Why Teams Choose Monad" cards.
  *
- * Two columns of cards with a solid Off-Black hairline and a 16px radius, each
- * with a blurred pastel wash bleeding in from its top-left corner (the four
- * gradients are Monad's, read off their cards). A card shows where and for
- * whom, the goal as a serif title, the opening paragraph, and the results as
- * hairline pills. The whole card opens the full study, word for word, in an
+ * Two columns of cards with a solid Off-Black hairline and a 16px radius.
+ * Each card is dark, with the study's rendered dashboard picture behind it and
+ * the text set in white: where and for whom, the goal as a serif title, the
+ * opening paragraph, and the results as hairline pills. The whole card opens the full study, word for word, in an
  * overlay: the Popover API, so light dismiss and Escape come free.
  */
 
-const WASHES = [
-  "linear-gradient(rgba(167,252,205,0), rgb(160,181,235) 54%)",
-  "radial-gradient(60% 60% at 20% 40%, rgb(167,252,205), rgb(226,193,97))",
-  "linear-gradient(270deg, rgb(160,181,235) 16%, rgb(255,148,115) 93%)",
-  "linear-gradient(rgb(226,193,97) 24%, rgb(243,122,10) 76%)",
-];
-
-function StudyCard({ study, index }: { study: CaseStudy; index: number }) {
+function StudyCard({ study }: { study: CaseStudy }) {
   const id = `story-${study.id}`;
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-card border border-off-black p-6 sm:p-10">
-      <div
-        aria-hidden="true"
-        className="wash top-[-30%] left-[-20%] h-[75%] w-[55%] opacity-60 transition-opacity duration-500 group-hover:opacity-90"
-        style={{ background: WASHES[index % WASHES.length], filter: "blur(60px)" }}
-      />
+    <article className="group relative flex flex-col overflow-hidden rounded-card border border-off-black bg-[#0c0e13] text-white">
+      {/* The picture: rendered by `scripts/build-case-study-art.mjs` from the
+          study's own results, with its dashboard against the right edge. It
+          runs across the top of the card and fades into the card's dark
+          ground, and the text starts over the fade, so the picture reads as
+          the card's backdrop at every width without ever sitting under a
+          line of text. */}
+      <div aria-hidden="true" className="relative h-[230px] overflow-hidden sm:h-[300px]">
+        <img
+          src={`/case-studies/study-${study.id}-wide.webp`}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="size-full object-cover object-right transition-transform duration-700 ease-out select-none group-hover:scale-[1.03]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e13] from-5% via-[#0c0e13]/30 via-45% to-transparent" />
+      </div>
 
-      <div className="relative flex flex-1 flex-col">
-        <p className="text-caption tracking-[0.05em] text-graphite uppercase sm:text-body-sm">
+      <div className="relative -mt-4 flex flex-1 flex-col px-6 pb-6 sm:-mt-20 sm:px-10 sm:pb-10">
+        <p className="text-caption tracking-[0.05em] text-white/60 uppercase sm:text-body-sm">
           {String(study.id).padStart(2, "0")} · {study.category}
         </p>
-        <h3 className="mt-5 font-serif text-subheading font-normal text-ink sm:text-heading-sm">
+        <h3 className="mt-5 font-serif text-subheading font-normal text-white sm:text-heading-sm">
           {study.goal}
         </h3>
-        <p className="mt-2 text-body-sm text-smoke">{study.location}</p>
-        <p className="mt-5 line-clamp-3 font-sans text-body leading-[1.35] text-off-black/80">
+        <p className="mt-2 text-body-sm text-white/50">{study.location}</p>
+        <p className="mt-5 line-clamp-3 font-sans text-body leading-[1.35] text-white/75">
           {study.paragraphs[0]}
         </p>
 
@@ -50,14 +54,14 @@ function StudyCard({ study, index }: { study: CaseStudy; index: number }) {
           {study.metrics.map((metric) => (
             <li
               key={metric}
-              className="rounded-pill border border-ash bg-parchment/70 px-3 py-1.5 text-caption tracking-[0.03em] text-off-black uppercase sm:text-body-sm"
+              className="rounded-pill border border-white/20 bg-white/[0.06] px-3 py-1.5 text-caption tracking-[0.03em] text-white uppercase backdrop-blur-sm sm:text-body-sm"
             >
               {metric}
             </li>
           ))}
         </ul>
 
-        <p className="mt-auto flex items-center gap-2 pt-8 text-body-sm tracking-[0.05em] text-off-black uppercase">
+        <p className="mt-auto flex items-center gap-2 pt-8 text-body-sm tracking-[0.05em] text-white uppercase">
           Read the story
           <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" strokeWidth={1.5} aria-hidden="true" />
         </p>
@@ -142,8 +146,8 @@ export function CaseStudies() {
           lead="See how we help founders turn ideas into credibility. We don't just build profiles, we build positioning that scales."
         />
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:mt-16">
-          {CASE_STUDIES.map((study, i) => (
-            <StudyCard key={study.id} study={study} index={i} />
+          {CASE_STUDIES.map((study) => (
+            <StudyCard key={study.id} study={study} />
           ))}
         </div>
       </Container>
