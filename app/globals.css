@@ -215,6 +215,7 @@ body {
    ============================================================ */
 
 .btn-glow {
+  position: relative;
   transition:
     box-shadow 0.25s ease,
     background-color 0.2s ease,

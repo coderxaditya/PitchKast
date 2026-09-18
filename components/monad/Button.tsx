@@ -56,5 +56,12 @@ export function Caret() {
 }
 
 /* A Hyper Text label inside a pill: undo the component's demo styling (4xl,
-   bold, padding) so the label keeps the pill's own type. */
-export const HYPER = "py-0 text-[length:inherit] leading-none font-normal";
+   bold, padding) so the label keeps the pill's own type.
+
+   Hyper Text scrambles when the pointer enters its own text, not the button
+   around it. The label's ::before is stretched over the whole pill (the pill
+   is positioned by `.btn-glow`), and the pointer entering it counts as
+   entering the label, so hovering anywhere on the button runs the scramble
+   together with the glow. */
+export const HYPER =
+  "py-0 text-[length:inherit] leading-none font-normal before:absolute before:inset-0 before:rounded-[inherit]";
