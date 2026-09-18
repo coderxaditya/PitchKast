@@ -57,13 +57,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       "Pitchkast for our Pitchdeck partner was the best decision we made. Their expertise in understanding the business model and vision have been instrumental in building our presentation. The entire team consistently demonstrated their commitment to quality and exceeded our expectations at every stage with timely delivery.",
   },
-  {
-    name: "[Client name]",
-    role: "[Role, Company]",
-    photo: "/testimonials/client-7.webp",
-    quote:
-      "[Testimonial. What the client says about working with PitchKast, in their own words. Longer quotes are cut to three lines on the card and open in full with Read more.]",
-  },
 ];
 
 export const TESTIMONIALS_INTRO = {
