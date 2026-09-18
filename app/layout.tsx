@@ -24,9 +24,9 @@ import { cn } from "@/lib/utils";
  */
 const serif = Newsreader({
   subsets: ["latin"],
-  /* Headings are locked at 400; italic is loaded for the one emphasised
-     phrase a headline may carry. */
-  weight: ["400"],
+  /* Loaded as the variable font (no weight list) so its weight axis is
+     available: the hero headline's kinetic hover effect animates weight
+     letter by letter. Headings elsewhere stay at 400. */
   style: ["normal", "italic"],
   variable: "--font-newsreader",
   display: "swap",

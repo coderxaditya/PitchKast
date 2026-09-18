@@ -1,4 +1,5 @@
 import { Button, Caret } from "@/components/monad/Button";
+import { KineticText } from "@/components/ui/kinetic-text";
 import { Container } from "@/components/monad/Container";
 import { BOOKING_URL } from "@/lib/site";
 import { Pipeline } from "./Pipeline";
@@ -11,12 +12,26 @@ import { Pipeline } from "./Pipeline";
  *
  * The copy is the site's own, carried over word for word.
  */
+const HEADLINE = "We build brands that move businesses forward";
+
 export function Hero() {
   return (
     <section id="home" aria-labelledby="hero-title" className="scroll-mt-[var(--header-h)] overflow-hidden pt-14 pb-16 sm:pt-[72px] lg:pb-24">
       <Container className="text-center">
-        <h1 id="hero-title" className="mx-auto max-w-[21ch] font-serif text-display font-normal text-ink">
-          We build brands that move businesses forward
+        {/* Magic UI's Kinetic Text: each letter's weight rises under the
+            pointer, and its neighbours' a little. The component lays letters
+            out in one wrapping row, which would break a line mid-word, so it
+            is applied to each word, and the words wrap as words. */}
+        <h1
+          id="hero-title"
+          className="mx-auto max-w-[21ch] font-serif text-display text-ink [font-optical-sizing:auto]"
+        >
+          {HEADLINE.split(" ").map((word, i) => (
+            <span key={i}>
+              {i > 0 ? " " : null}
+              <KineticText as="span" text={word} className="inline-flex" />
+            </span>
+          ))}
         </h1>
         <p className="mx-auto mt-6 max-w-[58ch] text-body-lg text-off-black/80">
           PitchKast is an end-to-end growth partner for early-stage founders:
