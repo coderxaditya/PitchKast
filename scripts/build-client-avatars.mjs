@@ -21,8 +21,9 @@ const OUT = "public/testimonials";
 const FILES = [
   { src: "Rightlin.jpeg", out: "rightlin" },
   { src: "Saumya Alagh.jpeg", out: "saumya-alagh", crop: [0.3, 0.03, 0.4] },
-  /* Amir's card uses his Shark Tank India still, cropped clear of the logo. */
-  { src: "WhatsApp Image 2026-09-18 at 11.16.30.jpeg", out: "amir-mulani", crop: [0.4, 0.03, 0.85] },
+  /* Amir's card uses his Shark Tank India still, framed wide enough to keep
+     the show's logo beside him. */
+  { src: "WhatsApp Image 2026-09-18 at 11.16.30.jpeg", out: "amir-mulani", crop: [0.136, 0, 1] },
   { src: "Maaz-Ansari.jpeg", out: "maaz-ansari", crop: [0.344, 0.07, 0.5] },
   { src: "Dr.Nachiket Bhatia.jpeg", out: "nachiket-bhatia", crop: [0.275, 0.11, 0.45] },
   { src: "Kannan-Gopinathan.jpeg", out: "kannan-gopinathan", crop: [0.33, 0.08, 0.6] },
