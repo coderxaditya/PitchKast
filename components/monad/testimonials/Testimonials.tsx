@@ -102,12 +102,12 @@ export function Testimonials() {
       </ul>
 
       <div aria-hidden="true" className="relative mt-12 flex w-full flex-col items-center overflow-hidden lg:mt-16">
-        <Marquee pauseOnHover className="[--duration:60s] [--gap:1.25rem]">
+        <Marquee pauseOnHover className="[--duration:30s] [--gap:1.25rem]">
           {FIRST_ROW.map((t) => (
             <ReviewCard key={t.name} t={t} />
           ))}
         </Marquee>
-        <Marquee reverse pauseOnHover className="[--duration:60s] [--gap:1.25rem]">
+        <Marquee reverse pauseOnHover className="[--duration:30s] [--gap:1.25rem]">
           {SECOND_ROW.map((t) => (
             <ReviewCard key={t.name} t={t} />
           ))}
