@@ -102,8 +102,9 @@ export function About() {
  * The principles, on a Sky Blue band inset like the reach band, a shade
  * deeper than its Periwinkle, so the section reads as a pause rather than
  * another ruled list. Mint and coral washes drift in from the corners, and
- * the six principles sit on frosted parchment cards: a Lake mono number, a
- * serif title in ink, a sans paragraph at 80%. On hover a card brightens and
+ * the six principles sit on near-solid parchment cards, so the text reads
+ * against the colour: a Lake mono number, a serif title in ink, a sans
+ * paragraph in Off-Black. On hover a card brightens and
  * a Lake rule draws across its top.
  */
 function Principles() {
@@ -122,7 +123,7 @@ function Principles() {
         />
 
         <Container className="relative py-16 lg:py-[120px]">
-          <p className="text-label tracking-[0.05em] text-lake uppercase sm:text-subheading">Our principles</p>
+          <p className="text-label tracking-[0.05em] text-off-black uppercase sm:text-subheading">Our principles</p>
           <h2 id="about-principles-title" className="mt-4 font-serif text-heading-lg font-normal text-ink">
             How we work with founders
           </h2>
@@ -131,17 +132,17 @@ function Principles() {
             {ABOUT_PRINCIPLES.map((principle) => (
               <li
                 key={principle.title}
-                className="group relative overflow-hidden rounded-card border border-parchment/60 bg-parchment/45 p-6 backdrop-blur-sm transition-colors duration-300 hover:bg-parchment/75 sm:p-8"
+                className="group relative overflow-hidden rounded-card border border-parchment bg-parchment/90 p-6 shadow-[0_8px_30px_rgba(43,89,209,0.10)] transition-colors duration-300 hover:bg-parchment sm:p-8"
               >
                 <span
                   aria-hidden="true"
                   className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-lake transition-transform duration-500 ease-out group-hover:scale-x-100"
                 />
-                <p className="flex size-10 items-center justify-center rounded-pill border border-lake/40 text-body-sm text-lake">
+                <p className="flex size-10 items-center justify-center rounded-pill border border-lake/50 bg-periwinkle/50 text-body-sm text-lake">
                   {principle.index}
                 </p>
                 <h3 className="mt-6 font-serif text-subheading font-normal text-ink">{principle.title}</h3>
-                <p className="mt-3 font-sans text-body leading-[1.45] text-off-black/80">{principle.body}</p>
+                <p className="mt-3 font-sans text-body leading-[1.5] text-off-black">{principle.body}</p>
               </li>
             ))}
           </ol>
