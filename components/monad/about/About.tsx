@@ -15,8 +15,7 @@ import {
  * in a hairline table, serif numerals over mono labels, each cell with a
  * blurred wash in its corner. The stages are three
  * hairline cards with blurred washes, like Monad's feature cards. The
- * principles run as a ruled list, a number in mono, a serif title, a sans
- * paragraph, the way a journal sets a numbered essay.
+ * principles sit on their own Lake Blue band (see `Principles`).
  */
 /* Monad's four card gradients: coral into sky, sky into mint, gold into
    crimson, and mint into gold. The stages take the first three; the figures
@@ -30,7 +29,7 @@ const WASHES = [
 
 export function About() {
   return (
-    <section id="about" aria-labelledby="about-title" className="scroll-mt-[var(--header-h)] py-16 lg:py-[120px]">
+    <section id="about" aria-labelledby="about-title" className="scroll-mt-[var(--header-h)] pt-16 lg:pt-[120px]">
       <Container>
         {/* ── Intro ── */}
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
@@ -91,20 +90,63 @@ export function About() {
           </ol>
         </div>
 
-        {/* ── Principles ── */}
-        <div className="mt-24 lg:mt-[120px]">
-          <SectionHeading id="about-principles-title" title="How we work with founders" />
-          <ol className="mt-10 grid border-t border-ash md:grid-cols-2 lg:grid-cols-3">
+      </Container>
+
+      {/* ── Principles ── */}
+      <Principles />
+    </section>
+  );
+}
+
+/**
+ * The principles, on a Lake Blue band inset like the reach band: the one
+ * deep colour on the page, so the section reads as a pause rather than
+ * another ruled list. Mint and coral washes drift in from the corners, and
+ * the six principles sit on frosted cards: a mint mono number, a serif title
+ * in parchment, a sans paragraph at 75%. On hover a card brightens and a
+ * mint rule draws across its top.
+ */
+function Principles() {
+  return (
+    <div className="mt-24 px-1 pb-6 lg:mt-[120px] lg:pb-10">
+      <div className="relative overflow-hidden rounded-band bg-lake">
+        <div
+          aria-hidden="true"
+          className="wash top-[-20%] left-[-10%] h-[60%] w-[45%] opacity-50"
+          style={{ background: "radial-gradient(rgb(167,252,205), rgba(160,181,235,0))", filter: "blur(90px)" }}
+        />
+        <div
+          aria-hidden="true"
+          className="wash right-[-12%] bottom-[-25%] h-[70%] w-[45%] opacity-45"
+          style={{ background: "linear-gradient(270deg, rgba(160,181,235,0.6) 16%, rgba(255,148,115,0.9) 93%)", filter: "blur(90px)" }}
+        />
+
+        <Container className="relative py-16 lg:py-[120px]">
+          <p className="text-label tracking-[0.05em] text-mint uppercase sm:text-subheading">Our principles</p>
+          <h2 id="about-principles-title" className="mt-4 font-serif text-heading-lg font-normal text-parchment">
+            How we work with founders
+          </h2>
+
+          <ol className="mt-10 grid gap-3 sm:gap-4 md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
             {ABOUT_PRINCIPLES.map((principle) => (
-              <li key={principle.title} className="border-b border-ash py-8 md:pr-10 lg:py-10">
-                <p className="text-body-sm text-smoke">{principle.index}</p>
-                <h3 className="mt-4 font-serif text-subheading font-normal text-ink">{principle.title}</h3>
-                <p className="mt-3 font-sans text-body leading-[1.45] text-off-black/80">{principle.body}</p>
+              <li
+                key={principle.title}
+                className="group relative overflow-hidden rounded-card border border-parchment/15 bg-parchment/[0.07] p-6 backdrop-blur-sm transition-colors duration-300 hover:bg-parchment/[0.13] sm:p-8"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-mint transition-transform duration-500 ease-out group-hover:scale-x-100"
+                />
+                <p className="flex size-10 items-center justify-center rounded-pill border border-mint/40 text-body-sm text-mint">
+                  {principle.index}
+                </p>
+                <h3 className="mt-6 font-serif text-subheading font-normal text-parchment">{principle.title}</h3>
+                <p className="mt-3 font-sans text-body leading-[1.45] text-parchment/75">{principle.body}</p>
               </li>
             ))}
           </ol>
-        </div>
-      </Container>
-    </section>
+        </Container>
+      </div>
+    </div>
   );
 }
