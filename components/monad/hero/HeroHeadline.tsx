@@ -15,9 +15,10 @@ import { TypingAnimation } from "@/components/ui/typing-animation";
  * Both copies share one grid cell. The kinetic copy is there from the first
  * paint, only transparent, so the headline's two lines are reserved and
  * nothing below moves while the text types in; it also carries the words for
- * screen readers throughout, so the typed copy is hidden from them. Under
- * `prefers-reduced-motion` the typing is skipped and the finished headline
- * shows at once.
+ * screen readers throughout, so the typed copy is hidden from them. The
+ * typing runs under `prefers-reduced-motion` too: it moves nothing on the
+ * page, and skipping it made the headline flash in half typed on phones with
+ * the setting on.
  *
  * The typing component reports no "done", so the hand-over watches the typed
  * copy itself and swaps once the whole line is on screen. Timing it instead
@@ -32,10 +33,6 @@ export function HeroHeadline({ text }: { text: string }) {
   const typing = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setTyped(true);
-      return;
-    }
     const el = typing.current;
     if (!el) return;
     let hold = 0;

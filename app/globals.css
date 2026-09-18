@@ -359,7 +359,11 @@ body {
   html {
     scroll-behavior: auto;
   }
-  *,
+  /* The slow, steady side-to-side loops (the logo strip, the testimonial
+     rows, the typing cursor) keep running: they are the content's way of
+     showing more than fits, and many phones switch this setting on with
+     battery saving, which left them frozen. Everything else stops. */
+  *:not(.animate-marquee, .animate-marquee-x, .animate-marquee-vertical, .animate-blink-cursor),
   *::before,
   *::after {
     animation-duration: 0.01ms !important;

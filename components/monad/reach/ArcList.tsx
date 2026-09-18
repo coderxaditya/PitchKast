@@ -10,8 +10,9 @@ import { COUNTRIES } from "@/content/countries";
  * upward along a "<" shaped path, fading as they near the top and bottom.
  *
  * One rAF loop writes a transform and an opacity per row; nothing re-renders.
- * The loop pauses while the band is off screen, and under
- * `prefers-reduced-motion` the rows are laid out once and left still.
+ * The loop pauses while the band is off screen. It keeps running under
+ * `prefers-reduced-motion`: the drift is slow and steady, and stopping it
+ * left most of the countries out of sight.
  */
 const GAP = 88; // px between rows
 const SPEED = 45; // px per second
@@ -52,9 +53,7 @@ export function ArcList() {
       frame = requestAnimationFrame(tick);
     };
 
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     place();
-    if (still) return;
 
     const io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
