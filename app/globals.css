@@ -205,6 +205,29 @@ body {
 }
 
 /* ============================================================
+   Button glow
+   ------------------------------------------------------------
+   monad.com's hover on its pills, read off their stylesheet: a
+   mint light inside the pill and a mint halo outside it. Opt-in,
+   by class, on the buttons that should carry it.
+   ============================================================ */
+
+.btn-glow {
+  transition:
+    box-shadow 0.25s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-glow:hover,
+.btn-glow:focus-visible {
+  box-shadow:
+    inset 0 0 10px 0 var(--color-mint),
+    0 0 6px 0 #73c677,
+    0 0 20px 0 var(--color-mint);
+}
+
+/* ============================================================
    Logo marquee
    ------------------------------------------------------------
    Two copies of the row, translated by half: the join is exact

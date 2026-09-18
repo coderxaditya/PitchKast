@@ -54,3 +54,7 @@ export function Caret() {
     </svg>
   );
 }
+
+/* A Hyper Text label inside a pill: undo the component's demo styling (4xl,
+   bold, padding) so the label keeps the pill's own type. */
+export const HYPER = "py-0 text-[length:inherit] leading-none font-normal";

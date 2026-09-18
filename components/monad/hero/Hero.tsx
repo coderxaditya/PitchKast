@@ -1,4 +1,5 @@
-import { Button, Caret } from "@/components/monad/Button";
+import { Button, Caret, HYPER } from "@/components/monad/Button";
+import { HyperText } from "@/components/ui/hyper-text";
 import { KineticText } from "@/components/ui/kinetic-text";
 import { Container } from "@/components/monad/Container";
 import { BOOKING_URL } from "@/lib/site";
@@ -39,13 +40,21 @@ export function Hero() {
           deck that raises the round.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Button asChild variant="dark">
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-              Book a discovery call
+          {/* Hyper Text labels and Monad's mint hover glow, as on the
+              header's two buttons. */}
+          <Button asChild variant="dark" className="btn-glow">
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" aria-label="Book a discovery call">
+              <HyperText as="span" aria-hidden="true" className={HYPER}>
+                Book a discovery call
+              </HyperText>
             </a>
           </Button>
-          <Button asChild variant="ghost">
-            <a href="#case-studies">View case studies</a>
+          <Button asChild variant="ghost" className="btn-glow">
+            <a href="#case-studies" aria-label="View case studies">
+              <HyperText as="span" aria-hidden="true" className={HYPER}>
+                View case studies
+              </HyperText>
+            </a>
           </Button>
         </div>
       </Container>
