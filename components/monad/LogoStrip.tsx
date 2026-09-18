@@ -21,7 +21,7 @@ export function LogoStrip() {
             loading="lazy"
             decoding="async"
             draggable={false}
-            className="h-14 w-40 object-contain select-none sm:h-20 sm:w-56"
+            className="h-10 w-32 object-contain select-none sm:h-14 sm:w-44"
           />
         </li>
       ))}
@@ -35,7 +35,7 @@ export function LogoStrip() {
           Trusted by founders at
         </p>
       </Container>
-      <div className="marquee mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+      <div className="marquee mt-10 overflow-hidden sm:mt-14 [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
         <div className="flex w-max animate-marquee">
           {row(0)}
           {row(1)}
