@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 
 import { Button, Caret } from "@/components/monad/Button";
 import { Container } from "@/components/monad/Container";
+import { HyperText } from "@/components/ui/hyper-text";
 import { SERVICES, serviceAnchor } from "@/content/services";
 import { BOOKING_URL, HEADER_LINKS } from "@/lib/site";
 
@@ -21,6 +22,10 @@ import { BOOKING_URL, HEADER_LINKS } from "@/lib/site";
  * link for the section the reader is in is set in Off-Black; the rest are
  * Smoke.
  */
+/* Undo Hyper Text's demo styling (4xl, bold, padding) so the label keeps
+   the pill's own type. */
+const HYPER = "py-0 text-[length:inherit] leading-none font-normal";
+
 const LINK =
   "inline-flex items-center gap-1.5 whitespace-nowrap py-2 text-[15px] tracking-[0.05em] uppercase transition-colors duration-150 hover:text-off-black xl:text-body";
 
@@ -178,12 +183,21 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Magic UI's Hyper Text: the label scrambles and resolves on
+                load and again on hover. The link carries the real label, so a
+                screen reader never reads the scrambled letters. */}
             <Button asChild variant="dark" className="hidden xl:inline-flex">
-              <a href="#contact">Let&apos;s talk</a>
+              <a href="#contact" aria-label="Let's talk">
+                <HyperText as="span" aria-hidden="true" className={HYPER}>
+                  {"Let's talk"}
+                </HyperText>
+              </a>
             </Button>
             <Button asChild variant="lake" className="hidden sm:inline-flex">
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                Book a call
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" aria-label="Book a call">
+                <HyperText as="span" aria-hidden="true" className={HYPER}>
+                  Book a call
+                </HyperText>
                 <Caret />
               </a>
             </Button>
