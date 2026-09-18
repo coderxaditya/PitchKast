@@ -1,6 +1,7 @@
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { About } from "@/components/monad/about/About";
 import { Announcement } from "@/components/monad/Announcement";
+import { ClientCircle } from "@/components/monad/ClientCircle";
 import { CaseStudies } from "@/components/monad/case-studies/CaseStudies";
 import { Closing } from "@/components/monad/Closing";
 import { Faq } from "@/components/monad/faq/Faq";
@@ -30,6 +31,7 @@ export default function Home() {
         <LogoStrip />
         <Services />
         <Reach />
+        <ClientCircle />
         <CaseStudies />
         <Testimonials />
         <About />
