@@ -1,6 +1,8 @@
 /**
  * The gallery photographs.
  *
+ * 11 to 19 are web copies made by `scripts/build-gallery-additions.mjs`.
+ *
  * `alt` says what each file is rather than what is in it. These are real
  * photographs whose contents I have not seen, and an invented description
  * would be read out as fact by a screen reader. The index at least gives
@@ -17,6 +19,15 @@ export const galleryImages = [
   "/gallery/gallery-08.jpg",
   "/gallery/gallery-09.png",
   "/gallery/gallery-10.jpeg",
+  "/gallery/gallery-11.webp",
+  "/gallery/gallery-12.webp",
+  "/gallery/gallery-13.webp",
+  "/gallery/gallery-14.webp",
+  "/gallery/gallery-15.webp",
+  "/gallery/gallery-16.webp",
+  "/gallery/gallery-17.webp",
+  "/gallery/gallery-18.webp",
+  "/gallery/gallery-19.webp",
 ] as const;
 
 export const galleryAlt = (i: number) => `PitchKast gallery photograph ${i + 1}`;
@@ -39,5 +50,14 @@ export const galleryDims: readonly (readonly [number, number])[] = [
   [1280, 720],
   [1080, 573],
   [956, 746],
+  [1280, 960],
+  [736, 1308],
+  [2048, 1368],
+  [960, 1280],
+  [641, 855],
+  [1080, 810],
+  [735, 941],
+  [736, 1308],
+  [2048, 1368],
   [1280, 960],
 ];
