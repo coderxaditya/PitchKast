@@ -2,7 +2,7 @@ import { Container } from "@/components/monad/Container";
 import { InstagramIcon, LinkedInIcon, WhatsAppIcon, XIcon } from "@/components/monad/footer-icons";
 import { Logo } from "@/components/monad/Navbar";
 import { SERVICES, serviceAnchor } from "@/content/services";
-import { EMAIL, HEADER_LINKS, SOCIAL_LINKS, WHATSAPP, isExternal } from "@/lib/site";
+import { EMAIL, FOUNDER_EMAIL, HEADER_LINKS, SOCIAL_LINKS, WHATSAPP, isExternal } from "@/lib/site";
 
 /**
  * Site footer, on monad.com's: the logo and "Follow us on" with round icon
@@ -18,9 +18,17 @@ const ICON_FOR: Record<string, (p: React.SVGProps<SVGSVGElement>) => React.React
 
 const LINK = "inline-block py-1 text-body-sm text-off-black transition-colors hover:text-smoke";
 
-function Column({ title, children }: { title: string; children: React.ReactNode }) {
+function Column({
+  title,
+  children,
+  className,
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div>
+    <div className={className}>
       <h3 className="text-caption tracking-[0.05em] text-smoke uppercase">{title}</h3>
       <ul className="mt-5 space-y-2">{children}</ul>
     </div>
@@ -101,10 +109,16 @@ export function Footer() {
                 </li>
               ))}
             </Column>
-            <Column title="Contact">
+            {/* Full width on a phone: the two addresses are too long for half. */}
+            <Column title="Contact" className="col-span-2 sm:col-span-1">
               <li>
                 <a href={`mailto:${EMAIL}`} className={LINK}>
                   {EMAIL}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${FOUNDER_EMAIL}`} className={LINK}>
+                  {FOUNDER_EMAIL}
                 </a>
               </li>
               <li>

@@ -34,6 +34,8 @@ export const HEADER_LINKS = [
  * needs touching. `EMAIL` is live.
  */
 export const EMAIL = "contact@pitchkast.com";
+/** Soham Goel, founder: listed under Contact in the footer. */
+export const FOUNDER_EMAIL = "sohamgoel@pitchkast.com";
 
 /**
  * The WhatsApp number, in the two forms it is needed in.
