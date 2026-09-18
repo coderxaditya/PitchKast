@@ -99,20 +99,20 @@ export function About() {
 }
 
 /**
- * The principles, on a Lake Blue band inset like the reach band: the one
- * deep colour on the page, so the section reads as a pause rather than
+ * The principles, on a Sky Blue band inset like the reach band, a shade
+ * deeper than its Periwinkle, so the section reads as a pause rather than
  * another ruled list. Mint and coral washes drift in from the corners, and
- * the six principles sit on frosted cards: a mint mono number, a serif title
- * in parchment, a sans paragraph at 75%. On hover a card brightens and a
- * mint rule draws across its top.
+ * the six principles sit on frosted parchment cards: a Lake mono number, a
+ * serif title in ink, a sans paragraph at 80%. On hover a card brightens and
+ * a Lake rule draws across its top.
  */
 function Principles() {
   return (
     <div className="mt-24 px-1 pb-6 lg:mt-[120px] lg:pb-10">
-      <div className="relative overflow-hidden rounded-band bg-lake">
+      <div className="relative overflow-hidden rounded-band bg-sky">
         <div
           aria-hidden="true"
-          className="wash top-[-20%] left-[-10%] h-[60%] w-[45%] opacity-50"
+          className="wash top-[-20%] left-[-10%] h-[60%] w-[45%] opacity-70"
           style={{ background: "radial-gradient(rgb(167,252,205), rgba(160,181,235,0))", filter: "blur(90px)" }}
         />
         <div
@@ -122,8 +122,8 @@ function Principles() {
         />
 
         <Container className="relative py-16 lg:py-[120px]">
-          <p className="text-label tracking-[0.05em] text-mint uppercase sm:text-subheading">Our principles</p>
-          <h2 id="about-principles-title" className="mt-4 font-serif text-heading-lg font-normal text-parchment">
+          <p className="text-label tracking-[0.05em] text-lake uppercase sm:text-subheading">Our principles</p>
+          <h2 id="about-principles-title" className="mt-4 font-serif text-heading-lg font-normal text-ink">
             How we work with founders
           </h2>
 
@@ -131,17 +131,17 @@ function Principles() {
             {ABOUT_PRINCIPLES.map((principle) => (
               <li
                 key={principle.title}
-                className="group relative overflow-hidden rounded-card border border-parchment/15 bg-parchment/[0.07] p-6 backdrop-blur-sm transition-colors duration-300 hover:bg-parchment/[0.13] sm:p-8"
+                className="group relative overflow-hidden rounded-card border border-parchment/60 bg-parchment/45 p-6 backdrop-blur-sm transition-colors duration-300 hover:bg-parchment/75 sm:p-8"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-mint transition-transform duration-500 ease-out group-hover:scale-x-100"
+                  className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-lake transition-transform duration-500 ease-out group-hover:scale-x-100"
                 />
-                <p className="flex size-10 items-center justify-center rounded-pill border border-mint/40 text-body-sm text-mint">
+                <p className="flex size-10 items-center justify-center rounded-pill border border-lake/40 text-body-sm text-lake">
                   {principle.index}
                 </p>
-                <h3 className="mt-6 font-serif text-subheading font-normal text-parchment">{principle.title}</h3>
-                <p className="mt-3 font-sans text-body leading-[1.45] text-parchment/75">{principle.body}</p>
+                <h3 className="mt-6 font-serif text-subheading font-normal text-ink">{principle.title}</h3>
+                <p className="mt-3 font-sans text-body leading-[1.45] text-off-black/80">{principle.body}</p>
               </li>
             ))}
           </ol>
