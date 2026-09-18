@@ -1,35 +1,25 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import { Star } from "lucide-react";
 
 import { Container } from "@/components/monad/Container";
+import { Marquee } from "@/components/ui/marquee";
+import { cn } from "@/lib/utils";
 import { TESTIMONIALS, TESTIMONIALS_INTRO, type Testimonial } from "@/content/testimonials";
 
 /**
- * Testimonials, carried over from the Steep branch as asked.
+ * Testimonials, on Magic UI's Marquee demo.
  *
- * A dark band with a centred pill eyebrow and heading over one endless row of
- * cards, edges faded out. Each card: a 44px ringed avatar (the photo when one
- * is set in `content/testimonials.ts`, the initials until then), the name, the
- * role, the quote cut to three lines, and five amber stars, with a soft
- * peach glow that strengthens on hover.
+ * A near-black band: the pill eyebrow and serif heading, then two rows of
+ * review cards drifting in opposite directions, each row pausing under the
+ * pointer, with both ends fading into the band. A card is a 16px-radius
+ * hairline frame with a faint top-lit fill that brightens on hover: the
+ * client's round photo, their name and role, and the quote in full.
  *
- * "Read more" opens the whole quote in place and becomes "Read less". While a
- * card is open the row stops, so the text is not carried away mid-sentence;
- * the quote closes by itself, and the row moves on, once the pointer leaves
- * the row or the section leaves the screen. The row also pauses under a
- * pointer. The motion is the logo strip's: two
- * copies of the row on one track, translated by half, so the join is exact.
- * The second copy is hidden from assistive technology and cannot be focused.
+ * The moving rows repeat every card several times, so they are hidden from
+ * assistive technology; a plain list of the same testimonials, visually
+ * hidden, is what a screen reader reads.
  *
- * Colours are the Steep branch's own: ink #17191c, peach #fbe1d1, sienna
- * #5d2a1a.
+ * The previous design is kept in `TestimonialsBand.tsx`.
  */
-
-/** Past roughly this many characters a quote runs beyond three lines. */
-const LONG = 150;
-
 const initials = (name: string) =>
   name
     .replace(/^(Dr|Mr|Ms|Mrs)\.\s+/, "")
@@ -39,112 +29,56 @@ const initials = (name: string) =>
     .slice(0, 2)
     .toUpperCase();
 
-function Card({
-  t,
-  open,
-  onToggle,
-  interactive,
-}: {
-  t: Testimonial;
-  open: boolean;
-  onToggle: () => void;
-  interactive: boolean;
-}) {
-  const long = t.quote.length > LONG;
-  return (
-    <article
-      className={`flex w-[320px] shrink-0 flex-col gap-6 rounded-[24px] border border-[#fbe1d1]/20 bg-white/[0.04] p-6 shadow-[0_0_45px_-10px_rgba(251,225,209,0.35)] transition-shadow duration-300 hover:shadow-[0_0_55px_-6px_rgba(251,225,209,0.5)] sm:w-[460px] ${
-        open ? "min-h-[300px]" : "h-[300px]"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-4">
-          {t.photo ? (
-            <img
-              src={t.photo}
-              alt=""
-              draggable={false}
-              className="size-11 shrink-0 rounded-full object-cover ring-[1.5px] ring-[#fbe1d1] select-none"
-            />
-          ) : (
-            <span
-              aria-hidden="true"
-              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#fbe1d1] font-sans text-[14px] font-semibold text-[#5d2a1a] ring-[1.5px] ring-[#fbe1d1]"
-            >
-              {initials(t.name)}
-            </span>
-          )}
-          <div className="min-w-0">
-            <p className="font-sans text-[16px] leading-6 font-semibold text-white">{t.name}</p>
-            <p className="font-sans text-[12px] leading-4 text-white/60">{t.role}</p>
-          </div>
-        </div>
-      </div>
+const half = Math.ceil(TESTIMONIALS.length / 2);
+const FIRST_ROW = TESTIMONIALS.slice(0, half);
+const SECOND_ROW = TESTIMONIALS.slice(half);
 
-      <div className="flex min-h-0 flex-1 flex-col justify-between gap-4">
-        <div className="flex min-h-0 flex-1 flex-col gap-1">
-          <p className={`font-sans text-[16px] leading-6 font-light text-white ${open ? "" : "line-clamp-3"}`}>
-            {t.quote}
-          </p>
-          {long ? (
-            interactive ? (
-              <button
-                type="button"
-                onClick={onToggle}
-                aria-expanded={open}
-                className="self-start py-1 font-sans text-[12px] font-semibold text-[#fbe1d1] transition-colors hover:text-[#fbe1d1]/80"
-              >
-                {open ? "Read less" : "Read more"}
-              </button>
-            ) : (
-              <span aria-hidden="true" className="self-start py-1 font-sans text-[12px] font-semibold text-[#fbe1d1]">
-                {open ? "Read less" : "Read more"}
-              </span>
-            )
-          ) : null}
-        </div>
-        <div className="flex gap-1 text-[#f5a623]" role="img" aria-label="Rated 5 out of 5">
-          {Array.from({ length: 5 }, (_, i) => (
-            <Star key={i} className="size-5 fill-current" strokeWidth={0} aria-hidden="true" />
-          ))}
+function ReviewCard({ t }: { t: Testimonial }) {
+  return (
+    <figure
+      className={cn(
+        "relative w-[300px] shrink-0 cursor-default overflow-hidden rounded-card border p-5 sm:w-[400px] sm:p-6",
+        "border-white/[0.1] bg-gradient-to-b from-white/[0.07] to-white/[0.02] transition-colors duration-300",
+        "hover:border-white/[0.18] hover:from-white/[0.11] hover:to-white/[0.04]",
+      )}
+    >
+      <div className="flex items-center gap-3">
+        {t.photo ? (
+          <img
+            src={t.photo}
+            alt=""
+            width={44}
+            height={44}
+            draggable={false}
+            className="size-11 shrink-0 rounded-full object-cover select-none"
+          />
+        ) : (
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-lake to-coral font-sans text-[14px] font-semibold text-white">
+            {initials(t.name)}
+          </span>
+        )}
+        <div className="min-w-0">
+          <figcaption className="font-sans text-[15px] leading-5 font-medium text-white">{t.name}</figcaption>
+          <p className="mt-0.5 font-sans text-[12.5px] leading-4 text-white/45">{t.role}</p>
         </div>
       </div>
-    </article>
+      <blockquote className="mt-4 font-sans text-[14.5px] leading-[1.55] text-white/75">{t.quote}</blockquote>
+    </figure>
   );
 }
 
 export function Testimonials() {
-  /* Which card is open, by name. Only the first copy can open one; the second
-     copy mirrors it so the loop stays seamless. */
-  const [open, setOpen] = useState<string | null>(null);
-  const section = useRef<HTMLElement>(null);
-
-  /* An open quote pauses the row, so nothing may leave it open by accident:
-     it closes, and the row moves again, as soon as the section scrolls out of
-     view. Without this, opening a quote and scrolling on left the row frozen
-     until someone came back and pressed "Read less". */
-  useEffect(() => {
-    const el = section.current;
-    if (!el || !open) return;
-    const io = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) setOpen(null);
-    });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [open]);
-
   return (
     <section
-      ref={section}
       id="testimonials"
       aria-labelledby="testimonials-title"
-      className="scroll-mt-[var(--header-h)] overflow-hidden bg-[#17191c] py-24 lg:py-32"
+      className="scroll-mt-[var(--header-h)] overflow-hidden bg-[#0a0a0a] py-24 lg:py-32"
     >
       <Container>
         <div data-reveal className="mx-auto flex max-w-3xl flex-col items-center gap-4">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#fbe1d1]/25 bg-[#fbe1d1]/12 px-[15px] py-[7.5px]">
-            <Star className="size-3.5 text-[#fbe1d1]" strokeWidth={2} aria-hidden="true" />
-            <span className="font-sans text-[12px] font-semibold text-[#fbe1d1] uppercase sm:text-[14px]">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] px-[15px] py-[7.5px]">
+            <Star className="size-3.5 fill-[#f5a623] text-[#f5a623]" strokeWidth={0} aria-hidden="true" />
+            <span className="font-sans text-[12px] font-semibold text-white/80 uppercase sm:text-[14px]">
               {TESTIMONIALS_INTRO.eyebrow}
             </span>
           </span>
@@ -153,42 +87,33 @@ export function Testimonials() {
             className="max-w-[16ch] text-center font-serif text-heading-lg font-normal text-white"
           >
             {TESTIMONIALS_INTRO.titleLead}{" "}
-            <em className="text-[#fbe1d1] italic">{TESTIMONIALS_INTRO.titleAccent}</em>{" "}
+            <em className="text-periwinkle italic">{TESTIMONIALS_INTRO.titleAccent}</em>{" "}
             {TESTIMONIALS_INTRO.titleTrail}
           </h2>
         </div>
       </Container>
 
-      {/* Leaving the row with the pointer also closes an open quote, for the
-          same reason. */}
-      <div
-        onPointerLeave={(e) => e.pointerType === "mouse" && setOpen(null)}
-        className="marquee mt-10 w-full overflow-hidden py-10 [mask-image:linear-gradient(to_right,transparent,#000_5%,#000_95%,transparent)]"
-      >
-        <div
-          className="flex w-max animate-marquee items-start [animation-duration:60s]"
-          style={open ? { animationPlayState: "paused" } : undefined}
-        >
-          {[0, 1].map((copy) => (
-            <ul
-              key={copy}
-              aria-hidden={copy === 1 ? "true" : undefined}
-              inert={copy === 1}
-              className="flex shrink-0 items-start gap-6 pr-6"
-            >
-              {TESTIMONIALS.map((t) => (
-                <li key={t.name}>
-                  <Card
-                    t={t}
-                    open={open === t.name}
-                    onToggle={() => setOpen((cur) => (cur === t.name ? null : t.name))}
-                    interactive={copy === 0}
-                  />
-                </li>
-              ))}
-            </ul>
+      <ul className="sr-only">
+        {TESTIMONIALS.map((t) => (
+          <li key={t.name}>
+            {t.quote} {t.name}, {t.role}
+          </li>
+        ))}
+      </ul>
+
+      <div aria-hidden="true" className="relative mt-12 flex w-full flex-col items-center overflow-hidden lg:mt-16">
+        <Marquee pauseOnHover className="[--duration:60s] [--gap:1.25rem]">
+          {FIRST_ROW.map((t) => (
+            <ReviewCard key={t.name} t={t} />
           ))}
-        </div>
+        </Marquee>
+        <Marquee reverse pauseOnHover className="[--duration:60s] [--gap:1.25rem]">
+          {SECOND_ROW.map((t) => (
+            <ReviewCard key={t.name} t={t} />
+          ))}
+        </Marquee>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r from-[#0a0a0a]" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l from-[#0a0a0a]" />
       </div>
     </section>
   );

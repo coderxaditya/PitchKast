@@ -377,4 +377,26 @@ body {
     opacity: 0;
     }
   }
+  /* Magic UI's Marquee (components/ui/marquee.tsx), renamed from its own
+     "marquee" so it does not replace the logo strip's animation of that
+     name, which moves a doubled track by half rather than by a whole copy. */
+  --animate-marquee-x: marquee-x var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+  @keyframes marquee-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
 }
