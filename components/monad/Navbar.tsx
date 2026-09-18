@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 import { Button, Caret, HYPER } from "@/components/monad/Button";
@@ -19,11 +19,16 @@ import { BOOKING_URL, HEADER_LINKS } from "@/lib/site";
  *
  * "Services" opens a parchment panel of the five services on hover or
  * keyboard focus, each linking to its own card in the services section. The
- * link for the section the reader is in is set in Off-Black; the rest are
- * Smoke.
+ * link for the section the reader is in is set in Off-Black, with a small
+ * Lake dot under it; the rest are Smoke.
+ *
+ * On hover (or keyboard focus) a Periwinkle pill slides behind the link under
+ * the pointer and follows it from link to link, fading out when the pointer
+ * leaves the row. Once the page has scrolled, the bar turns frosted with a
+ * hairline beneath it, and the logo mark tips a few degrees on hover.
  */
 const LINK =
-  "inline-flex items-center gap-1.5 whitespace-nowrap py-2 text-[15px] tracking-[0.05em] uppercase transition-colors duration-150 hover:text-off-black xl:text-body";
+  "relative z-10 inline-flex items-center gap-1.5 whitespace-nowrap py-2 text-[15px] tracking-[0.05em] uppercase transition-colors duration-150 hover:text-off-black xl:text-body";
 
 /** Which header link the reader is in; sections not in the header count as
     part of the last one above them. */
@@ -67,6 +72,30 @@ function useCurrentSection() {
   return current;
 }
 
+/** Whether the page has scrolled away from the very top. */
+function useScrolled() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return scrolled;
+}
+
+/** The small Lake dot under the current section's link. */
+function ActiveDot({ on }: { on: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute -bottom-1 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-lake transition-[opacity,scale] duration-300 ${
+        on ? "scale-100 opacity-100" : "scale-0 opacity-0"
+      }`}
+    />
+  );
+}
+
 function Chevron({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 12 8" aria-hidden="true" className={`h-2 w-3 shrink-0 ${className}`}>
@@ -77,13 +106,13 @@ function Chevron({ className = "" }: { className?: string }) {
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`flex items-center gap-2.5 ${className}`}>
+    <span className={`group/logo flex items-center gap-2.5 ${className}`}>
       <img
         src="/brand/landing-mark-ink-256.png"
         alt=""
         width={979}
         height={825}
-        className="h-8 w-auto"
+        className="h-8 w-auto transition-transform duration-300 ease-out group-hover/logo:scale-110 group-hover/logo:-rotate-[8deg]"
       />
       <span className="font-sans text-[26px] font-semibold tracking-[-0.04em] text-off-black">
         PitchKast
@@ -124,6 +153,20 @@ function ServicesPanel() {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const current = useCurrentSection();
+  const scrolled = useScrolled();
+  const row = useRef<HTMLUListElement>(null);
+  const [pill, setPill] = useState({ x: 0, w: 0, show: false });
+
+  /* Slide the pill behind the link inside `li`. */
+  const pillTo = (li: HTMLElement) => {
+    const link = li.querySelector("a");
+    const box = row.current?.getBoundingClientRect();
+    if (!link || !box) return;
+    const r = link.getBoundingClientRect();
+    const pad = 12;
+    setPill({ x: r.left - box.left - pad, w: r.width + pad * 2, show: true });
+  };
+  const hidePill = () => setPill((p) => ({ ...p, show: false }));
 
   useEffect(() => {
     if (!open) return;
@@ -134,7 +177,13 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 bg-parchment">
+    <header
+      className={`sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ${
+        scrolled
+          ? "bg-parchment/92 shadow-[0_1px_0_rgba(36,36,36,0.08),0_8px_24px_-12px_rgba(36,36,36,0.12)] backdrop-blur-md"
+          : "bg-parchment"
+      }`}
+    >
       <Container>
         <div className="flex h-[var(--header-h)] items-center justify-between gap-6">
           <div className="flex items-center gap-8 xl:gap-12">
@@ -143,13 +192,35 @@ export function Navbar() {
             </a>
 
             <nav aria-label="Primary" className="hidden lg:block">
-              <ul className="flex items-center gap-5 xl:gap-8">
+              <ul
+                ref={row}
+                onPointerLeave={hidePill}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) hidePill();
+                }}
+                className="relative flex items-center gap-5 xl:gap-8"
+              >
+                {/* The hover pill, behind the links. */}
+                <li
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-1/2 left-0 h-9 rounded-pill bg-periwinkle transition-[transform,width,opacity] duration-300 ease-[cubic-bezier(0.3,1.3,0.5,1)]"
+                  style={{
+                    transform: `translate(${pill.x}px, -50%)`,
+                    width: pill.w,
+                    opacity: pill.show ? 1 : 0,
+                  }}
+                />
                 {HEADER_LINKS.filter((l) => l.href !== "#home").map((link) => {
                   const active = current === link.href;
                   const tone = active ? "text-off-black" : "text-smoke";
                   if (link.href === "#services") {
                     return (
-                      <li key={link.href} className="group relative">
+                      <li
+                        key={link.href}
+                        className="group relative"
+                        onPointerEnter={(e) => pillTo(e.currentTarget)}
+                        onFocus={(e) => pillTo(e.currentTarget)}
+                      >
                         <a
                           href={link.href}
                           aria-current={active ? "location" : undefined}
@@ -157,19 +228,25 @@ export function Navbar() {
                         >
                           {link.label}
                           <Chevron className="transition-transform duration-200 group-hover:rotate-180" />
+                          <ActiveDot on={active} />
                         </a>
                         <ServicesPanel />
                       </li>
                     );
                   }
                   return (
-                    <li key={link.href}>
+                    <li
+                      key={link.href}
+                      onPointerEnter={(e) => pillTo(e.currentTarget)}
+                      onFocus={(e) => pillTo(e.currentTarget)}
+                    >
                       <a
                         href={link.href}
                         aria-current={active ? "location" : undefined}
                         className={`${LINK} ${tone}`}
                       >
                         {link.label}
+                        <ActiveDot on={active} />
                       </a>
                     </li>
                   );
