@@ -26,7 +26,6 @@ export const ABOUT_INTRO = {
   lead: "PitchKast is an end-to-end growth partner for early-stage founders.",
   body: [
     "We bring product, design, growth, and fundraising expertise together under one accountable team, helping founders move from an idea to a built product, from product to traction, and from traction to their next funding round.",
-    "Early-stage companies rarely need another disconnected service provider. They need people who understand the bigger picture. Every engagement has named people, transparent progress, and work delivered in your name.",
   ],
 };
 

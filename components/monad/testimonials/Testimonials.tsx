@@ -12,8 +12,8 @@ import { TESTIMONIALS, TESTIMONIALS_INTRO, type Testimonial } from "@/content/te
  * A dark band with a centred pill eyebrow and heading over one endless row of
  * cards, edges faded out. Each card: a 44px ringed avatar (the photo when one
  * is set in `content/testimonials.ts`, the initials until then), the name, the
- * role, a "Best Service" pill, the quote cut to three lines, and five amber
- * stars, with a soft peach glow that strengthens on hover.
+ * role, the quote cut to three lines, and five amber stars, with a soft
+ * peach glow that strengthens on hover.
  *
  * "Read more" opens the whole quote in place and becomes "Read less". While a
  * card is open the row stops, so the text is not carried away mid-sentence;
@@ -77,11 +77,6 @@ function Card({
             <p className="font-sans text-[12px] leading-4 text-white/60">{t.role}</p>
           </div>
         </div>
-        {/* Hidden on a phone, where the card is 320px and the pill would leave
-            the client's name and role too little room. */}
-        <span className="hidden shrink-0 rounded-full border border-[#fbe1d1]/20 bg-[#fbe1d1]/12 px-3 py-[5px] font-sans text-[14px] font-semibold tracking-[0.6px] text-[#fbe1d1] uppercase sm:inline-block">
-          Best Service
-        </span>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col justify-between gap-4">
