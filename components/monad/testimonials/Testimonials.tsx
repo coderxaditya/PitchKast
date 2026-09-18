@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Star } from "lucide-react";
 
 import { Container } from "@/components/monad/Container";
@@ -17,7 +17,9 @@ import { TESTIMONIALS, TESTIMONIALS_INTRO, type Testimonial } from "@/content/te
  *
  * "Read more" opens the whole quote in place and becomes "Read less". While a
  * card is open the row stops, so the text is not carried away mid-sentence;
- * the row also pauses under a pointer. The motion is the logo strip's: two
+ * the quote closes by itself, and the row moves on, once the pointer leaves
+ * the row or the section leaves the screen. The row also pauses under a
+ * pointer. The motion is the logo strip's: two
  * copies of the row on one track, translated by half, so the join is exact.
  * The second copy is hidden from assistive technology and cannot be focused.
  *
@@ -115,9 +117,25 @@ export function Testimonials() {
   /* Which card is open, by name. Only the first copy can open one; the second
      copy mirrors it so the loop stays seamless. */
   const [open, setOpen] = useState<string | null>(null);
+  const section = useRef<HTMLElement>(null);
+
+  /* An open quote pauses the row, so nothing may leave it open by accident:
+     it closes, and the row moves again, as soon as the section scrolls out of
+     view. Without this, opening a quote and scrolling on left the row frozen
+     until someone came back and pressed "Read less". */
+  useEffect(() => {
+    const el = section.current;
+    if (!el || !open) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) setOpen(null);
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [open]);
 
   return (
     <section
+      ref={section}
       id="testimonials"
       aria-labelledby="testimonials-title"
       className="scroll-mt-[var(--header-h)] overflow-hidden bg-[#17191c] py-24 lg:py-32"
@@ -141,7 +159,12 @@ export function Testimonials() {
         </div>
       </Container>
 
-      <div className="marquee mt-10 w-full overflow-hidden py-10 [mask-image:linear-gradient(to_right,transparent,#000_5%,#000_95%,transparent)]">
+      {/* Leaving the row with the pointer also closes an open quote, for the
+          same reason. */}
+      <div
+        onPointerLeave={(e) => e.pointerType === "mouse" && setOpen(null)}
+        className="marquee mt-10 w-full overflow-hidden py-10 [mask-image:linear-gradient(to_right,transparent,#000_5%,#000_95%,transparent)]"
+      >
         <div
           className="flex w-max animate-marquee items-start [animation-duration:60s]"
           style={open ? { animationPlayState: "paused" } : undefined}
