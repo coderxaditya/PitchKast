@@ -216,11 +216,16 @@ body {
   transition:
     box-shadow 0.25s ease,
     background-color 0.2s ease,
+    border-color 0.2s ease,
     color 0.2s ease;
 }
 
 .btn-glow:hover,
 .btn-glow:focus-visible {
+  /* A ghost pill's hairline would otherwise draw a dark ring between the
+     fill and the halo; the fill runs under the border, so hiding the line
+     leaves one clean edge. */
+  border-color: transparent;
   box-shadow:
     inset 0 0 10px 0 var(--color-mint),
     0 0 6px 0 #73c677,
