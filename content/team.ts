@@ -104,8 +104,12 @@ export const TEAM = [
       "With over 15 years of experience in training and developing young talent, Shelly brings extensive expertise in mentoring, skill development, and professional training. At PitchKast, she leads the training department and works towards building a strong, capable, and industry-ready team.",
     ],
     linkedin: "https://www.linkedin.com/in/shelly-goel-1992aa21a/",
-    src: "/team/shelly-g.png",
-    w: 646,
-    h: 1094,
+    /* A 4:5 head-and-shoulders cut from `shelly-g.png`, a wide classroom
+       shot in which she stood small at the upper right: the region around
+       her face (x 364, y 178, 280x350), so her face reads at the same size
+       as everyone else's in the row. The original is kept. */
+    src: "/team/shelly-g-portrait.webp",
+    w: 280,
+    h: 350,
   },
 ] as const;
