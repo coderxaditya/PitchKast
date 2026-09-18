@@ -9,7 +9,8 @@ import { BOOKING_URL } from "@/lib/site";
 /**
  * Case studies, on monad.com's "Why Teams Choose Monad" cards.
  *
- * Two columns of cards with a solid Off-Black hairline and a 16px radius.
+ * Three columns of cards (two on a tablet, one on a phone) with a solid
+ * Off-Black hairline and a 16px radius.
  * Each card is dark, with the study's rendered dashboard picture behind it and
  * the text set in white: where and for whom, the goal as a serif title, the
  * opening paragraph, and the results as hairline pills. The whole card opens the full study, word for word, in an
@@ -23,10 +24,10 @@ function StudyCard({ study }: { study: CaseStudy }) {
       {/* The picture: rendered by `scripts/build-case-study-art.mjs` from the
           study's own results, with its dashboard against the right edge. It
           runs across the top of the card and fades into the card's dark
-          ground, and the text starts over the fade, so the picture reads as
-          the card's backdrop at every width without ever sitting under a
-          line of text. */}
-      <div aria-hidden="true" className="relative h-[230px] overflow-hidden sm:h-[300px]">
+          ground, and the text starts over the fade. The band keeps the
+          picture's own 2:1 shape, so the whole dashboard shows however wide
+          the card is, and never sits under a line of text. */}
+      <div aria-hidden="true" className="relative aspect-[2/1] overflow-hidden">
         <img
           src={`/case-studies/study-${study.id}-wide.webp`}
           alt=""
@@ -38,11 +39,11 @@ function StudyCard({ study }: { study: CaseStudy }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e13] from-5% via-[#0c0e13]/30 via-45% to-transparent" />
       </div>
 
-      <div className="relative -mt-4 flex flex-1 flex-col px-6 pb-6 sm:-mt-20 sm:px-10 sm:pb-10">
+      <div className="relative -mt-4 flex flex-1 flex-col px-6 pb-6 sm:-mt-8 sm:px-8 sm:pb-8">
         <p className="text-caption tracking-[0.05em] text-white/60 uppercase sm:text-body-sm">
           {String(study.id).padStart(2, "0")} · {study.category}
         </p>
-        <h3 className="mt-5 font-serif text-subheading font-normal text-white sm:text-heading-sm">
+        <h3 className="mt-5 font-serif text-subheading font-normal text-white">
           {study.goal}
         </h3>
         <p className="mt-2 text-body-sm text-white/50">{study.location}</p>
@@ -145,7 +146,7 @@ export function CaseStudies() {
           title="Results that speak for themselves"
           lead="See how we help founders turn ideas into credibility. We don't just build profiles, we build positioning that scales."
         />
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:mt-16">
+        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:mt-16 lg:grid-cols-3">
           {CASE_STUDIES.map((study) => (
             <StudyCard key={study.id} study={study} />
           ))}
