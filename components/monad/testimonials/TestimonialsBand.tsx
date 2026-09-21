@@ -11,7 +11,7 @@ import { TESTIMONIALS, TESTIMONIALS_INTRO, type Testimonial } from "@/content/te
  * in `app/page.tsx`, render `<TestimonialsBand />` in place of
  * `<Testimonials />`.
  *
- * Testimonials, carried over from the Steep branch as asked.
+ * The earlier testimonials design.
  *
  * A dark band with a centred pill eyebrow and heading over one endless row of
  * cards, edges faded out. Each card: a 44px ringed avatar (the photo when one
@@ -27,7 +27,7 @@ import { TESTIMONIALS, TESTIMONIALS_INTRO, type Testimonial } from "@/content/te
  * copies of the row on one track, translated by half, so the join is exact.
  * The second copy is hidden from assistive technology and cannot be focused.
  *
- * Colours are the Steep branch's own: ink #17191c, peach #fbe1d1, sienna
+ * Colours: ink #17191c, peach #fbe1d1, sienna
  * #5d2a1a.
  */
 
