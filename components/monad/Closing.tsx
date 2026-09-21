@@ -13,7 +13,7 @@ import { BOOKING_URL } from "@/lib/site";
  */
 export function Closing() {
   return (
-    <section aria-labelledby="closing-title" className="py-16 lg:py-[120px]">
+    <section id="lets-talk" aria-labelledby="closing-title" className="scroll-mt-[var(--header-h)] py-16 lg:py-[120px]">
       <Container>
         <div data-reveal className="relative overflow-hidden rounded-band border border-off-black px-5 py-16 text-center sm:px-10 lg:py-20">
           <div

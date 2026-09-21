@@ -260,7 +260,7 @@ export function Navbar() {
                 load and again on hover. The link carries the real label, so a
                 screen reader never reads the scrambled letters. */}
             <Button asChild variant="dark" className="btn-glow hidden xl:inline-flex">
-              <a href="#contact" aria-label="Let's talk">
+              <a href="#lets-talk" aria-label="Let's talk">
                 <HyperText as="span" aria-hidden="true" className={HYPER}>
                   {"Let's talk"}
                 </HyperText>
